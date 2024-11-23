@@ -1,0 +1,105 @@
+<details>
+        <summary>
+                <h1>Frequently Asked Questions</h1>
+        </summary>
+
+        <section>
+                <p>FAQs are a list of common questions or issues and their answers, helping users quickly find
+                        information without contacting support. They enhance user experience
+                        by providing easy access to solutions for common queries.
+                </p>
+
+                <h4 id="onboarding_saml"><a href="{{url.page}}/Onboarding#onboarding_saml">What is the common SAML
+                                onboarding process?</a></h4>
+                <p>For further understanding about this topic, go to this <a
+                                href="{{url.page}}/Onboarding#onboarding_saml">section.</a></p>
+
+                <h4 id="flow_saml"><a href="{{url.page}}/Troubleshooting#flow_saml">How SAML authentication
+                                works?</a>
+                </h4>
+                <p>For further understanding about this topic, go to this <a
+                                href="{{url.page}}/Troubleshooting#flow_saml"> section.</a></p>
+
+                <h4 id="inconsistents"><a href="{{url.page}}/Troubleshooting#inconsistents">What are common issues
+                                in SAML integration?</a></h4>
+                <p>For further understanding about this topic, go to this <a
+                                href="{{url.page}}/Troubleshooting#inconsistents"> section.</a></p>
+
+                <h4 id="devops"><a href="{{url.page}}/Troubleshooting#devops">What are common problems related to
+                                the environment?</a>
+                </h4>
+                <p>For further understanding about this topic, go to this <a
+                                href="{{url.page}}/Troubleshooting#devops"> section.</a></p>
+
+                <h4 id="expiration"><a href="{{url.page}}/Onboarding#expiration">How manage the expiration times
+                                for the access token and refresh token?</a>
+                </h4>
+                <p>For further understanding about this topic, go to this <a
+                                href="{{url.page}}/Onboarding#expiration"> section.</a></p>
+
+                <h4 id="authentication"><a href="{{url.page}}/Troubleshooting#flow_saml">What to do if some users
+                                can't login?</a>
+                </h4>
+                <p>In case some users cannot login, the authentication method they are using must be verified (Basic
+                        login, SAML login). Once the authentication method used has been identified, it must be checked
+                        if the <a href="{{url.page}}/Domain">authentication domain</a> is correct; generally the
+                        authentication domain is related to the
+                        email or username. Once the domain has been identified, it should be checked if authentication
+                        is failing for all users of the domain or only for a few. This can be reviewed through the <a
+                                href="{{url.page}}/Logs">Logs</a>
+                        and <a href="{{url.page}}/Alerts">Alerts</a> system. Sometimes authentication problems for
+                        a domain are related to the incorrect
+                        <a href="{{url.page}}/Domain#idp_role_map">roles assignment</a>, or <a
+                                href="{{url.page}}/Domain#user_product">unauthorized access
+                                to certain products</a>. If the cause of the error is
+                        still not determined, you should check whether the <a
+                                href="{{url.page}}/Introduction#SP">client application or SP</a> used by the user
+                        connects
+                        through a <a href="{{url.page}}/Introduction#License">license</a> or <a
+                                href="{{url.page}}/Introduction#Credential">credential</a>. If so, the expiration
+                        of said license must be verified, and it
+                        should also be verified if the user or domain used is in active status. On the other hand, if
+                        authentication fails for all users of a given domain and it uses SAML integration, the trust
+                        relationship between the <a href="{{url.page}}/Introduction#AS">AS</a> and the <a
+                                href="{{url.page}}/Introduction#AS">IDP</a> must be checked. For further
+                        understanding about this topic, go to this <a
+                                href="{{url.page}}/Troubleshooting#flow_saml">
+                                section</a>.
+                </p>
+
+                <h4 id="howmany"><a href="{{url.page}}/FAQs#howmany">How many authentication domains can
+                                we have?</a>
+                </h4>
+                <p>The authentication domains have a <em>One to Many</em> relationship with the enterprise entity. There
+                        is
+                        no limit to the number of domains allowed for a given enterprise. This only depends on the
+                        implementation of the <a href="{{url.page}}/Introduction#SP">SP</a>.</a></p>
+
+                <h4 id="mandatory"><a href="{{url.page}}/FAQs#mandatory">Is it mandatory to use licenses to
+                                integrate my SP with the Auth server?</a>
+                </h4>
+                <p>It is not mandatory to use <a href="{{url.page}}/Introduction#License">licenses</a> to
+                        integrate the
+                        <a href="{{url.page}}/Introduction#SP">SP</a> with the Auth server. This is managed from
+                        an attribute in the authentication domain known as <a
+                                href="{{url.page}}/Domain#sp_verify">sp_verify</a>. Licenses add more
+                        flexibility to the solution, allowing configurations to be managed centrally from the credential
+                        entity. Licenses also add an extra layer of security to SPs. Although licenses are not
+                        mandatory, it is recommended to use them or at least use an SP
+                        identifier by defining <a href="{{url.page}}/Credential#client_id">client_id</a> and <a
+                                href="{{url.page}}/Credential#client_secret">client_secret</a>.
+                </p>
+
+
+                <h4 id="verify"><a href="{{url.page}}/FAQs#verify">How can I verify my access token?</a>
+                </h4>
+                <p>It is a common practice that different applications or systems that use Access Token for user
+                        identification try to decompress said security code to obtain valuable user information and make
+                        decisions based on it. This is not recommended because it requires sharing the same secret key
+                        used to encrypt the JWTs. Instead, systems must consume a service from the AS to
+                        obtain information regarding a certain access token. For further understanding about this
+                        topic, go to this <a href="{{url.page}}/Account">section</a>.
+                </p>
+
+        </section>
+</details>

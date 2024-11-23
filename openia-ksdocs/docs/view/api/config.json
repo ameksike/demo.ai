@@ -1,0 +1,37 @@
+{
+  "swaggerDefinition": {
+    "openapi": "3.0.1",
+    "tags": [],
+    "info": {
+      "version": "1.0.0",
+      "description": "MyCom API Docs"
+    },
+    "basePath": "/",
+    "servers": [
+      {
+        "url": "https://auth-dev.qa.ewas.aero",
+        "description": "Public development server"
+      },
+      {
+        "url": "https://auth-stg.qa.ewas.aero",
+        "description": "Public staging server for testing"
+      },
+      {
+        "url": "http://{host}:{port}",
+        "description": "Local development server",
+        "variables": {
+          "port": {
+            "default": "4000"
+          },
+          "host": {
+            "default": "localhost"
+          }
+        }
+      }
+    ]
+  },
+  "apis": ["{root}/**/*.yml", "{root}/**/*.json", "{root}/**/*.ts", "{root}/**/*.js", "{root}/../../../auth/**/*.js", "{root}/../../../auth/**/*.ts"],
+  "js": [],
+  "css": [],
+  "topics": []
+}

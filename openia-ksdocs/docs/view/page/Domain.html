@@ -1,0 +1,662 @@
+<details>
+    <summary>
+        <h1>Data Model: Domain</h1>
+    </summary>
+
+    <section>
+        <p>Regarding the database, this solution is composed by three main tables: <a
+                href="{{url.page}}/Domain#domain_model"><em>ewas_mgmt.domain</em></a>,
+            <a href="{{url.page}}/Credential#credential_model"><em><span>ewas_mgmt.credential</span></em></a> and
+            <a
+                href="{{url.page}}/Credential#credential_state"><em><span>ewas_mgmt.credential_state</span></em></a>,
+            but there are also others that work like complement to apply some business rules, some of which will be
+            described in this topic.
+        </p>
+
+        <h4 id="domain_model"><a href="{{url.page}}/Domain#domain_model">Domain</a></h4>
+        <p>For further information about domains read the section named as <a
+                href="{{url.page}}/Introduction">Introduction</a>.
+            <a href="{{url.public}}/img/table.domain-01.png"><img alt="table.domain"
+                    src="{{url.public}}/img/table.domain-01.png" /></a>
+
+        <ul>
+            <li><strong>id:</strong> Auto Generated integer identifier<strong>.</strong></li>
+            <li id="name"><strong>name:</strong> the domain name is type<strong> </strong><em>varchar(254), </em>it is a
+                nominal
+                or semantic identifier, it should be unique.&nbsp; &nbsp;</li>
+            <li id="group"><span style="letter-spacing: 0.0px;"><strong>group: </strong>With type <em>varchar(60)</em>,
+                    It is an
+                    optional value that allow to classify or wrap a bunch of domains.</span></li>
+            <li><strong style="letter-spacing: 0.0px;">description:</strong><span style="letter-spacing: 0.0px;"> It is
+                    optional, with type </span><em style="letter-spacing: 0.0px;">varchar(254).</em></li>
+            <li><span style="letter-spacing: 0.0px;"><strong>status:</strong> It is a <em>tinyint </em>field, define if
+                    the domain is active or not, possible values are 0 and 1.</span></li>
+            <li><strong>secret:</strong> It is an optional filed with type <em>longtext</em>, it is useful for handling
+                different passphrases for encryption purpose.</li>
+            <li id="enterprise_id"><strong>enterprise_id:</strong> It is the Enterprise foreign key. This field is
+                optional, but it is
+                recommended setting it.</li>
+            <li id="expiration"><strong>expiration: </strong>An optional field using <em>varchar(45)</em>. It define the
+                expiration time
+                as active domain applied to access tokens. It support the following format: 60, "2 days", "10h", "7d". A
+                numeric value is interpreted as a seconds count. If you use a string be sure you provide the time units
+                (days, hours, etc), otherwise milliseconds unit is used by default ("120" is equal to "120ms"). </li>
+            <li id="refresh"><strong>refresh: </strong>An optional field using <em>varchar(45)</em>. It define the
+                expiration time as
+                active domain on the refresh token process. It support the following format: 60, "2 days", "10h", "7d".
+                A numeric value is interpreted as a seconds count. If you use a string be sure you provide the time
+                units (days, hours, etc), otherwise milliseconds unit is used by default ("120" is equal to "120ms").
+            </li>
+            <li><strong>created_at:</strong> It is a <em>datetime </em>field to describe when the domain was created.
+            </li>
+            <li><strong>updated_at</strong><strong style="letter-spacing: 0.0px;">:</strong><span
+                    style="letter-spacing: 0.0px;"> It is a </span><em style="letter-spacing: 0.0px;">datetime
+                </em><span style="letter-spacing: 0.0px;">field to describe the last domain update.</span></li>
+            <li><span style="letter-spacing: 0.0px;"><strong>idp_issuer:</strong> It is relative to the IDP, an optional
+                    <span><em>varchar(254)</em> </span>field. It describes the <span>issuer name for the Auth Server in
+                        externals IDP. Usually, if it is not set, the issuer name will be the value in
+                        <em>as_url_metadata </em>field<em>.</em></span></span></li>
+            <li id="idp_url_entry"><strong>idp_url_entry: </strong><span>It is an optional </span><em>longtext
+                </em><span>field. It
+                    describes the entry point URL of an external IDP. It should be taken from the IDP metadata, and
+                    there is also an endpoint that automates the import of IDP metadata.</span></li>
+            <li id="idp_url_login"><strong>idp_url_login</strong><strong style="letter-spacing: 0.0px;">: </strong>It is
+                <span style="letter-spacing: 0.0px;">an optional </span><em style="letter-spacing: 0.0px;">longtext
+                </em><span style="letter-spacing: 0.0px;">field. It describes the login URL of an external IDP. <span>It
+                        should be taken from the IDP metadata.</span></span>
+            </li>
+            <li id="idp_url_logout"><strong>idp_url_logout: </strong><span style="letter-spacing: 0.0px;">It is an
+                    optional </span><em style="letter-spacing: 0.0px;">longtext </em><span
+                    style="letter-spacing: 0.0px;">field. It
+                    describes the logout URL <span>of an </span>external IDP. <span>It should be taken from the IDP
+                        metadata.</span></span></li>
+            <li id="idp_url_failure"><strong>idp_url_failure</strong><strong style="letter-spacing: 0.0px;">:
+                </strong><span>It is an
+                    optional </span><em style="letter-spacing: 0.0px;">longtext </em><span>field. It describes the
+                    failure URL of an external IDP. It should be taken from the IDP metadata.</span></li>
+            <li id="idp_url_metadata"><strong>idp_url_metadata: </strong><span>It is an optional </span><em
+                    style="letter-spacing: 0.0px;">longtext </em><span>field. It describes the metadata URL of an
+                    external IDP. It should be taken from the IDP metadata. If the IDP metadata was imported manually
+                    from a file, its content will be stored in this field even if it is not a URL.</span></li>
+            <li id="idp_attr_map"><strong>idp_attr_map: </strong>It is an optional <em
+                    style="letter-spacing: 0.0px;">longtext </em><span style="letter-spacing: 0.0px;">field. <span>It
+                        describes in a JSON format how the user attributes
+                        from an IDP will map to the expected fields of the Auth Server.&nbsp; A common value could
+                        be:</span></span></li>
+        </ul>
+
+        <code-view>{  
+            "id": "accountID",
+            "mail": "email", 
+            "firstName": 
+            "givenName", 
+            "lastName": "sn", 
+            "username": "in-user", 
+            "password": "in-pass", 
+            "role": "profile", 
+            "refresh": "ex-refresh", 
+            "expiration": "ex-expiration",
+            "secret": "code"
+        }</code-view>
+
+        <p style="margin-left: 40.0px;">Note in the above example that each index key represents the AS User field and
+            the value is the IDP User field. If we apply this transformation, the result will be as the following:&nbsp;
+        </p>
+
+        <div class="table-wrap">
+            <table class="wrapped confluenceTable tablesorter tablesorter-default" resolved="" role="grid">
+                <colgroup>
+                    <col />
+                    <col />
+                </colgroup>
+                <thead>
+                    <tr class="tablesorter-headerRow" role="row">
+                        <th aria-disabled="false"
+                            aria-label="IDP user data: No sort applied, activate to apply an ascending sort"
+                            aria-sort="none"
+                            class="confluenceTh tablesorter-header sortableHeader tablesorter-headerUnSorted"
+                            data-column="0" role="columnheader" scope="col"
+                            style="text-align: center; user-select: none;" tabindex="0" unselectable="on">
+                            <div class="tablesorter-header-inner">IDP user data</div>
+                        </th>
+                        <th aria-disabled="false"
+                            aria-label="AS user map result: No sort applied, activate to apply an ascending sort"
+                            aria-sort="none"
+                            class="confluenceTh tablesorter-header sortableHeader tablesorter-headerUnSorted"
+                            data-column="1" role="columnheader" scope="col"
+                            style="text-align: center; user-select: none;" tabindex="0" unselectable="on">
+                            <div class="tablesorter-header-inner">AS user map result</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody aria-live="polite" aria-relevant="all">
+                    <tr role="row">
+                        <td class="confluenceTd">
+                            <code-view>{
+                                "accountID": "2342534523452",
+                                "email":"antonio.membrides@MyCom.com",
+                                "givenName":"Antonio",
+                                "sn":"Membrides",
+                                "profile":"THT", 
+                                "ex-refresh": "2d", 
+                                "ex-expiration": "5d",
+                                "code": "nr2foiun4n345n5n6366m63"
+                            }</code-view>
+                        </td>
+                        <td class="confluenceTd">
+                            <code-view>{
+                                "id": "2342534523452",
+                                "mail":"antonio.membrides@MyCom.com",
+                                "firstName":"Antonio",
+                                "lastName":"Membrides",
+                                "role":"THT", 
+                                "refresh": "2d", 
+                                "expiration": "5d",
+                                "secret": "nr2foiun4n345n5n6366m63"
+                            }</code-view>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <ul>
+            <li><span style="letter-spacing: 0.0px;"><strong>idp_identifier_format:</strong> </span><span
+                    style="letter-spacing: 0.0px;">It is an optional </span><em style="letter-spacing: 0.0px;">longtext
+                </em><span>field. It controls how the users at identity providers are mapped to users at service
+                    providers during single sign-on. By default, it takes the value </span><em
+                    style="letter-spacing: 0.0px;">urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified. </em>All
+                possible values when the <em>idp_type </em>is SAML are:
+
+                <ul>
+                    <li>
+                        <p><span
+                                style="color: rgb(0,51,102);">urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p><span
+                                style="color: rgb(0,51,102);">urn:oasis:names:tc:SAML:2.0:nameid-format:transient</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p><span
+                                style="color: rgb(0,51,102);">urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p><span
+                                style="color: rgb(0,51,102);">urn:oasis:names:tc:SAML:2.0:nameid-format:emailAddress</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p><span style="color: rgb(0,51,102);">urn:oasis:names:tc:SAML:2.0:nameid-format:kerberos</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p><span style="color: rgb(0,51,102);">urn:oasis:names:tc:SAML:2.0:nameid-format:entity</span>
+                        </p>
+                    </li>
+                    <li>
+                        <p><span
+                                style="color: rgb(0,51,102);">urn:oasis:names:tc:SAML:2.0:nameid-format:WindowsDomainQualifiedName</span>
+                        </p>
+                    </li>
+                </ul>
+            </li>
+            <li id="idp_role_map"><strong>idp_role_map:</strong> It is an optional <em>longtext </em><span>field. It
+                    describes in a JSON
+                    format how the incoming role value from IDP is mapped to an expected role in the AS. A common value
+                    could be:</span></li>
+        </ul>
+
+        <code-view>{ "W2F": "PILOT W2F", "PAL": "PILOT PAL" }</code-view>
+
+        <p style="margin-left: 40.0px;">Note in the above example that each index key represents the value in the role
+            field from the IDP user data, and the value for each of these keys will be the exact role name in the
+            <em>ewas_mgmt.profiles</em> table from AS database. &nbsp;
+        </p>
+
+        <div class="table-wrap">
+            <table class="wrapped confluenceTable tablesorter tablesorter-default" resolved="" role="grid">
+                <colgroup>
+                    <col />
+                    <col />
+                </colgroup>
+                <thead>
+                    <tr class="tablesorter-headerRow" role="row">
+                        <th aria-disabled="false"
+                            aria-label="IDP user data: No sort applied, activate to apply an ascending sort"
+                            aria-sort="none"
+                            class="confluenceTh tablesorter-header sortableHeader tablesorter-headerUnSorted"
+                            data-column="0" role="columnheader" scope="col"
+                            style="text-align: center; user-select: none;" tabindex="0" unselectable="on">
+                            <div class="tablesorter-header-inner">IDP user data</div>
+                        </th>
+                        <th aria-disabled="false"
+                            aria-label="AS user map result: No sort applied, activate to apply an ascending sort"
+                            aria-sort="none"
+                            class="confluenceTh tablesorter-header sortableHeader tablesorter-headerUnSorted"
+                            data-column="1" role="columnheader" scope="col"
+                            style="text-align: center; user-select: none;" tabindex="0" unselectable="on">
+                            <div class="tablesorter-header-inner">AS user map result</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody aria-live="polite" aria-relevant="all">
+                    <tr role="row">
+                        <td class="confluenceTd">
+                            <code-view>{"email":"antonio.membrides@MyCom.com","givenName":"Antonio","sn":"Membrides","profile":"W2F"}</code-view>
+                        </td>
+                        <td class="confluenceTd">
+                            <code-view>{"mail":"antonio.membrides@MyCom.com","firstName":"Antonio","lastName":"Membrides","role":"PILOT W2F"}</code-view>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p style="margin-left: 40.0px;">It is also possible to use Regular Expressions format as index key, like the
+            following example:</p>
+
+        <code-view>{ "W2F": "PILOT W2F", "PAL": "PILOT PAL", "PILOT.*": "PILOT DEFAULT" }</code-view>
+
+        <p style="margin-left: 40.0px;">If we apply this transformation, the result will be as the following:&nbsp;</p>
+
+        <div class="table-wrap">
+            <table class="wrapped confluenceTable tablesorter tablesorter-default" resolved="" role="grid">
+                <colgroup>
+                    <col />
+                    <col />
+                </colgroup>
+                <thead>
+                    <tr class="tablesorter-headerRow" role="row">
+                        <th aria-disabled="false"
+                            aria-label="IDP user data: No sort applied, activate to apply an ascending sort"
+                            aria-sort="none"
+                            class="confluenceTh tablesorter-header sortableHeader tablesorter-headerUnSorted"
+                            data-column="0" role="columnheader" scope="col"
+                            style="text-align: center; user-select: none;" tabindex="0" unselectable="on">
+                            <div class="tablesorter-header-inner">IDP user data</div>
+                        </th>
+                        <th aria-disabled="false"
+                            aria-label="AS user map result: No sort applied, activate to apply an ascending sort"
+                            aria-sort="none"
+                            class="confluenceTh tablesorter-header sortableHeader tablesorter-headerUnSorted"
+                            data-column="1" role="columnheader" scope="col"
+                            style="text-align: center; user-select: none;" tabindex="0" unselectable="on">
+                            <div class="tablesorter-header-inner">AS user map result</div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody aria-live="polite" aria-relevant="all">
+                    <tr role="row">
+                        <td class="confluenceTd">
+                            <code-view>{"email":"antonio.membrides@MyCom.com","givenName":"Antonio","sn":"Membrides","profile":"PILOT Admin"}</code-view>
+                        </td>
+                        <td class="confluenceTd">
+                            <code-view>{"mail":"antonio.membrides@MyCom.com","firstName":"Antonio","lastName":"Membrides","role":"PILOT DEFAULT"}</code-view>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p style="margin-left: 40.0px;">It is important to take into account, that if there is no role field to map, the
+            new user coming from an external IDP will receive the default profile defined in the relation between the
+            enterprise and the product. &nbsp;However, if the role is mapped from the IDP with a non existent role
+            inside the Auth Server, the AS will throw an error.&nbsp;</p>
+
+        <ul>
+            <li id="idp_type"><strong>idp_type: </strong>It is a <em>varchar(254) </em><span
+                    style="letter-spacing: 0.0px;">field. It
+                    describes the required protocol for communication between IDP and AS. For further information in
+                    regard to the allow protocols, see the section named as <em>&quot;Auth Protocols&quot;</em>.
+                </span>By default it should be <span style="letter-spacing: 0.0px;"><em>SAML</em>.</span></li>
+            <li id="idp_cert"><span style="letter-spacing: 0.0px;"><strong>idp_cert:</strong> It is a longtext field,
+                    which contain
+                    the public certificate value from the IDP. It is required for <span>communication between IDP and
+                        AS. It should be taken from the IDP metadata, and there is also an endpoint that automates the
+                        import of IDP metadata.</span></span></li>
+            <li id="as_cert"><span style="letter-spacing: 0.0px;"><strong>as_cert: </strong>It is a <em>longtext
+                    </em><span>field,
+                        which contain the public certificate value from the AS. It is required for communication between
+                        IDP and AS.&nbsp;</span></span></li>
+            <li id="as_key"><strong>as_key:</strong> <span>It is a <em>longtext </em>field, which contain the private
+                    certificate
+                    value from the AS. It is required for communication between IDP and AS.&nbsp;</span></li>
+            <li id="as_type"><span style="letter-spacing: 0.0px;"><strong>as_type:</strong> </span>It is a <em
+                    style="letter-spacing: 0.0px;">varchar(254) </em><span style="letter-spacing: 0.0px;">field. It
+                    describes the required protocol for communication between SP and AS. For further information in
+                    regard to the allow protocols, see the section named as <a
+                        href="{{url.page}}/Constants#auth_protocols"><em>&quot;Auth Protocols&quot;</em></a>. By
+                    default it should be </span><em>OAUTH_AUTHORIZATION_CODE</em>.</li>
+            <li id="as_url_entry"><span style="letter-spacing: 0.0px;"><strong>as_url_entry: </strong>It is a
+                    <em>longtext
+                    </em><span>field. It describes the entry point from the AS. For instance, in case of having
+                        <em>as_type </em>as <em>BASIC</em>, it will be the login URL.&nbsp;</span></span></li>
+            <li id="as_url_token"><strong>as_url_token: </strong>It is a <em>longtext </em>field. It defines the AS URL
+                for requesting the
+                access and refresh token. &nbsp;</li>
+            <li id="as_url_revoke"><strong>as_url_revoke: </strong>It is a <em>longtext </em>field. It defines the
+                logout/SLO URL into the
+                AS server. &nbsp;</li>
+            <li id="as_url_metadata"><strong>as_url_metadata: </strong>It is a longtext field. Defines the domain
+                metadata URL. It is required for the integration between the AS and IDP, specially in protocolos like
+                SAML. Usually, it is autogenerated by the server from a set of attributes described in the domain</li>
+            <li id="as_url_profile"><strong>as_url_profile: </strong>It is a longtext field. Defines the entry point in
+                the AS to request
+                the profile data based on a certain token.&nbsp;</li>
+            <li id="as_user_action"><strong>as_user_action: </strong>It is a <em>tinyint </em>field, which define how
+                the AS should proceed
+                with the user incoming from the IDP. By default it take 2 value, for further information in regard to
+                the allow actions, see the section named as <a
+                    href="{{url.page}}/Constants#as_user_action"><em>&quot;AS User
+                        Action&quot;</em></a>.
+            </li>
+            <li id="sp_verify"><strong>sp_verify:</strong> It is a <em>tinyint </em>field, which define if the
+                credential from the SP
+                will be verified or not. By default it take o value, for further information in regard to the allow
+                protocols, see the section named as <a href="{{url.page}}/Constants#sp_verify"><em>&quot;SP Verify
+                        Options&quot;</em></a>.&nbsp;</li>
+            <li id="metadata"><strong>metadata: </strong>It is an optional <em style="letter-spacing: 0.0px;">longtext
+                </em><span style="letter-spacing: 0.0px;">field. <span>Describes in JSON format a set of additional data
+                        that
+                        can be used in the configuration of domains. For example, It is possible to define which
+                        attributes will be updated if duplicates are detected for entities or models such as User and
+                        User-Product. A common configuration could be:
+                        <code-view>{
+                            "userProduct":{
+                                "updateOnDuplicate":["profileId","active","devices"]
+                            },
+                            "user":{
+                                "updateOnDuplicate":["statusId"],
+                                "format":{
+                                    "separator":"..",
+                                    "domain":"date",
+                                    "includeDomain":true,
+                                    "password": "default-password"
+                                }
+                            }
+                        }</code-view>
+                        <p>In the above example we are telling the Auth server to update those attributes is the user
+                            exist or the User-Product relationship exist, of course it will be valid only if the "AS
+                            User Action" attribute is set to 2 or 4. For further information in regard to the allow
+                            actions, see the section named as <a
+                                href="{{url.page}}/Constants#as_user_action"><em>&quot;AS User
+                                    Action&quot;</em></a>.</p>
+
+                        <p>It is also possible to define de format for the username based on <em>separator</em>,
+                            <em>domain</em> and
+                            <em>includeDomain</em> property. Usually the <em>separator</em> property is used to replace
+                            the @ symbol and the <em>includeDomain</em> define if we want the email domain as part of
+                            the username, and it will use only if the <em>domain</em> property was not defined. In case
+                            the <em>domain</em> property has been defined its value will be taken as a raw string, but
+                            if its value is <em>"date"</em> it will be automatically converted to a timestamp.
+                        </p>
+
+                        <p><strong>Example 1</strong>, with the following configuration:</p>
+                        <code-view>{
+                                "user":{
+                                    "format":{
+                                        "separator":"..",
+                                        "includeDomain":true
+                                    }
+                                }
+                            }</code-view>
+                        <p>If we receive the following email:</p>
+                        <code-view>antonio.membrides@MyCom.com</code-view> The resulting username would be the following:
+                        <code-view>antonio.membrides..MyCom.com</code-view>
+
+                        <p><strong>Example 2</strong>, with the following configuration:</p>
+                        <code-view>{
+                                "user":{
+                                    "format":{
+                                        "separator":"-",
+                                        "domain":"date"
+                                    }
+                                }
+                            }</code-view>
+                        <p>If we receive the following email:</p>
+                        <code-view>antonio.membrides@MyCom.com</code-view> The resulting username would be the following:
+                        <code-view>antonio.membrides-1698309865520</code-view>
+
+                        <p><strong>Example 3</strong>, with the following configuration:</p>
+                        <code-view>{
+                                "user":{
+                                    "format":{
+                                        "separator":"+",
+                                        "domain":"tmp"
+                                    }
+                                }
+                            }</code-view>
+                        <p>If we receive the following email:</p>
+                        <code-view>antonio.membrides@MyCom.com</code-view> The resulting username would be the following:
+                        <code-view>antonio.membrides+tmp</code-view>
+
+                        <p><strong>Example 4</strong>, with the following configuration:</p>
+                        <code-view>{
+                                "user":{
+                                    "format":{
+                                        "separator":"",
+                                        "includeDomain":false
+                                    }
+                                }
+                            }</code-view>
+                        <p>If we receive the following email:</p>
+                        <code-view>antonio.membrides@MyCom.com</code-view> The resulting username would be the following:
+                        <code-view>antonio.membrides</code-view>
+
+                        <p><strong>Example 5</strong>, with the following configuration:</p>
+                        <code-view>{
+                                "user":{ }
+                            }</code-view>
+                        <p>If we receive the following email:</p>
+                        <code-view>antonio.membrides@MyCom.com</code-view> The resulting username would be the following:
+                        <code-view>antonio.membrides..MyCom.com</code-view>
+
+                        <p>It is also possible to define a default password for all users of a given domain through the
+                            <strong><em>metadata.user.format.password</em></strong> property. If the password property
+                            is not specified in the user formats section, then the password would be formed from the
+                            concatenation of the created username and the defined separator. If the separator is not
+                            specified, the value "-" is adopted by default.
+                        </p>
+            </li>
+        </ul>
+
+        <div id="enterprise_product">
+            <h3><a href="{{url.page}}/Domain#enterprise_product">Enterprise and Products</a></h3>
+            <p>The relationship between products and domains is through <em>enterprise_products</em> table bonded with
+                the
+                assigned entreprise ID in the Domain entity. &nbsp;On the other hand, if there is no role defined for a
+                new
+                incoming user, the profile will be taken from the <em>default_profile_id</em> field.</p>
+            <a href="{{url.public}}/img/table.enterprise-product-01.png"> <img alt="table.enterprise-product"
+                    src="{{url.public}}/img/table.enterprise-product-01.png" /></a>
+            <p>It is also important to mention that the access token expiration time will be taken from<em>
+                    enterprise_products.config.expiration</em> or <em>domain.expiration</em> in case there is no such
+                configuration in &nbsp;the <em>enterprise_products </em> table. Similarly, the refresh token expiration
+                time
+                will be taken from <em> enterprise_products.config.ending</em> or <em>
+                    enterprise_products.config.refresh</em>. Both cases support the following format: 60,
+                "2 days", "10h", "7d". A numeric value is interpreted as a seconds count. If you use a string be sure
+                you
+                provide the time units (days, hours, etc), otherwise milliseconds unit is used by default ("120" is
+                equal to
+                "120ms").
+            </p>
+            <p>
+                In case there is no data set in the <strong>expiration</strong> and <strong>refresh</strong> field in
+                the
+                domain model or <strong>Enterprise—Product</strong> relationship, the value will be taken from
+                environment
+                variables that have the following default values:
+            </p>
+            <ul>
+                <li><strong>SEC_ACCESS_TOKEN_EXPIRATION:</strong> 5d</li>
+                <li><strong>SEC_REFRESH_TOKEN_EXPIRATION:</strong> 365d</li>
+            </ul>
+
+            <a href="{{url.public}}/img/endpoint.domain.png"><img alt="endpoint"
+                    src="{{url.public}}/img/endpoint.domain.png" /></a>
+            <p>We can check the allowed enterprises and products once we request all the information about a domain,
+                like the example above.</p>
+        </div>
+
+        <div id="user_product">
+            <h3><a href="{{url.page}}/Domain#user_product">User and Products</a></h3>
+            <p>This relationship determines which products a given user has access to. Every time a user is
+                automatically created by the SA, the relevant entries must be generated in the
+                <strong>User-Products</strong>
+                table with the
+                objective of providing authorization to said user to access certain products.
+            </p>
+            <a href="{{url.public}}/img/domian.user.product.1.jpg"><img alt="domian.user.product.1"
+                    src="{{url.public}}/img/domian.user.product.1.jpg" /></a>
+            <p>Keep in mind that in the process of assigning a profile to a user for a specific product, it must be
+                verified that said profile is related to the product to avoid erroneous assignment errors. This is
+                managed through the <strong>ewas_product_id </strong> property in the <strong>Profile</strong> table
+                containing the exact related product.</p>
+
+        </div>
+
+        <div id="domain_new">
+            <h3><a href="{{url.page}}/Domain#domain_new">How to create a new Domain</a> </h3>
+            <p>Using the automatic guide, it is possible to create a Domain simply by setting the required fields like
+                the
+                example below:</p>
+            <code-view>POST https://auth-dev.qa.ewas.aero/v1/domain </code-view>
+            <code-view>
+                {
+                    "auto": true,
+                    "enterprise_id": 103,
+                    "group": "thy.com",
+                    "idp_type": "SAML",
+                    "idp_url_metadata": "https://thy.com/idp/metadata",
+                    "name": "hl.thy.com"
+                  }
+            </code-view>
+            <p>As a result, we should receive the following: </p>
+            <code-view>{
+                "idp_attr_map": {"mail":"email","firstName":"givenName","lastName":"sn"},
+                "idp_role_map": null,
+                "as_user_action": 3,
+                "sp_verify": 0,
+                "status": 1,
+                "expiration": "480m",
+                "id": 23,
+                "idp_type": "SAML",
+                "as_type": "OAUTH_AUTHORIZATION_CODE",
+                "as_url_entry": "https://auth-dev.qa.ewas.aero/v1/oauth/authorize",
+                "as_url_token": "https://auth-dev.qa.ewas.aero/v1/oauth/token",
+                "as_url_revoke": "https://auth-dev.qa.ewas.aero/v1/oauth/revoke",
+                "as_url_profile": "https://auth-dev.qa.ewas.aero/v1/oauth/profile",
+                "as_url_metadata": "https://auth-dev.qa.ewas.aero/v1/oauth/metadata/hl.thy.com",
+                "idp_identifier_format": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+                "idp_url_entry": "https://thy.com/idp/saml2/idp/SSOService.php",
+                "idp_url_logout": "https://thy.com/idp/saml2/idp/SingleLogoutService.php",
+                "idp_url_login": "hhttps://thy.com/idp/saml2/idp/SSOService.php",
+                "idp_cert": "MIICmjCCAYJ278DjPS2lwEAATJLwxZtoAv6PNs188hvT1tfMLPUX4m35qaGAU48PwCL7L3cRHYs9wZWc0ifXZcBENLtHYCLi5txR8c5lyHB9d3AQHzKHMFNjLswn5HsckKg83RH7+eVqHqGw==",
+                "idp_url_metadata": "https://thy.com/idp/saml2/idp/metadata.php",
+                "enterprise_id": "103",
+                "name": "hl.thy.com",
+                "as_cert": "-----BEGIN CERTIFICATE----- CSqGSIb3DQEB\rEfDOax2pQU8AZBzX0l6lHOfwpR/I0w6gAB+6C246QXPwHBg== -----END CERTIFICATE----- ",
+                "as_key": "-----BEGIN RSA PRIVATE KEY----- MIIEpAIQ3KDOax2pQU8AZBzX0jSNaYZTvgr4yAxGUdt97WowrBcUvkzYiw8AkZeLpnLFup97sKp37wODA== -----END RSA PRIVATE KEY----- ",
+                "updatedAt": "2023-08-01T12:21:07.883Z",
+                "createdAt": "2023-08-01T12:21:07.883Z"
+            }</code-view>
+            <p>Note that by setting the auto property to true, we tell the AS to automatically generate the necessary
+                fields
+                like <em>as_cert</em>, <em>as_key</em>, all as_urls, etc. Also in combination with idp_type, allows
+                importing data from <em>idp_url_metadata </em>which provides almost all fields with <em>idp_</em>
+                prefix.
+            </p>
+            <img alt="table.domain" src="{{url.public}}/img/postman.domain.jpg" />
+            <p>It is also possible to set the as_cert, as_key and the idp_metadata from a file, like the image above.
+            </p>
+
+            <h3 id="domain_update"><a href="{{url.page}}/Domain#domain_update">How to update a Domain</a></h3>
+            <p>Both for domains and credentials, RESTful services are implemented that standardize the implementation of
+                the
+                CRUD. Based on that, we are able to update a domain like the following:</p>
+            <code-view>PUT https://auth-dev.qa.ewas.aero/v1/domain/23</code-view>
+            <code-view>{
+                "enterprise_id": 1058
+            }</code-view>
+            <p>As a result, we should receive the following: </p>
+            <code-view>{
+                "idp_attr_map": "{\"mail\":\"email\",\"firstName\":\"givenName\",\"lastName\":\"sn\"}",
+                "idp_role_map": null,
+                "as_user_action": 3,
+                "sp_verify": 0,
+                "status": 1,
+                "expiration": "480m",
+                "id": 23,
+                "idp_type": "SAML",
+                "as_type": "OAUTH_AUTHORIZATION_CODE",
+                "as_url_entry": "https://auth-dev.qa.ewas.aero/v1/oauth/authorize",
+                "as_url_token": "https://auth-dev.qa.ewas.aero/v1/oauth/token",
+                "as_url_revoke": "https://auth-dev.qa.ewas.aero/v1/oauth/revoke",
+                "as_url_profile": "https://auth-dev.qa.ewas.aero/v1/oauth/profile",
+                "as_url_metadata": "https://auth-dev.qa.ewas.aero/v1/oauth/metadata/hl.thy.com",
+                "idp_identifier_format": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+                "idp_url_entry": "https://thy.com/idp/saml2/idp/SSOService.php",
+                "idp_url_logout": "https://thy.com/idp/saml2/idp/SingleLogoutService.php",
+                "idp_url_login": "hhttps://thy.com/idp/saml2/idp/SSOService.php",
+                "idp_cert": "MIICmjCCAYJ278DjPS2lwEAATJLwxZtoAv6PNs188hvT1tfMLPUX4m35qaGAU48PwCL7L3cRHYs9wZWc0ifXZcBENLtHYCLi5txR8c5lyHB9d3AQHzKHMFNjLswn5HsckKg83RH7+eVqHqGw==",
+                "idp_url_metadata": "https://thy.com/idp/saml2/idp/metadata.php",
+                "enterprise_id": "1058",
+                "name": "hl.thy.com",
+                "as_cert": "-----BEGIN CERTIFICATE----- CSqGSIb3DQEB\rEfDOax2pQU8AZBzX0l6lHOfwpR/I0w6gAB+6C246QXPwHBg== -----END CERTIFICATE----- ",
+                "as_key": "-----BEGIN RSA PRIVATE KEY----- MIIEpAIQ3KDOax2pQU8AZBzX0jSNaYZTvgr4yAxGUdt97WowrBcUvkzYiw8AkZeLpnLFup97sKp37wODA== -----END RSA PRIVATE KEY----- ",
+                "updatedAt": "2023-08-01T12:21:07.883Z",
+                "createdAt": "2023-08-01T12:21:07.883Z"
+            }</code-view>
+            <p>It is also possible to update a domain knowing only the name, like the following example: </p>
+            <code-view>POST https://auth-dev.qa.ewas.aero/v1/domain </code-view>
+            <code-view>{
+                "enterprise_id": 1058,
+                "name": "hl.thy.com"
+            }</code-view>
+        </div>
+
+        <div id="domain_delete">
+            <h3><a href="{{url.page}}/Domain#domain_delete">How to delete a Domain</a></h3>
+            <p>Based on the previous statement, we should remove a domain like the following: </p>
+            <code-view>DELETE https://auth-dev.qa.ewas.aero/v1/domain/23 </code-view>
+            <p>As a result, we should receive the following: </p>
+            <code-view>{
+                "idp_attr_map": "{\"mail\":\"email\",\"firstName\":\"givenName\",\"lastName\":\"sn\"}",
+                "idp_role_map": null,
+                "as_user_action": 3,
+                "sp_verify": 0,
+                "status": 1,
+                "expiration": "480m",
+                "id": 23,
+                "idp_type": "SAML",
+                "as_type": "OAUTH_AUTHORIZATION_CODE",
+                "as_url_entry": "https://auth-dev.qa.ewas.aero/v1/oauth/authorize",
+                "as_url_token": "https://auth-dev.qa.ewas.aero/v1/oauth/token",
+                "as_url_revoke": "https://auth-dev.qa.ewas.aero/v1/oauth/revoke",
+                "as_url_profile": "https://auth-dev.qa.ewas.aero/v1/oauth/profile",
+                "as_url_metadata": "https://auth-dev.qa.ewas.aero/v1/oauth/metadata/hl.thy.com",
+                "idp_identifier_format": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+                "idp_url_entry": "https://thy.com/idp/saml2/idp/SSOService.php",
+                "idp_url_logout": "https://thy.com/idp/saml2/idp/SingleLogoutService.php",
+                "idp_url_login": "hhttps://thy.com/idp/saml2/idp/SSOService.php",
+                "idp_cert": "MIICmjCCAYJ278DjPS2lwEAATJLwxZtoAv6PNs188hvT1tfMLPUX4m35qaGAU48PwCL7L3cRHYs9wZWc0ifXZcBENLtHYCLi5txR8c5lyHB9d3AQHzKHMFNjLswn5HsckKg83RH7+eVqHqGw==",
+                "idp_url_metadata": "https://thy.com/idp/saml2/idp/metadata.php",
+                "enterprise_id": "1058",
+                "name": "hl.thy.com",
+                "as_cert": "-----BEGIN CERTIFICATE----- CSqGSIb3DQEB\rEfDOax2pQU8AZBzX0l6lHOfwpR/I0w6gAB+6C246QXPwHBg== -----END CERTIFICATE----- ",
+                "as_key": "-----BEGIN RSA PRIVATE KEY----- MIIEpAIQ3KDOax2pQU8AZBzX0jSNaYZTvgr4yAxGUdt97WowrBcUvkzYiw8AkZeLpnLFup97sKp37wODA== -----END RSA PRIVATE KEY----- ",
+                "updatedAt": "2023-08-01T12:21:07.883Z",
+                "createdAt": "2023-08-01T12:21:07.883Z"
+            }</code-view>
+        </div>
+
+        <p>You might be interested in reviewing the following related topic knows as <a
+                href="{{url.page}}/Credential">Credential</a>.</p>
+
+    </section>
+</details>

@@ -1,0 +1,223 @@
+<details>
+    <summary>
+        <h1>Troubleshooting</h1>
+    </summary>
+
+    <section>
+        <h3 id="flow_saml"><a href="{{url.page}}/Troubleshooting#flow_saml">Common SAML authentication flow:</a>
+        </h3>
+        <ul>
+            <li> <strong><a href="{{url.page}}/Login#step1">STEP 1:</a> </strong> Process in which
+                communication is established with the external
+                IDP. The authentication domain is determined and an attempt is made to redirect the user
+                to the <a href="{{url.page}}/Login">login</a> screen provided by the IDP. To
+                identify an error in this step, you can use
+                the <a href="{{url.page}}/Logs">Logs</a> or consult the
+                <a href="{{url.page}}/Credential#credential_state">credential_state</a> table
+                in order to get if there is an error. If when checking a specific flow ID it is
+                observed that <em>STEP 2</em> is not reached, it may be
+                due to configuration errors between the IDP and the AS. These problems could also
+                be caused by connectivity problems.
+
+                <p>A way to verify if the problem is on the client's side could be to search the logs
+                    for some record related to <em>STEP 1</em> similar to the example below,
+                    identifying the
+                    flow ID or obtaining the
+                    redirect URL so that the client tries to access said URL directly from an
+                    installed browser on the same computer, thus verifying if there is any problem
+                    with connectivity or with the structure of the URL.</p>
+                <code-view>{"flow":"169751894127473","level":4,"src":"Logger:Track:Redirect","data":{"location":"https://dcctest.thy.com/oamfed/idp/samlv20?SAMLRequest=nVNdj9owEPwrkd%2Fz4RwchwWcKKgq0rWNIL2HvlSLvTksJXbOdoDrr68TSMvDHap4irS7npmdnUwej1UZ7NFYqdWU0Cghj7OJhaqs2bxxO7XG1watC%2FyYsqxrTEljFNNgpWUKKrTMcbaZf31iaZSw2minuS5JsFpOya9UJANMgQ7G93wkaFFsExSD7eB%2BK4CPHh5GSToeDvmYBM%2B9CI%2FiH1vb4EpZB8r5UpLehTQJ6ShPhixJWUqju4T%2BJEF2pvsklZDq5bq27WnIsi95noXZ901OgqXfTipwHfXOudqyOBacO1%2BP3O4t4rqKNVQFiliKOm4t2Kde4WdtOHYeTYkzDZJgbi2aFmihlW0qNBs0e8nxx%2FrpHzT4F6F1L9ErRHgAGwEaHe%2Bp5%2FCdrq2N%2FI3kdAbWGWEu%2FL%2B%2BIvQayOw%2FGSt0IMBBfF52El%2Fw9ln45olWy0yXkr%2FdkoV5WerDwiA47N3y%2FlXgPgagEe0qUoRFN8oaZWvkspAoSNwrOwcURXcK77zD401xXeiqBiNtmwM8Anf9BS6BF6U3eI3FLfe4OsYZb6F9OfOfgzaiTTb6GIrcgF9cG3e%2BzHt6ZqfeB3b87V7%2B0rM%2F&RelayState=MTY5NzUxODk0MTI5ODoxNjk3NTE4OTQxMjc0NzM6N2IyMjc1NzM2NTcyNDk2NDIyM2E2ZTc1NmM2YzJjMjI2MzcyNjU2NDY1NmU3NDY5NjE2YzQ5NjQyMjNhMzkzMjJjMjI2NDZmNmQ2MTY5NmU0OTY0MjIzYTMyN2Q%3D&SigAlg=http%3A%2F%2Fwww.w3.org%2F2000%2F09%2Fxmldsig%23rsa-sha1&Signature=T6YhpfkHM%2FB8xTAihqlCLPPKkBr%2BY1YViFE6MuodrylEgS9c5CFFT2q32JojZC4kUw5sNSi2ymBu%2Fj0gw5I5vuw8vYOPvlEokHSDl3j%2BKUPYpMGI1hdifxUPrebhQwbzQU8MNRq96RFXBqGJaw1DjeZV4HuhYVUuKBBWzh%2BYdNkUQQBD5RX2yjbifpC3moJmq3FBsuK15NHhf1RMHy5SB6QgR1hMVmW9MUyqWIjkgbluHNX86ckrCUS6Yvf1ZEaatJiGMQBP1DaBDqCGnWouLLnEsyUMS51pvUQFU74PQ2NM2Ip9n3hjo5gv8uYcx1O1uu6jGBzXfRyR2RdXD%2Fq%2BOoGxb99x%2BEF8jlVSwsbOhMVn5HHk1VR%2Bi2cD88NL7UT09%2FCR0XjyJ3vtzOVO14Mh%2Fw938rXdX8iLgrMKKkuHX%2B%2FjZf76y3ftqJEdgEM%2BBYK6P0ixxCpM79P7e2cN3cQWC8oniMlOl%2FgskRQS3ui%2BBYH95cH7KNk%2B5PHjO635S6UhFTgyBWmX1rHzowrQPyXYpQZ0KXIXn5hD43iKZpALnZU3q4Rp0rqdQ5tEa5J8NNvK8F4ffz8qdq5lGkEb%2FGC7n8BAMK3NNmSA8GAek%2BJ0uY5jVvRrzK1vAFmrjfFitmSUTwBAE1%2FS%2BdGMIR%2FHx%2B5bBqwsACQ4VypX7z%2BaENbx0LA%3D"}}</code-view>
+
+                <p>This step should also check the validity of the requested domain or license, if any.
+                    In the case of the domain, the <a href="{{url.page}}/Domain#sp_verify">sp_verify</a> option
+                    determines whether or not the
+                    credential associated with the client application that performed that operation
+                    will be verified. Another way to identify errors is to verify the <a
+                        href="{{url.page}}/Alerts#msteam">MS Teams
+                        alerts.</a> </p>
+
+            </li>
+            <li> <a href="{{url.page}}/Login#step2"><strong>STEP 2:</strong></a> This process begins
+                once receiving the user data from the external
+                IDP. In this step we can confirm that the IDP showed the user a login screen and
+                completed the process defined by the IDP to identify themselves.
+
+                <p>
+                    The most common errors in this section are related to the <a
+                        href="{{url.page}}/Domain#idp_attr_map">mapping of attributes</a>,
+                    as well as the definition of
+                    <a href="{{url.page}}/Domain#idp_role_map">privileges or user roles</a>.
+                    If log filtering is performed based on the term <em>service:Saml:identify</em>,
+                    the data coming from the IDP could be observed as shown in the example below:
+                </p>
+
+                <code-view>{"flow":"169751894127473","level":3,"src":"service:Saml:identify","data":{"issuer":"https://dcctest.thy.com/oam/fed","inResponseTo":"_2d04e2a1496c7d1ffb0ed4b46bdac788702955c9","sessionIndex":"id-kVX0scEmANXmm-CixV6tDD9ojbqOJTW7Nzwm3RAD","nameID":"TEST@THY.COM","nameIDFormat":"urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified","THY-LOGINNAME":"G_ISTANBULLUGIL","THY-SICILNO":"106648","attributes":{"THY-LOGINNAME":"G_ISTANBULLUGIL","THY-SICILNO":"106648"}},"date":"Tue, 17 Oct 2023 05:02:35 GMT"}</code-view>
+
+                <p>
+                    Another element that could fail is that the relationship between <a
+                        href="{{url.page}}/Domain#enterprise_product"> company and product
+                    </a> is not well defined or its configuration is incorrect. It is also important
+                    to check the configuration of the <a
+                        href="{{url.page}}/Domain#as_user_action">as_user_action</a>
+                    property, which define how the AS will manage the user creation.
+                </p>
+
+                <p>On the other hand, if it is detected that the user data has not been updated with the
+                    correct data or the <em>User-Product</em> relationship has an erroneous
+                    configuration, in
+                    these cases the configuration of the <a href="{{url.page}}/Domain#metadata">metadata </a> of
+                    the specified
+                    domain should be verified, which indicates which elements of the user and
+                    <a href="{{url.page}}/Domain#user_product">User-Product</a> relationship
+                    should be updated upon receipt of user profile data
+                    from the IDP.
+                </p>
+            </li>
+            <li> <a href="{{url.page}}/Login#step3"><strong>STEP 3:</strong></a>
+                The third step is confirmation that the user has successfully <a href="{{url.page}}/Login">logged in</a>.
+
+                <code-view>{"flow":"169751894127473","level":3,"src":"controller:OAuth:getToken","message":"STEP 3: Send token to SP","data":{"grant_type":"authorization_code"},"date":"Tue, 17 Oct 2023 05:02:36 GMT"}</code-view>
+
+                <p>In case it is required to check if the SAML solution is working correctly, it should
+                    be filtered by <strong>STEP 3</strong> in the log management system to identify
+                    a record similar to the previous example.</p>
+
+                <p>STEP 3: The user domain or credenial is not valid for this request, please check your <client_id> and <client_secret> or avoid the credential verification for this domain</p>
+                <p>If you find any error log like the one shown in the example above, that means there
+                    must have some issues with the license or some of the resources was recently
+                    disabled: User, <a href="{{url.page}}/Introduction#Credential">Credential</a> or <a
+                        href="{{url.page}}/Introduction#Domain">Domain</a> .</p>
+
+            </li>
+            <li> <a href="{{url.page}}/Refresh"><strong>STEP 4:</strong></a> It refers to the refresh
+                token flow, at this point we can
+                identify that step 3 has been completed in which a valid access token was delivered to
+                the client application, and it attempts to renew said access token from the generated
+                refresh token previously. This step is optional since its occurrence only depends on
+                whether the <a href="{{url.page}}/Refresh">refresh token</a> process is started.
+            </li>
+            <li> <a href="{{url.page}}/Logout"><strong>STEP 5:</strong></a> This process describes
+                the closing of the session from the AS,
+                usually after this step a record associated with STEP 6 is expected where confirmation
+                of the closing of the session is received from the IDP, otherwise a log record should be
+                displayed that indicates a related error with STEP 6. If STEP 6 is not completed, it
+                would not represent a significant security problem, since STEP 5 guarantees logout from
+                the <a href="{{url.page}}/Introduction#AS">AS</a> itself.</li>
+            <li> <a href="{{url.page}}/Logout"><strong>STEP 6:</strong></a> This refers to the IDP
+                confirming a successful <a href="{{url.page}}/Logout">logout</a>.
+                <a href="{{url.public}}/img/credential.state.5.JPG"><img alt="table.credential.state"
+                        src="{{url.public}}/img/credential.state.5.JPG" /></a>
+                <p>In the <a href="{{url.page}}/Credential#credential_state">credential_state</a>
+                    table you can identify how the flow was completed</p>
+            </li>
+        </ul>
+
+        <h3 id="inconsistents"><a href="{{url.page}}/Troubleshooting#inconsistents">Inconsistent data error:</a>
+        </h3>
+        <ul>
+            <li id="bad_relationships"><strong>Bad relationships:</strong>
+                <ul>
+                    <li><strong>Cause:</strong> When starting an authentication process, you get
+                        an error because the requested product is not assigned to the user or
+                        the domain.</li>
+                    <li><strong>Solution:</strong> The Company - Product relationship must be
+                        verified. In the case of a domain, it must be verified that the company
+                        assigned to the domain is correct. For more information on these cases,
+                        read the sections named as: <a href="{{url.page}}/Logs#auth_legacy">How to
+                            check the legacy authentication logs in Kibana</a>.</li>
+                </ul>
+            </li>
+            <li id="bad_status"><strong>Bad status:</strong>
+                <ul>
+                    <li><strong>Cause:</strong> When starting an authentication process, you get an
+                        error because the company, product, domain, credential, or user does not
+                        exist or one of them is disabled.</li>
+                    <li><strong>Solution:</strong> It must be verified which side of the record is
+                        active, for which the status of the field of each entity must be
+                        verified (Enterprise, Domain, Credential, User, Enterprise-Product,
+                        etc.).
+                    </li>
+                </ul>
+            </li>
+            <li id="bad_connections"><strong>Bad connections (VPN/VPC/Firewall/Proxy):</strong>
+                <ul>
+                    <li><strong>Cause:</strong> Users complain that they cannot authenticate with
+                        SAML.</li>
+                    <li><strong>Solution:</strong> If, when checking the log records, the process
+                        does not go beyond STEP 1, it is very likely that it is a connection
+                        problem. You can also request the application logs. the client must be
+                        instructed to contact their network administrator and verify that their
+                        services are accessible from MyCom servers, it must also be verified that
+                        the application from the internal network must be able to access MyCom
+                        services.
+                    </li>
+                </ul>
+            </li>
+            <li id="bad_role_assignment"><strong>Bad role assignment:</strong>
+                <ul>
+                    <li><strong>Cause:</strong> Users complain that they cannot authenticate with
+                        SAML.</li>
+                    <li><strong>Solution:</strong> If when reviewing the blog posts the
+                        authentication process does not go beyond STEP 2, it is most likely a
+                        role or permission assignment issue. You must verify how the role
+                        assignment is defined. You can refer to the <a
+                            href="{{url.page}}/Domain#enterprise_product">"Company and
+                            Products"</a>
+                        topic, or maybe it is related to a wrong setting some domain properties
+                        like: <em> idp_attr_map, idp_role_map, metadata.updateOnDuplicate.</em>
+                    </li>
+                </ul>
+            </li>
+            <li id="bad_license"><strong>Bad credentials or license:</strong>
+                <ul>
+                    <li><strong>Cause:</strong> When the application starts, it does not load the
+                        configuration and authentication methods are not available.</li>
+                    <li><strong>Solution:</strong> When reviewing the authentication logs, a
+                        credential request is detected whose result is empty, the http request
+                        would be similar to the one shown below:
+                        <code-view>https://auth-dev.qa.ewas.aero/v1/credential?Authorization=NjhiMjlkYjJmZjRkNzQ2Yzk2NjNlMGFjMmZmMjFiODU6OWZjMjRmOGI4ZGM2MDY0MDQ0NDhlODAwZDU5YzM5Yjk=</code-view>
+                        In this case you must verify the credential token that is in BASIC
+                        format. Usually the credential_id and the credential_secret do not
+                        match, as a solution you can renew the license. Please note that the
+                        secret code is stored encrypted in the database for security reasons.
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <p>For more information on these cases, read the sections named as <a
+                href="{{url.page}}/Domain">Domain</a>, <a href="{{url.page}}/Logs">Logs</a>
+            and <a href="{{url.page}}/Alerts">Alerts</a>.
+
+        <h3 id="devops"><a href="{{url.page}}/Troubleshooting#devops">Incomplete deployment of a product
+                version:</a>
+        </h3>
+        <ul>
+            <li id="src_outdated"><strong>Source Code Outdated:</strong>
+                <ul>
+                    <li><strong>Cause:</strong> When updates are made to the database that were
+                        intended for a higher version than the one that is deployed on the
+                        server.</li>
+                    <li><strong>Solution:</strong> It must be verified that the <a
+                            href="{{url.page}}/Builds#migration_number">Migration
+                            Number</a> is
+                        less than or equal to the <a href="{{url.page}}/Builds#build_number">Build Number</a>.
+                    </li>
+                </ul>
+            </li>
+            <li id="db_outdated"><strong>Database Outdated:</strong>
+                <ul>
+                    <li><strong>Cause:</strong> Occurs when all the required modifications to the
+                        database are not executed.</li>
+                    <li><strong>Solution:</strong> It must be verified that the current <a
+                            href="{{url.page}}/Builds#migration_number">Migration
+                            Number</a> is greater than or equal to the last available
+                        Migration Number.
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        
+        <p>For further information about this topic read the section named as <a
+                href="{{url.page}}/Builds#migration_build">Builds</a>.
+    </section>
+</details>

@@ -1,0 +1,146 @@
+<details>
+        <summary>
+                <h1>User Account and Token Introspection</h1>
+        </summary>
+
+        <section>
+                <p>This specification defines a method for a protected resource to query an OAuth 2.0 authorization
+                        server to determine the active state of an OAuth 2.0 token and to determine meta-information
+                        about this token. OAuth 2.0 deployments can use this method to convey information about the
+                        authorization context of the token from the authorization server to the protected
+                        resource.</span></p>
+
+
+                <div id="introspection">
+                        <h3><a href="{{url.page}}/Account#introspection">Introspection</a> </h3>
+                        <p>
+                                Once an access token is obtained, it can be verified allowing data to be obtained from
+                                the user who has logged in. The URL to obtain the user profile by validating the access
+                                token can be obtained in the domain configuration defined by the property named <a
+                                        href="{{url.page}}/Domain#as_url_profile"> as_url_profile. </a>and it must
+                                be called using the <strong>GET</strong> method of the HTTP protocol.
+                        </p>
+                        <code-view>https://auth-dev.qa.ewas.aero/v1/oauth/profile?token=ACCESS_TOKEN </code-view>
+                        <p>If an application type credential is not used or the selected domain does not require SP
+                                verification, it is possible to use the authorization variable to specify the access
+                                token that
+                                you want to validate. In other cases, it will be necessary to
+                                use the authorization property to send the client_id and client_secret in basic encoding
+                                format,
+                                as well as the access_token or refresh_token into the token in the token property. </p>
+                        <code-view>https://auth-dev.qa.ewas.aero/v1/oauth/profile?authorization=ACCESS_TOKEN </code-view>
+                        <p>Note that it is recommended to always use the authorization property of the HTTP protocol
+                                header
+                                section, even if it is allowed to be used as a GET variable. After the request is
+                                executed, if
+                                the access token is valid, you will get a response like the following:</p>
+
+                        <code-view>
+                        {
+                                "active": true,
+                                "client_id": "e2bf3e6c39d647272c4c9db3ddc78919",
+                                "exp": 1950888992,
+                                "iat": 1698428192,
+                                "sub": 187687
+                        }
+                        </code-view>
+                        <p>If the access token is not valid, the result of the request will be the following:</p>
+                        <code-view>{"active": false}</code-view>
+                        <p>Note that processing an expired <strong> <em>access token</em> </strong> will automatically
+                                initiate a logout as a background process in the AS.</p>
+                </div>
+
+                <div id="account">
+                        <h3><a href="{{url.page}}/Account#account">User Account</a> </h3>
+                        <p>Property <strong><em>response_type</em></strong> must be specified with value
+                                <strong><em>"full"</em></strong> in case additional information is required for the user
+                                account associated with a given access token. The request would be as shown below:
+                        </p>
+
+                        <code-view>https://auth-dev.qa.ewas.aero/v1/oauth/profile?token=ACCESS_TOKEN&response_type=full </code-view>
+                        <p>The result is a payload like the following:</p>
+                        <code-view>{
+                                        "scope": "DISPATCH EDITION,DISPATCH ALERTS,DISPATCH COMMENTS,DISPATCH REROUTING,DISPATCH ROUTEFINDER,DISPATCH LIGHT DASHBOARD,DISPATCH OTH AREAS,DISPATCH NFZ CTN AREAS,DISPATCH_HIDE_OFFICES,DISPATCH HIDE MANUAL POSITION,DISPATCH HIDE FLYOVER LAYER",
+                                        "products": "3",
+                                        "roles": {
+                                            "DISPATCH DEMO": {
+                                                "profileId": 11,
+                                                "profileName": "DISPATCH DEMO",
+                                                "description": "eWAS Dispatch Demo (FlightAware)",
+                                                "products": [
+                                                    3
+                                                ],
+                                                "scope": [
+                                                    "DISPATCH EDITION",
+                                                    "DISPATCH ALERTS",
+                                                    "DISPATCH COMMENTS",
+                                                    "DISPATCH REROUTING",
+                                                    "DISPATCH ROUTEFINDER",
+                                                    "DISPATCH LIGHT DASHBOARD",
+                                                    "DISPATCH OTH AREAS",
+                                                    "DISPATCH NFZ CTN AREAS",
+                                                    "DISPATCH_HIDE_OFFICES",
+                                                    "DISPATCH HIDE MANUAL POSITION",
+                                                    "DISPATCH HIDE FLYOVER LAYER"
+                                                ]
+                                            }
+                                        },
+                                        "active": true,
+                                        "user": {
+                                            "userId": 187687,
+                                            "statusId": 1,
+                                            "typeId": 1,
+                                            "profileId": 1,
+                                            "enterpriseId": 369,
+                                            "userNick": "user2..example.com",
+                                            "startTime": "2023-10-18 19:45:21",
+                                            "mail": "user2@example.com",
+                                            "expirationTime": "2033-10-18 19:49:38",
+                                            "firstName": "User2",
+                                            "middleName": "",
+                                            "lastName": "user2@example.com",
+                                            "secondTelephone": "",
+                                            "telephone": "",
+                                            "address": "",
+                                            "city": "",
+                                            "country": "0",
+                                            "postCode": "",
+                                            "validated": 0,
+                                            "userLang": "en",
+                                            "userAircraft": 0,
+                                            "birthYear": 0,
+                                            "contactEmail": 0,
+                                            "userComments": "",
+                                            "vip": 0,
+                                            "enterpriseNameUser": "",
+                                            "numDevices": 1,
+                                            "completedInfo": 0,
+                                            "referral": "",
+                                            "modificationTime": "2023-10-18 19:45:21",
+                                            "config": null,
+                                            "smsValidationSent": 0,
+                                            "pilotId": null,
+                                            "apiKeyId": null
+                                        },
+                                        "client_id": "e2bf3e6c39d647272c4c9db3ddc78919",
+                                        "exp": 1697687450,
+                                        "iat": 1697658650
+                                    }</code-view>
+                        <p>Observed in the previous example how to obtain additional data related to the user account
+                                that owns the access token. Among the received data, we find the same content that is
+                                obtained in the token introspection, the whole scope, as well as the assigned
+                                roles and their permissions per product.
+                        </p>
+                </div>
+
+
+
+                <span>You may be interested in viewing the following topics:</span>
+                <ul>
+                        <li><a href="{{url.page}}/Login">Login</a></li>
+                        <li><a href="{{url.page}}/Logout">Logout</a></li>
+                </ul>
+                </div>
+
+        </section>
+</details>

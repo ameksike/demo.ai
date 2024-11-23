@@ -1,0 +1,132 @@
+components:
+  schemas:
+    Adress:
+      type: object
+      description: This is an entity that stores all the relevant information related to Identity Providers, Authorization Servers, Service Providers, and general security values. By providing a flexible and configurable solution, the Adress Entity enhances the system's adaptability to handle different components and configurations, making it a valuable and powerful component in the implementation. For further information about this service, consult [the complete documentation here]({{url.page}}/Adress)
+      properties:
+        id:
+          type: number
+          description: Auto Generated integer identifier.
+        group:
+          type: string
+          description: With type varchar(60), It is an optional value that allow to classify or wrap a bunch of Adresss.
+          required: false
+        name:
+          type: string
+          description: The Adress name is type varchar(254), it is a nominal or semantic identifier, it should be unique.
+          required: true
+        enterprise_id:
+          type: number
+          description: It is the Enterprise foreign key. This field is optional, but it is recommended setting it.
+        status:
+          type: number
+          default: 1
+          enum: [0, 1]
+          description: It is a tinyint field, define if the Adress is active or not, possible values are 0 and 1.
+        expiration:
+          type: string
+          description: It is an optional field using varchar(45). It define the expiration time as active Adress applied to access tokens. It support the following format like 60, "2 days", "10h", "7d". A numeric value is interpreted as a seconds count. If you use a string be sure you provide the time units (days, hours, etc), otherwise milliseconds unit is used by default ("120" is equal to "120ms").
+          required: false
+        refresh:
+          type: string
+          description: It is an optional field using varchar(45). It define the expiration time as active Adress on the refresh token process. It support the following format like 60, "2 days", "10h", "7d". A numeric value is interpreted as a seconds count. If you use a string be sure you provide the time units (days, hours, etc), otherwise milliseconds unit is used by default ("120" is equal to "120ms").
+          required: false
+        metadata:
+          required: false
+          type: string
+          description: It is an optional longtext field. Describes in JSON format a set of additional data that can be used in the configuration of Adresss. For example, It is possible to define which attributes will be updated if duplicates are detected for entities or models such as User and User-Product.
+        updatedAt:
+          required: false
+          type: string
+          description: It is a datetime field to describe the last Adress update. Example '2023-04-17 09:05:33'
+        createdAt:
+          required: false
+          type: string
+          description: It is a datetime field to describe when the Adress was created. Example '2023-04-17 09:05:33'
+
+        as_type:
+          type: string
+          default: OAUTH_AUTHORIZATION_CODE
+          enum: [OAUTH_AUTHORIZATION_CODE, SAML, BASIC]
+          description: It is a varchar(254) field. It describes the required protocol for communication between SP and AS. For further information in regard to the allow protocols, see the section named as ["Auth Protocols"]({{url.page}}/Constants#auth_protocols).
+        as_user_action:
+          type: number
+          enum: [0, 1, 2, 3, 4, 5]
+          description: It is a tinyint field, which define how the AS should proceed with the user incoming from the IDP. By default it take 2 value, for further information in regard to the allow actions, see the section named as ["AS User Action"]({{url.page}}/Constants#as_user_action).
+          default: 3
+        as_url_entry:
+          type: string
+          description: It is a longtext field. It describes the entry point from the AS. For instance, in case of having as_type as BASIC, it will be the login URL.
+        as_url_token:
+          type: string
+          description: It is a longtext field. It defines the AS URL for requesting the access and refresh token.
+        as_url_revoke:
+          type: string
+          description: It is a longtext field. It defines the logout/SLO URL into the AS server.
+        as_url_profile:
+          type: string
+          description: It is a longtext field. Defines the entry point in the AS to request the profile data based on a certain token.
+        as_url_metadata:
+          type: string
+          description: It is a longtext field. Defines the Adress metadata URL. It is required for the integration between the AS and IDP, specially in protocolos like SAML.
+        as_cert:
+          type: string
+          required: true
+          description: It is a longtext field, which contain the public certificate value from the AS. It is required for communication between IDP and AS.
+        as_key:
+          type: string
+          required: true
+          description: It is a longtext field, which contain the private certificate value from the AS. It is required for communication between IDP and AS.
+
+        idp_type:
+          type: string
+          enum: ["SAML", "BASIC"]
+          default: "SAML"
+          description: It is a varchar(254) field. It describes the required protocol for communication between IDP and AS. For further information in regard to the allow protocols, see the section named as ["Auth Protocols"]({{url.page}}/Constants#auth_protocols). By default it should be SAML.
+        idp_issuer:
+          type: string
+          description: It is relative to the IDP, an optional varchar(254) field. It describes the issuer name for the Auth Server in externals IDP. Usually, if it is not set, the issuer name will be the value in as_url_metadata field.
+          required: false
+        idp_attr_map:
+          type: string
+          description: It is an optional longtext field. It describes in a JSON format how the user attributes from an IDP will map to the expected fields of the Auth Server. Example ```{"mail":"email","firstName":"givenName","lastName":"sn","role":"profile"}```
+        idp_role_map:
+          type: string
+          description: It is an optional longtext field. It describes in a JSON format how the incoming role value from IDP is mapped to an expected role in the AS. Example ```{"W2F":"PILOT W2F","PAL":"PILOT PAL"}```
+        idp_identifier_format:
+          type: string
+          enum: [
+            "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified", 
+            "urn:oasis:names:tc:SAML:2.0:nameid-format:transient", 
+            "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent", 
+            "urn:oasis:names:tc:SAML:2.0:nameid-format:emailAddress", 
+            "urn:oasis:names:tc:SAML:2.0:nameid-format:kerberos", 
+            "urn:oasis:names:tc:SAML:2.0:nameid-format:entity", 
+            "urn:oasis:names:tc:SAML:2.0:nameid-format:WindowsAdressQualifiedName"
+          ]
+          description: It is an optional longtext field. It controls how the users at identity providers are mapped to users at service providers during single sign-on. By default, it takes the value ```urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified```.
+        idp_url_entry:
+          type: string
+          description: It is an optional longtext field. It describes the entry point URL of an external IDP. It should be taken from the IDP metadata, and there is also an endpoint that automates the import of IDP metadata.
+        idp_url_logout:
+          type: string
+          description: It is an optional longtext field. It describes the logout URL of an external IDP. It should be taken from the IDP metadata.
+        idp_url_login:
+          type: string
+          description: It is an optional longtext field. It describes the login URL of an external IDP. It should be taken from the IDP metadata.
+        idp_url_failure:
+          type: string
+          description: It is an optional longtext field. It describes the failure URL of an external IDP. It should be taken from the IDP metadata.
+        idp_url_metadata:
+          type: string
+          description: It is an optional longtext field. It describes the metadata URL of an external IDP. It should be taken from the IDP metadata. If the IDP metadata was imported manually from a file, its content will be stored in this field even if it is not a URL.
+        idp_cert:
+          type: string
+          required: true
+          description: It is a longtext field, which contain the public certificate value from the IDP. It is required for communication between IDP and AS. It should be taken from the IDP metadata, and there is also an endpoint that automates the import of IDP metadata.
+        sp_verify:
+          type: number
+          enum: [0, 1, 2]
+          default: 0
+          required: false
+          description: It is a tinyint field, which define if the credential from the SP will be verified or not. By default it take o value, for further information in regard to the allow protocols, see the section named as ["SP Verify Options"]({{url.page}}/Constants#sp_verify).

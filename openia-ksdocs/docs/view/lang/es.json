@@ -1,0 +1,58 @@
+{
+  "title": "MyCom Auth API DOC",
+  "description": "API REST para el servidor de autenticación, que en el ecosistema MyCom sirve como un servicio intermediario y mediador vital por razones de seguridad.",
+
+  "404": {
+    "title": "Algo andaba mal.",
+    "message": "El recurso al que intenta acceder ya no existe."
+  },
+  "access": {
+    "title": "Se requiere autenticación para acceder a la documentación.",
+    "subtitle": "Por favor ingrese su cuenta MyCom/OCC.",
+	"password": "Contraseña",
+	"username": "Nombre de usuario"
+  },
+  "btn": {
+    "login": "Entrar",
+	"exit": "Salir"
+  },
+  "msg": {
+    "error_invalid_user": "Usuario no válido para acceder a esta sección, realice la acción de inicio de sesión"
+  },
+  "main": {
+	"version": "Version",
+	"roadmap": "Roadmap",
+	"environment": "Ambiente",
+	"build_number": "Número de compilación",
+	"migration_number": "Número de migración",
+	"warning": "Advertencia",
+	"last_available": "ÚLTIMA DISPONIBLE",
+	"current": "ACTUAL",
+	"docref": "la documentación completa aquí",
+	"further_info": "Para más información sobre este tema consultar",
+	"quick_guide": "Si neceMyCom consultar una guía rápida para la resolución y comprensión de problemas, se recomienda revisar el tema conocido como",
+	"faq": "Preguntas frecuentes"
+  },
+  "layout": {
+	"welcome": "Bienvenido",
+	"home": "Inicio",
+	"api": "API Docs",
+	"src": "SRC Docs"
+  },
+  "menu": {
+    "Introduction": "Introducción",
+    "Onboarding": "Incorporación",
+    "Domain": "Dominio",
+    "Credential": "Credencial",
+    "Login": "Iniciar sesión",
+    "Logout": "Cerrar sesión",
+    "Refresh": "Actualizar Token",
+    "Account": "Perfil",
+    "Constants": "Constantes",
+    "Builds": "Compilaciones",
+    "Alerts": "Alertas",
+    "Logs": "Registros",
+    "Troubleshooting": "Solución de problemas",
+    "FAQs": "Preguntas frecuentes"
+  }
+}

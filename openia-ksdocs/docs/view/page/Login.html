@@ -1,0 +1,360 @@
+<details>
+        <summary>
+                <h1>Login</h1>
+        </summary>
+
+        <section>
+                <h3 id="step1"><a href="{{url.page}}/Legacy.md">Legacy Authentication</a> </h3>
+                <p>Legacy Auth refers to a group of endpoints that facilitate authentication in a manner similar to
+                        OAuth, albeit with an older implementation that does not fully comply with the standard. This
+                        codebase has been in use for a long time and has been widely adopted across MyCom applications.
+                        For more information regarding this topic, consult <a href="{{url.page}}/Legacy.md">this link</a>.
+
+                </p>
+                <h3 id="step1"><a href="{{url.page}}/Legacy.md">SAML login</a> </h3>
+
+                <p>MyCom's implementation of a login flow (SAML, Authorization Code, etc) in the Auth Server consists of
+                        three main processes or steps: Information, Identification and Authorization.</p>
+
+                <img src="{{url.public}}/img/auth-login-1.jpg" alt="auth-login-1" />
+                <img src="{{url.public}}/img/auth-login-2.jpg" alt="auth-login-2" />
+                <img src="{{url.public}}/img/auth-login-3.jpg" alt="auth-login-3" />
+
+                <h3 id="step1"><a href="{{url.page}}/Login#step1">Login STEP 1: Information</a> </h3>
+                <p>It is required to select the correct domain metadata in order to have access to different URL for the
+                        selected domain, like: login, logout, get permissions, get metadata and profile data. The
+                        selection of the domain could be based on the domain name. &nbsp;Example, for "<em>man.steve@<a
+                                        class="external-link" href="#" rel="nofollow">thy.com</a></em>" the
+                        username is <em>man.steve</em> in the domain<em> <a class="external-link" href="#"
+                                        rel="nofollow">thy.com</a></em>, knowing that the email format is composed by
+                        username, @ and the domain name.</p>
+                <div>
+                        <ul>
+                                <li>GET https://auth-dev.qa.ewas.aero/v1/domain/:domainName</li>
+                                <li>GET https://auth-dev.qa.ewas.aero/v1/domain/:domainId</li>
+                        </ul>
+                        <p>Example: </p>
+                        <ul>
+                                <li>GET https://auth-dev.qa.ewas.aero/v1/domain/thy.com </li>
+                                <li>GET https://auth-dev.qa.ewas.aero/v1/domain/2</li>
+                        </ul>
+                </div>
+
+                <p>As a result, we should receive the following:</p>
+                <code-view>{
+                        "id": 2,
+                        "name": "thy.com",
+                        "group": "thy.com",
+                        "description": "SSO thy",
+                        "as_url_entry": "https://auth-dev.qa.ewas.aero/v1/oauth/authorize",
+                        "as_url_token": "https://auth-dev.qa.ewas.aero/v1/oauth/token",
+                        "as_url_revoke": "https://auth-dev.qa.ewas.aero/v1/oauth/revoke",
+                        "as_url_metadata": "https://auth-dev.qa.ewas.aero/v1/oauth/metadata/thy.com",
+                        "as_url_profile": "https://auth-dev.qa.ewas.aero/v1/oauth/profile",
+                        "as_type": "OAUTH_AUTHORIZATION_CODE",
+                        "enterprise_id": 369,
+                        "enterprise": {
+                        "enterprise_name": "GTD Dispatch",
+                        "enterprise_id": 369,
+                        "enterprise_products": [
+                        {
+                        "config": {},
+                        "product_id": 3,
+                        "default_profile_id": 17
+                        }
+                        ]
+                        }
+                        }</code-view>
+                <p>Note the following: </p>
+                <ul>
+                        <li><strong>as_url_entry</strong>: Login URL</li>
+                        <li><strong>as_url_revoke:</strong> Logout URL</li>
+                        <li><strong>as_url_token:</strong> Authorization URL, usually it is for requesting the access
+                                and refresh token &nbsp;</li>
+                        <li><strong>as_url_metadata:</strong> This is the URL used to import our server metadata into
+                                external IDP</li>
+                        <li><strong>as_url_profile:</strong> Get extra data related with all the permissions regarding
+                                the current profile &nbsp;</li>
+                        <li><strong>as_type:</strong> Supported protocol (BASIC | OAUTH_AUTHORIZATION_CODE | OAUTH_PKCE
+                                | OAUTH_CLIENT_CREDENTIAL | OAUTH_PASWORD_CREDENTIAL | SAML), usually is AUTHORIZATION
+                                CODE from OAUTH 2.0.</li>
+                        <li><strong>name:</strong> Friendly ID, usually nested to an email domain, it should be
+                                unique&nbsp;</li>
+                        <li><strong>group: </strong>Allows grouping domains, for instance if it is required to assign
+                                different authentication method to a certain enterprise, this property should use.</li>
+                        <li><strong>enterprise:</strong> Allow you to identify the relationship between the domain,
+                                enterprise, and products&nbsp;</li>
+                </ul>
+                <p>In addition, it is possible to add another type of filtering in this step, such as user and company:
+                </p>
+                <ul>
+                        <li>Filtering by Email: <a class="external-link"
+                                        href="https://auth-dev.qa.ewas.aero/v1/domain?user=st1@MyCom.com"
+                                        rel="nofollow">https://auth-dev.qa.ewas.aero/v1/domain?user=st1@MyCom.com</a>&nbsp;
+                        </li>
+                        <li>Filtering by Username: <a class="external-link"
+                                        href="https://auth-dev.qa.ewas.aero/v1/domain?user=rcalvo" rel="nofollow"
+                                        style="letter-spacing: 0.0px;">https://auth-dev.qa.ewas.aero/v1/domain?user=</a><a
+                                        class="external-link"
+                                        href="https://auth-dev.qa.ewas.aero/v1/domain?user=st1@MyCom.com" rel="nofollow"
+                                        style="letter-spacing: 0.0px;">st1</a></li>
+                        <li>Filtering by Enterprise ID: <a class="external-link"
+                                        href="https://auth-dev.qa.ewas.aero/v1/domain?enterprise=103"
+                                        rel="nofollow">https://auth-dev.qa.ewas.aero/v1/domain?enterprise=103</a></li>
+                        <li>
+                                <p>Filtering by Group: <a class="external-link"
+                                                href="https://auth-dev.qa.ewas.aero/v1/domain?group=thy.com"
+                                                rel="nofollow"
+                                                style="letter-spacing: 0.0px;">https://auth-dev.qa.ewas.aero/v1/domain?group=thy.com</a>&nbsp;
+                                </p>
+                        </li>
+                        <li>Filtering by Product: <a class="external-link"
+                                        href="https://auth-dev.qa.ewas.aero/v1/domain?product=3" rel="nofollow"
+                                        style="letter-spacing: 0.0px;">https://auth-dev.qa.ewas.aero/v1/domain?product=3</a>
+                        </li>
+                        <li>Filtering by Mix: <a class="external-link"
+                                        href="https://auth-dev.qa.ewas.aero/v1/domain?group=thy.com&amp;enterprise=103&amp;description=st1"
+                                        rel="nofollow">https://auth-dev.qa.ewas.aero/v1/domain?group=thy.com&amp;enterprise=103&amp;description=st1</a>
+                        </li>
+                </ul>
+                <p>In all of these cases, you will receive the following:&nbsp;&nbsp;</p>
+                <code-view>{
+                        "page": 1,
+                        "size": 10,
+                        "total": 1,
+                        "data": [
+                        {
+                        "id": 1,
+                        "name": "thynet.thy.com",
+                        "group": "thy.com",
+                        "description": "SSO TK",
+                        "as_url_entry": "https://auth-dev.qa.ewas.aero/v1/oauth/authorize",
+                        "as_url_token": "https://auth-dev.qa.ewas.aero/v1/oauth/token",
+                        "as_url_revoke": "https://auth-dev.qa.ewas.aero/v1/oauth/revoke",
+                        "as_url_metadata": "https://auth-dev.qa.ewas.aero/v1/oauth/metadata/thynet.thy.com",
+                        "as_url_profile": "https://auth-dev.qa.ewas.aero/v1/oauth/profile",
+                        "as_type": "OAUTH_AUTHORIZATION_CODE1",
+                        "enterprise_id": 103,
+                        "enterprise": {
+                        "enterprise_name": "GTD Dispatch",
+                        "enterprise_id": 103,
+                        "enterprise_products": [
+                        {
+                        "config": {},
+                        "product_id": 3,
+                        "default_profile_id": 17
+                        }
+                        ]
+                        }
+                        },
+                        {
+                        "id": 10,
+                        "name": "MyCom",
+                        "group": "thy.com",
+                        "description": "Login",
+                        "as_url_entry": "https://auth-dev.qa.ewas.aero/v1/login",
+                        "as_url_token": "https://auth-dev.qa.ewas.aero/v1/token",
+                        "as_url_revoke": "https://auth-dev.qa.ewas.aero/v1/token",
+                        "as_url_metadata": "",
+                        "as_url_profile": "https://auth-dev.qa.ewas.aero/v1/oauth/profile",
+                        "as_type": "BASIC",
+                        "enterprise_id": 103
+                        }
+                        ]
+                        }</code-view>
+
+                <h3 id="step2"><a href="{{url.page}}/Login#step2">Login STEP 2: Identification</a></h3>
+                <p>Once you have the domain data, the next step will be access to the IDP in order to identify the user.
+                        This is where components like Webview are required for native apps. </p>
+                <code-view data-type="raw">
+                        <pre>GET https://auth-dev.qa.ewas.aero/v1/oauth/authorize? </pre>
+                        <pre> response_type=code&
+                        client_id=<deviceUid> &
+                        scope=<functionalities-1> <functionalities-2> <functionalities-3> <functionalities-n>&
+                        state=<domainId> <productId>&
+                        redirect_uri=<app_url_response>&
+                        code_challenge=<app_secure_code>&
+                        code_challenge_method=S256 </pre>
+                </code-view>
+                <p>Note, this URL <a class="external-link" href="https://auth-dev.qa.ewas.aero/v1/oauth/authorize"
+                                rel="nofollow">https://auth-dev.qa.ewas.aero/v1/oauth/authorize</a> come as result of
+                        the first STEP in <strong>as_url_entry </strong>property. <span
+                                style="letter-spacing: 0.0px;">The required </span><span
+                                style="letter-spacing: 0.0px;">parameters are:</span></p>
+                <ul>
+                        <li><strong>response_type:</strong> REQUIRED. The value must be one of "code" for requesting an
+                                authorization code flow, like a token for requesting an access token (implicit grant).
+                        </li>
+                        <li><strong>client_id: </strong>REQUIRED. The authorization server issues the registered client
+                                a client identifier, a unique string representing the registration information provided
+                                by the client. The client identifier is not a secret; it is exposed to the resource
+                                owner and MUST NOT be used alone for client authentication. The client identifier is
+                                unique to the authorization server.&nbsp;</li>
+                        <li><span style="letter-spacing: 0.0px;"><strong>scope:</strong> OPTIONAL. The authorization and
+                                        token endpoints allow the client to specify the scope of the access request
+                                        using the "scope" request parameter. &nbsp;In turn, the authorization server
+                                        uses the "scope" response parameter to inform the client of the scope of the
+                                        access token issued. The value of the scope parameter is expressed as a list of
+                                        space-delimited, case-sensitive strings. The authorization server defines the
+                                        strings. If the value contains multiple space-delimited/coma strings, their
+                                        order does not matter, and each string adds an additional access range to the
+                                        requested scope. If the client omits the scope parameter when requesting
+                                        authorization, the authorization server MUST either process the request using a
+                                        pre-defined default value or fail the request indicating an invalid scope. The
+                                        authorization server SHOULD document its scope requirements and default value
+                                        (if defined).</span></li>
+                        <li><strong>state:</strong> REQUIRED. An opaque value used by the client to maintain state
+                                between the request and callback. The authorization server includes this value when
+                                redirecting the user-agent back to the client. The parameter SHOULD be used for
+                                preventing cross-site request forgery. The state is usually composed by “<em>&lt;Domain
+                                        ID&gt; &lt;Product ID&gt;</em>”</li>
+                        <li><strong>redirect_uri:</strong> After completing its interaction with the resource owner, the
+                                authorization server directs the resource owner's user-agent back to the client. The
+                                authorization server redirects the user-agent to the client's redirection endpoint
+                                previously established with the authorization server during the client registration
+                                process or when making the authorization request. The redirection endpoint URI MUST be
+                                an absolute URI and may include an "application/x-www-form-urlencoded" formatted query
+                                component [RFC3986] which MUST be retained when adding additional query parameters.</li>
+                        <li><strong>code_challenge: &nbsp;</strong>REQUIRED only by OAUTH_PKCE<strong>.</strong> A
+                                challenge derived from the code verifier that is sent in the authorization request, to
+                                be verified against later. The client uses the output of a suitable random number
+                                generator to create a 32-octet sequence. Encoding this octet sequence as base64url
+                                provides the value of the <em>code_challenge</em>. If the server requires Proof Key for
+                                Code Exchange (PKCE) by OAuth public clients and the client does not send the
+                                "<em>code_challenge</em>" in the request, the authorization endpoint must return the
+                                authorization error response with the "<em>error</em>" value set to
+                                "<em>invalid_request</em>".</li>
+                        <li><strong>code_challenge_method:</strong> OPTIONAL. It is a method that was used to derive
+                                code challenge. defaults to "<em>plain</em>" if not present in the request. Code
+                                verifier transformation method is "<em>S256</em>" or "<em>plain</em>".</li>
+                </ul>
+                <p>Example: </p>
+                <code-view>GET
+                        https://auth-dev.qa.ewas.aero/v1/oauth/authorize?response_type=code&client_id=2342R34R34R43&scope=&state=1
+                        4&code_challenge=T-pJBGW3LXT0K-tUNuXrl34yN0Khaki_UZGijw902Z8&code_challenge_method=S256&redirect_uri=dispatch://MyCom?code=eyJlbWFpbC8h4eyJlbWFpbC8h&email=mito@thy.com
+                </code-view>
+                <p>Response: Redirect to: </p>
+                <code-view>dispatch://MyCom?code=eyJlbWFpbC8h4eyJlbWFpbC8h&email=mito@thy.com </code-view>
+                <p>In case of the application does not have any redirect_uri in their backend, the Auth server provides
+                        an empty URL that make possible to receive in the Webview component the response from the IDP as
+                        following: </p>
+                <code-view>https://auth-dev.qa.ewas.aero/v1/oauth/token?code=eyJlbWFpbC8h4eyJlbWFpbC8h4&email=mito@thy.com
+                </code-view>
+                <p>Note in the response there are two important values: </p>
+                <ul>
+                        <li><strong>code: </strong>The authorization code generated by the authorization server.
+                                &nbsp;The authorization code MUST expire shortly after it is issued to mitigate the risk
+                                of leaks. &nbsp;A maximum authorization code lifetime of 10 minutes is RECOMMENDED. The
+                                client MUST NOT use the authorization code more than once. If an authorization code is
+                                used more than once, the authorization server MUST deny the request and SHOULD revoke
+                                (when possible) all tokens previously issued based on that authorization code. &nbsp;The
+                                authorization code is bound to the client identifier and redirection URI.</li>
+                        <li><strong>email:</strong> The user email how has already logged into to the IDP.</li>
+                </ul>
+
+                <h3 id="step3"><a href="{{url.page}}/Login#step3">Login STEP 3: Authorization</a></h3>
+                <p>This is the last step in order to get the access. The authorization endpoint is used to interact with
+                        the resource owner and obtain an authorization grant. The authorization server must first verify
+                        the identity of the resource owner. The way in which the authorization server authenticates the
+                        resource owner (e.g., username and password login, session cookies) is beyond the scope of this
+                        specification.</p>
+                <p>Note, this URL <a class="external-link" href="https://auth-dev.qa.ewas.aero/v1/oauth/token"
+                                rel="nofollow">https://auth-dev.qa.ewas.aero/v1/oauth/token</a> come as result of the
+                        first STEP in <strong>as_url_token </strong>property. It should be an HTTP POST action, like the
+                        following example:&nbsp;</p>
+                <code-view>POST https://auth-dev.qa.ewas.aero/v1/oauth/token </code-view>
+                <code-view>{
+                        "client_id": "2342R34R34R43",
+                        "client_secret": "DSFEF33XE3XEX3",
+                        "grant_type":"authorization_code",
+                        "code":"eyJlbWFpbC8h4eyJlbWFpbC8h4",
+                        "redirect_uri": "dispatch://MyCom?code=eyJlbWFpbC8h4eyJlbWFpbC8h&email=mito@thy.com",
+                        "code_verifier":"2134123412c3412341234234"
+                        }</code-view>
+                <p> The required parameters are: </p>
+                <ul>
+                        <li><strong>client_id:</strong> REQUIRED. The same as described in the above step. The
+                                authorization server issues the registered client a client identifier, a unique string
+                                representing the registration information provided by the client. The client identifier
+                                is not a secret; it is exposed to the resource owner and MUST NOT be used alone for
+                                client authentication. The client identifier is unique to the authorization
+                                server.&nbsp;</li>
+                        <li><strong>client_secret:</strong> REQUIRED. The application’s client secret. This ensures that
+                                the request to get the access token is made only from the application, and not from a
+                                potential attacker that may have intercepted the authorization code.</li>
+                        <li><strong>grant_type:</strong> It must be <em>authorization_code</em><strong>. </strong>This
+                                tells the token endpoint that the application is using the Authorization Code grant
+                                type.</li>
+                        <li><strong>code: </strong>The result of the above step. The authorization code generated by the
+                                authorization server. &nbsp;The authorization code MUST expire shortly after it is
+                                issued to mitigate the risk of leaks. &nbsp;A maximum authorization code lifetime of 10
+                                minutes is RECOMMENDED. The client MUST NOT use the authorization code more than once.
+                                If an authorization code is used more than once, the authorization server MUST deny the
+                                request and SHOULD revoke (when possible) all tokens previously issued based on that
+                                authorization code. &nbsp;The authorization code is bound to the client identifier and
+                                redirection URI.</li>
+                        <li><strong>redirect_uri:</strong> The same as described in the above
+                                step.<strong>&nbsp;</strong>After completing its interaction with the resource owner,
+                                the authorization server directs the resource owner's user-agent back to the client. The
+                                authorization server redirects the user-agent to the client's redirection endpoint
+                                previously established with the authorization server during the client registration
+                                process or when making the authorization request. The redirection endpoint URI MUST be
+                                an absolute URI and may include an "application/x-www-form-urlencoded" formatted query
+                                component [RFC3986] which MUST be retained when adding additional query parameters.</li>
+                        <li><strong>code_verifier:</strong> A cryptographically random string that is used to correlate
+                                the authorization request to the token request.</li>
+                </ul>
+                <p>As a response, you should receive: </p>
+                <code-view>{
+                        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJl...",
+                        "refresh_token": "qqJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eI6...",
+                        "token_type": "Bearer",
+                        "expires_in": "1311281970",
+                        "scope": "DISPATCH EDITION,DISPATCH ALERTS,DISPATCH COMMENTS,DISPATCH REROUTING,DISPATCH
+                        ROUTEFINDER,DISPATCH EDIT ALERT CRITERIA"
+                        }</code-view>
+                <p>Note in the response there are different values: </p>
+                <ul>
+                        <li><strong>access_token:</strong> Access token credentials (as well as any confidential access
+                                token attributes) MUST be kept confidential in transit and storage, and only shared
+                                among the authorization server, the resource servers the access token is valid for, and
+                                the client to whom the access token is issued. Access token credentials MUST only be
+                                transmitted using TLS.</li>
+                        <li><strong>refresh_token:</strong> Refresh tokens MUST be kept confidential in transit and
+                                storage, and shared only among the authorization server and the client to whom the
+                                refresh tokens were issued. &nbsp;The authorization server MUST maintain the binding
+                                between a refresh token and the client to whom it was issued.</li>
+                        <li><strong>token_type:</strong> It is usually Bearer. The access token type provides the client
+                                with the information required to successfully utilize the access token to make a
+                                protected resource request (along with type-specific attributes). &nbsp;The client MUST
+                                NOT use an access token if it does not understand the token type. For example, the
+                                "bearer" token type defined in RFC 6750, it is utilized by simply including the access
+                                token string in the request.</li>
+                        <li><strong>expires_in:</strong> The lifetime in seconds of the access token. &nbsp;For example,
+                                the value "3600" denotes that the access token will expire in one hour from the time the
+                                response was generated. If omitted, the authorization server SHOULD provide the
+                                expiration time via other means or document the default value.</li>
+                        <li><strong>scope:</strong> The same as described in the above step.<span> The authorization and
+                                        token endpoints allow the client to specify the scope of the access request
+                                        using the "scope" request parameter. &nbsp;In turn, the authorization server
+                                        uses the "scope" response parameter to inform the client of the scope of the
+                                        access token issued. The value of the scope parameter is expressed as a list of
+                                        space-delimited, case-sensitive strings. The authorization server defines the
+                                        strings. If the value contains multiple space-delimited strings, their order
+                                        does not matter, and each string adds an additional access range to the
+                                        requested scope. If the client omits the scope parameter when requesting
+                                        authorization, the authorization server MUST either process the request using a
+                                        pre-defined default value or fail the request indicating an invalid scope. The
+                                        authorization server SHOULD document its scope requirements and default value
+                                        (if defined).</span>&nbsp;</li>
+                </ul>
+                <div>
+                        <span>You may be interested in viewing the following topics:</span>
+                        <ul>
+                                <li><a href="{{url.page}}/Logout">Logout</a></li>
+                                <li><a href="{{url.page}}/Refresh">Refresh</a></li>
+                                <li><a href="{{url.page}}/Account">Introspection </a></li>
+                        </ul>
+                </div>
+        </section>
+</details>

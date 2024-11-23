@@ -1,0 +1,131 @@
+<details>
+    <summary>
+        <h1>Onboarding</h1>
+    </summary>
+
+    <section>
+        <h3 id="onboarding_saml"><a href="{{url.page}}/Onboarding#onboarding_saml">Common SAML onboarding
+                process:</a></h3>
+        <ul>
+            <li><strong>Request the IDP <a href="{{url.page}}/Domain#idp_url_metadata">metadata</a></strong>.
+
+                Typically, this metadata is distributed through a public URL that exposes the content of
+                the metadata. Sometimes companies do not have a public service for this and they send a
+                file with its content. Note that the SAML metadata standard belongs to the family of
+                XML-based standards known as Security Assertion Markup Language (SAML). A SAML metadata
+                document describes a SAML implementation, such as a SAML identity provider or SAML
+                service provider. Implementations share metadata to establish a foundation of
+                trust and interoperability.
+
+                For a better understanding of this topic, see the topics related to how to <a
+                    href="{{url.page}}/Domain#domain_new"> create </a> or <a
+                    href="{{url.page}}/Domain#domain_update"> update </a> an
+                authentication domain.
+            </li>
+
+            <li><strong>Request the <a href="{{url.page}}/Introduction#IDP">IDP</a> <a
+                        href="{{url.page}}/Domain#idp_attr_map">attribute
+                        mapping</a></strong> (OPTIONAL). At
+                this point we need to define the existing relationship of the data we receive from the
+                external IDP once a user completes the login process. The AS should be able to interpret
+                such information from the IDP, but not all IDPs send user data using the same
+                properties. </li>
+            <li><strong>Request the <a href="{{url.page}}/Introduction#IDP">IDP</a> <a
+                        href="{{url.page}}/Domain#idp_role_map">role
+                        mapping</a></strong>
+                (OPTIONAL). In some cases, extra configurations are required, including when defining
+                attribute mapping
+                so that the AS is able to process the profile data of an external user. Such is the case
+                of roles, sometimes it is not enough to define the attribute that set profile role or
+                user rights. It is
+                also necessary to define the coincidence of the value contained in said property in
+                order to figure out they correct coincide with the roles defined in MyCom.</li>
+            <li><strong>Request an environment</strong> in the external <a
+                    href="{{url.page}}/Introduction#IDP">IDP</a>
+                for MyCom <strong>with at least 2 users for</strong> the purpose of
+                compatibility and functionality <strong>testing</strong>. Keep in mind that each company
+                has its particularities and although this solution is based on standards, this implies
+                many configuration elements that define one behavior or another; not all system and
+                service administrators have to use the same model. In these cases it is important to
+                have a testing environment to validate the integration and in case an issue is detected,
+                it can be properly tested once corrected. Even for those companies that have had a
+                successful integration in the past, it would be beneficial to have their test
+                environment to verify compatibility so that new developments do not affect previously
+                validated functionalities or configurations.</li>
+            <li><strong>Create the required MyCom resources:</strong> profiles, <a
+                    href="{{url.page}}/Introduction#Credential">credentials</a> and <a
+                    href="{{url.page}}/Introduction#Domain">domains</a>. We can manage this
+                using the <a href="https://occ-dev.qa.ewas.aero/products/management/profiles">OCC
+                    BackOffice</a>
+                depending on the environment we require this configuration.
+            </li>
+            <li><strong>Provide the IDP with MyCom <a href="{{url.page}}/Introduction#AS">AS</a> <a
+                        href="{{url.page}}/Domain#as_url_metadata">metadata</a></strong>
+                for a given authentication domain. Once you have all the required information and all
+                the MyCom resources mentioned in the previous point have been created, you should share
+                the MyCom metadata for the authentication domain previously created with the IDP so that
+                they can import our metadata and establish the relationship of trust that will allows
+                both services to communicate properly. It is important to keep in mind that every time
+                any value is changed in the domain configuration, the metadata associated with the IDP
+                must be shared again so that they in turn proceed to update our data on their side. For
+                example, if you check the settings for a domain, you will see something like the
+                following:
+                <a href="{{url.public}}/img/domian.metadata.1.jpg"><img alt="table.domain"
+                        src="{{url.public}}/img/domian.metadata.1.jpg" /></a>
+
+                And if you access the url defined in the <strong> as_url_metadata </strong> property you
+                will be able to
+                see the content of the metadata with an appearance similar to the following:
+
+                <a href="{{url.public}}/img/domian.metadata.2.jpg"><img alt="table.domain"
+                        src="{{url.public}}/img/domian.metadata.2.jpg" /></a>
+
+                Keep in mind that the URL contained in the domain property called <strong>
+                    as_url_metadata </strong>must
+                be visible in the IDP network, otherwise it is possible to send them the content of the
+                metadata and this should be enough, although the IDP cannot read the content in the url
+                of the as_url_metadata is a bad signal that warns of possible connectivity problems.
+
+            </li>
+        </ul>
+        <h3 id="expiration"><a href="{{url.page}}/Onboarding#onboarding_saml">Setting the token expiration
+                time:</a></h3>
+        <p>There are different ways to configure the expiration time of the access token and refresh token, which are
+            listed below:</p>
+        <ol>
+            <li><strong>IDP response:</strong> It is possible to establish a synchronization between the expiration
+                dates for user access tokens from the <a
+                    href="{{url.page}}/Introduction#AS">AS</a> server and the expiration
+                time of the accounts of an external
+                <a href="{{url.page}}/Introduction#IDP">IDP</a>. To achieve this goal, the
+                IDP must include the values associated with the expiration and refresh
+                properties in the user information that it delivers to the AS in each login process. The
+                <strong><em>expiration</em></strong> property refers to the expiration time of the access token and the
+                <strong><em>refresh</em></strong> property refers to the expiration time of the refresh token. The names
+                of these properties <em>(refresh and expiration)</em> do not have to be exact, this can be managed from
+                the <a href="{{url.page}}/Domain#idp_attr_map">attribute mapping</a> option.
+            </li>
+            <li><strong>Enterprise—Product:</strong> If the previous option is not specified, it is possible to define
+                the <em>refresh</em> and <em>expiration</em> values in the config property stored in
+                the <em>enterprise_products</em> table. For further understanding check the <a
+                    href="{{url.page}}/Domain#enterprise_product">Enterprise-Product</a>
+                section for domain configuration.
+            </li>
+            <li><strong>Domain:</strong> If the previous option is not specified, it is possible to define
+                the <a href="{{url.page}}/Domain#refresh">refresh</a> and <a
+                    href="{{url.page}}/Domain#expiration">expiration</a> values in the properties with the same
+                name stored in the
+                <em>domain</em> table.
+            </li>
+            <li><strong>Environment Variables:</strong> If the previous option is not specified, it is possible to take
+                those values from server environment vars like <strong>SEC_ACCESS_TOKEN_EXPIRATION</strong> as refresh
+                and <strong>SEC_REFRESH_TOKEN_EXPIRATION</strong> as expiration.</li>
+            <li><strong>Default:</strong> If none of the previous options have been specified, the default value is
+                <strong>5 days </strong> for the access token and <strong>365 days</strong> for the refresh token.
+            </li>
+        </ol>
+
+        <p>If you need to consult a quick guide to solving and understanding problems, it is recommended to review the
+            topic known as <a href="{{url.page}}/FAQs"><strong> FAQs. </strong> </a></p>
+    </section>
+</details>

@@ -1,0 +1,250 @@
+<details>
+    <summary>
+        <h1>Build Numbers and Migrations</h1>
+    </summary>
+
+    <section>
+        <h3 id="build_number">Build Number</h3>
+        <p>A build number, in the context of software development projects, is a unique identifier assigned to a
+            specific build or version of a software application. It helps track and differentiate different builds,
+            releases, or revisions of the software. The build number format you described, composed of fourteen digits
+            in the order of year, month, day, hour, minute, and seconds, is a timestamp-based approach commonly used to
+            generate build numbers.
+        </p>
+        <p>In the format you provided: <strong>YYYYMMDDHHMMSS</strong> </p>
+        <ul>
+            <li><strong>YYYY</strong>: Represents the year using four digits (e.g., 2023).</li>
+            <li><strong>MM</strong>: Represents the month using two digits (e.g., 01 for January, 12 for December).</li>
+            <li><strong>DD</strong>: Represents the day using two digits (e.g., 01 to 31).</li>
+            <li><strong>HH</strong>: Represents the hour using two digits in a 24-hour format (e.g., 00 to 23).</li>
+            <li><strong>MM</strong>: Represents the minute using two digits (e.g., 00 to 59).</li>
+            <li><strong>SS</strong>: Represents the seconds using two digits (e.g., 00 to 59).</li>
+        </ul>
+        <p>For example, a build number <strong>20230803121545</strong> represents August 3rd, 2023, at 12:15:45 PM. In
+            some contexts only 8 digits are used and in others the rest are filled with 0 until completing 14.</p>
+        <p>The build numbers will be assigned manually before the merge. They can be used for various purposes,
+            including: </p>
+        <ol>
+            <li>
+                <p><strong>Version Tracking</strong>: Build numbers help developers and stakeholders track different
+                    versions or releases of the software. This is especially useful in situations where multiple builds
+                    are being developed and maintained simultaneously.</p>
+            </li>
+            <li>
+                <p><strong>Release Management</strong>: Build numbers aid in organizing and managing software releases,
+                    making it easy to identify which build corresponds to a particular release.</p>
+            </li>
+            <li>
+                <p><strong>Issue Tracking</strong>: When issues or bugs are reported, having a unique build number
+                    associated with each release helps in pinpointing the exact version of the software where the issue
+                    occurred.</p>
+            </li>
+            <li>
+                <p><strong>Continuous Integration/Deployment</strong>: In CI/CD pipelines, build numbers can be
+                    automatically incremented with each successful build or deployment, providing a reliable way to keep
+                    track of changes.</p>
+            </li>
+            <li>
+                <p><strong>Audit and Compliance</strong>: Build numbers are often used for audit purposes, allowing
+                    organizations to keep a record of when specific builds were created and deployed.</p>
+            </li>
+            <li>
+                <p><strong>Historical Reference</strong>: Build numbers provide a chronological order to builds, making
+                    it easier to reference and discuss specific versions when collaborating with team members.</p>
+            </li>
+        </ol>
+
+        <p>Using a timestamp-based build number format like the one you described can provide a clear and standardized
+            way to identify builds and their creation time. It helps maintain a consistent and meaningful naming
+            convention, aiding in efficient project management and software development processes.
+        </p>
+
+
+        <h3 id="migration_number">Migration Number</h3>
+        <p>The migration number is a specialized form of a <strong>Build Number</strong>. it is used to capture and
+            communicate
+            the sequence of changes made to a database schema in a consistent and ordered manner. It is typically
+            organized in a way that reflects the order in which database migrations were applied. Each migration number
+            provides insights into the changes introduced to the database structure and data, ensuring that database
+            schemas are managed effectively across different environments.
+        </p>
+
+        <p>For instance, a migration number 20230803121545 would indicate changes applied to the database schema on
+            August 3rd, 2023, at 12:15:45 PM.</p>
+        <p>Key aspects of migration numbers include: </p>
+        <ol>
+            <li>
+                <p><strong>Database Schema Tracking</strong>: Migration numbers enable developers and database
+                    administrators to track the sequence of changes applied to a database schema over time. Each
+                    migration number uniquely identifies a specific set of changes.</p>
+            </li>
+            <li>
+                <p><strong>Version Control</strong>: Similar to source code version control, migration numbers help
+                    manage the evolution of database schemas. This ensures that all changes are well-documented and can
+                    be reviewed and applied consistently.</p>
+            </li>
+            <li>
+                <p><strong>Deployment and Rollback</strong>: Migration numbers are crucial during deployment and
+                    rollback processes. They allow for targeted application of specific changes and offer a clear path
+                    for reverting to previous schema states if needed.</p>
+            </li>
+            <li>
+                <p><strong>Collaboration</strong>: Teams can communicate effectively about the state of the database
+                    schema using migration numbers. Developers can quickly identify which changes have been applied and
+                    replicate those changes across different environments.</p>
+            </li>
+            <li>
+                <p><strong>Audit and Compliance</strong>: Migration numbers facilitate auditing and compliance efforts
+                    by providing a historical record of changes made to the database schema.</p>
+            </li>
+        </ol>
+
+        <p>In summary, a migration number is a specialized form of a build number that captures the history of changes
+            to a database schema. It plays a vital role in maintaining the integrity, consistency, and traceability of
+            database structures across different environments and throughout the software development lifecycle.
+        </p>
+
+        <h3 id="migration_build">Build Number vs Migration Number</h3>
+        <p>The relationship between the migration number and the build number is crucial for maintaining the
+            synchronization and integrity of a software project, particularly when dealing with databases and version
+            control.
+        </p>
+        <p>The <a href="{{url.page}}/Builds#migration_number"><strong>migration number</strong></a> represents the
+            sequence of
+            changes applied to the database schema over time. It ensures
+            that database structures are systematically evolved and updated as the software evolves.
+        </p>
+        <p>On the other hand, the <a href="{{url.page}}/Builds#build_number"><strong> build number </strong></a>
+            serves as a unique
+            identifier for a specific version of the software
+            application. It captures the state of the entire software project, including both codebase and database
+            schema, at a particular point in time.
+        </p>
+        <p>The following rules govern the relationship between migration numbers and build numbers:
+        </p>
+
+        <ol>
+            <li>
+                <p><strong>Migration Number and Build Number Alignment</strong>: The migration number associated with
+                    the latest database schema changes should always be lower than or equal to the build number of the
+                    deployed software version. This ensures that the database schema is consistent with the codebase.
+                </p>
+            </li>
+            <li>
+                <p><strong>Outdated Source Code Detection</strong>: If the current migration number is greater than the
+                    build number, it indicates that the source code of the project is outdated. This misalignment
+                    signifies that code changes have been made without updating the database schema accordingly.</p>
+            </li>
+            <li>
+                <p><strong>Outdated Database Detection</strong>: If the current migration number is less than the last
+                    available migration number, it indicates that the database schema is outdated. This scenario implies
+                    that database changes have occurred but have not been applied to the deployed version.</p>
+            </li>
+        </ol>
+
+        <p>In essence, the migration number ensures that the database schema keeps pace with the software's evolution,
+            while the build number provides an overall snapshot of the software's version. By adhering to these
+            relationships, teams can maintain consistency between code and database, facilitating smooth deployments,
+            updates, and accurate tracking of changes across the project's lifecycle.
+        </p>
+
+        <h3 id="migration_new">How to create a Migration</h3>
+        <p>The methodology for creating a migration, following the specified guidelines, involves several steps to
+            ensure the successful modification of the database structure.</p>
+        <a href="{{url.public}}/img/migrations.jpg"> <img alt="migration.format" src="{{url.public}}/img/migrations.jpg" /></a>
+        <p>Here's a breakdown of the process:</p>
+        <ol>
+            <li>
+                <p><strong>Directory Setup</strong>:</p>
+                <ul>
+                    <li>Create a directory named "scripts" at the root of the project to store migration scripts.</li>
+                    <li>Each migration script will be an SQL file containing both header and body sections.</li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Script Structure</strong>:</p>
+                <ul>
+                    <li>Each migration script should have a specific format in its filename to provide meaningful
+                        information about the migration:<ul>
+                            <li><code>&lt;MigrationNumber&gt;-&lt;TargetVersion&gt;-&lt;Action&gt;-&lt;Description&gt;.sql</code>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>Separate each element using hyphens "-" and use the ".sql" extension.</li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Migration Number and Header</strong>:</p>
+                <ul>
+                    <li>Start the script with the header section. In the header:<ul>
+                            <li>Include an SQL instruction to insert the migration number into a dedicated migration
+                                table to keep a record of the migration process.</li>
+                            <li>This helps track which migrations have been applied to the database.</li>
+                            <li>Set migration metadata example:
+                                <pre><code class="language-sql">
+INSERT IGNORE INTO `ewas_mgmt`.`SequelizeMeta` (`name`, `version`, `build`, `note`)
+VALUES (
+        '20230825174535-1.6.0-update-credential_state.sql',
+        '1.6.0',
+        '20230825174535',
+        'Update Credential State'
+);
+                                </code></pre>
+                            </li>
+                            <li>It is also recommended to use transactions like the following:
+                                <pre> START TRANSACTION;  /* HEAD: Set Migration Metadata */ /* BODY: SQL Migration Content */ COMMIT; </pre>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Body Section</strong>:</p>
+                <ul>
+                    <li>After the header, include the body section containing the SQL code for modifying the database
+                        structure.</li>
+                    <li>This section will contain the actual database schema changes, such as table alterations, column
+                        additions, or data transformations.</li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Migration Description</strong>:</p>
+                <ul>
+                    <li>The description element in the filename should provide a clear and concise summary of the
+                        changes being made in the migration.</li>
+                    <li>This helps developers understand the purpose of the migration without needing to open the file.
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Example Filename</strong>:</p>
+                <ul>
+                    <li>As an example, the filename format could be:
+                        <code>20230817085705-1.6.0-update-domain.sql</code>.
+                    </li>
+                    <li>In this example:<ul>
+                            <li><code>20230817085705</code> is the migration number.</li>
+                            <li><code>1.6.0</code> is the version to which the migration is targeted.</li>
+                            <li><code>update-domain</code> describes the main action performed by the migration.</li>
+                            <li><code>sql</code> is the file extension.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <p><strong>Migration Execution</strong>:</p>
+                <ul>
+                    <li>Once the migration script is created, it can be executed using appropriate tools or scripts that
+                        apply all pending migrations to the database.</li>
+                    <li>The script's header ensures that the migration number is inserted into the migration history
+                        table, indicating the successful execution of the migration.</li>
+                </ul>
+            </li>
+        </ol>
+        <p>By following this methodology, you create organized and trackable migration scripts that adhere to a
+            consistent naming convention. The separation of header and body sections provides a clear structure, and the
+            descriptive filename helps in quickly understanding the purpose of each migration. This approach ensures
+            effective management and versioning of your database schema changes.</p>
+
+    </section>
+</details>

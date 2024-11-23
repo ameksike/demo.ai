@@ -1,0 +1,57 @@
+components:
+  responses:
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseError'
+
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseError'
+            
+    BadRequest:
+      description: Bad request, It could be a missing parameters 
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseError'
+
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseError'
+    
+
+    # to delete
+    List:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              page:
+                type: number
+                default: 0
+                description: Current page or group of records
+              size:
+                type: number
+                default: 10
+                description: Maximum number of records per page
+              total:
+                type: number
+                default: 0
+                description: Maximum number of records
+              data:
+                type: array
+                description: List of records or generic objects
+                items:
+                  type: object
+                  description: Generic object that describes the record 

@@ -1,0 +1,58 @@
+<details>
+    <summary>
+        <h1>Monitoring: Alerts</h1>
+    </summary>
+
+    <section>
+        <p>The alerting system for the authentication API integrates with Microsoft Teams and New Relic to provide
+            real-time monitoring and notifications. It is important to mention that this section is complemented by
+            <a href="{{url.page}}/Logs">Logs</a> and <a href="{{url.page}}/FAQs">FAQs</a>
+        </p>
+
+        <p>When critical events occur within the authentication process, the system triggers alerts through two
+            channels:
+        </p>
+        <ol>
+            <li id="msteam">
+                <p><strong>Microsoft Teams Channel:</strong></p>
+                <ul>
+                    <li>The system sends messages to a designated Microsoft Teams channel. These messages provide
+                        instant visibility to the authentication team.</li>
+                    <li>Alerts are structured with relevant information, such as the nature of the event and its
+                        severity.</li>
+                    <li>Team members can collaborate on troubleshooting and resolution directly within the Teams
+                        channel.</li>
+                </ul>
+                <a href="{{url.public}}/img/alerts-teams.jpg"><img alt="alerts-teams"
+                        src="{{url.public}}/img/alerts-teams.jpg" /></a>
+                <p>Note that some of these alerts define several properties that describe them. In these examples you
+                    can see the environment where the error was detected and its classification, as well as the
+                    associated flow identifier so that it can be tracked from the log records, the domain name, the
+                    company, and group identifier, among others. </p>
+                <a href="{{url.public}}/img/alerts-teams-1.jpg"><img alt="alerts-teams"
+                        src="{{url.public}}/img/alerts-teams-1.jpg" /></a>
+
+                <p>The MS Teams group where the alerts are exposed can be specified through an environment variable
+                    knows as <strong>CHANNEL_URL_OUT</strong>.</p>
+
+            </li>
+            <li id="newrelic">
+                <p><strong>New Relic:</strong></p>
+                <ul>
+                    <li>The system logs events and anomalies related to the authentication API in New Relic.</li>
+                    <li>New Relic's logging platform collects, analyzes, and visualizes these logs, enabling thorough
+                        monitoring and analysis.</li>
+                    <li>Alerts can be configured within New Relic to automatically trigger notifications based on
+                        predefined conditions, ensuring rapid response to issues.</li>
+                </ul>
+            </li>
+        </ol>
+        <p>In summary, the alerting system creates a robust safety net for the authentication API by utilizing Microsoft
+            Teams for immediate team awareness and collaboration, and New Relic for in-depth monitoring and automated
+            alerting. This proactive approach enhances the system's reliability and helps ensure timely response to
+            potential authentication issues.</p>
+
+        <p>If you need to consult a quick guide to solving and understanding problems, it is recommended to
+            review the topic known as <a href="{{url.page}}/FAQs"><strong> FAQs. </strong> </a></p>
+    </section>
+</details>

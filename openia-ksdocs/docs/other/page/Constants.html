@@ -1,0 +1,97 @@
+<details>
+        <summary>
+                <h1>Constants, Acronyms, and Conventions</h1>
+        </summary>
+
+        <section>
+                <div id="credential_status">
+                        <h3><a href="#credential_status">Credential status convention:</a> </h3>
+                        <ul>
+                                <li><strong>-1:</strong> Authentication process failed</li>
+                                <li><strong>&nbsp;0:</strong> Initialized authentication process</li>
+                                <li><strong>&nbsp;1:</strong> User identified by the IDP</li>
+                                <li><strong>&nbsp;2:</strong> Success login</li>
+                                <li><strong>&nbsp;3:</strong> Success logout</li>
+                                <li><strong>&nbsp;4:</strong> Blocked user</li>
+                        </ul>
+                </div>
+
+                <div id="sp_verify">
+                        <h3><a href="#sp_verify">SP Verify Options:</a></h3>
+                        <ul>
+                                <li><strong>0:</strong> The credential ID and Secret will not be verified, so if a new
+                                        SP make a
+                                        request to the AS without a credential value, a new credential record will be
+                                        created
+                                        based on the device ID or request header user agent field.</li>
+                                <li><strong>1:</strong> The credential ID and Secret will be verified, but in a weak
+                                        mode where
+                                        it is allowed auto signed certificates.</li>
+                                <li><strong>2: </strong>The credential ID and Secret will be verified, usually it should
+                                        be send
+                                        in the request header authorization field.</li>
+                        </ul>
+                </div>
+
+                <div id="level_conversion">
+                        <h3><a href="#level_conversion">Log level convention:</a> </h3>
+                        <ul>
+                                <li><strong>-1:</strong> NONE &nbsp;- Show none or no logs</li>
+                                <li><strong>&nbsp;0:</strong> ALL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Show all kind of
+                                        logs
+                                </li>
+                                <li><strong>&nbsp;1:</strong> ERROR - Show only error</li>
+                                <li><strong>&nbsp;2:</strong> WARN &nbsp;- Show errors and warnings</li>
+                                <li><strong>&nbsp;3:</strong> INFO &nbsp;&nbsp;&nbsp;- Show errors, warnings, and
+                                        informational
+                                        logs</li>
+                                <li><strong>&nbsp;4:</strong> DEBUG - Show errors, warnings, informational and debug
+                                        (logs in
+                                        develop mode)
+                                </li>
+                        </ul>
+                        <p>These values called <em>'logs level'</em> define the types of messages or event records that
+                                will be
+                                displayed in the log system. These are structured in a hierarchy, which allows this flow
+                                of information to be managed in a comfortable way. You can see below the configuration
+                                of log levels associated with environments:</p>
+                        <ul>
+                                <li><strong>Local environment:</strong> 0 or All</li>
+                                <li><strong>DEV environment:</strong> 4 or Debug</li>
+                                <li><strong>STG environment:</strong> 4 or Debug</li>
+                                <li><strong>PRD environment:</strong> 1 or Error</li>
+                                <li><strong>TST environment:</strong> -1 or None</li>
+                        </ul>
+                        <p>Note that this setting affects the entire Auth server. This is something that can be managed
+                                from the configuration files.</p>
+                </div>
+
+                <div id="as_user_action">
+                        <h3><a href="#as_user_action">AS User Action: </a></h3>
+                        <ul>
+                                <!-- li><strong>0: </strong>No actions will be allowed</li -->
+                                <li><strong>1: </strong>Only read actions will be allowed.</li>
+                                <li><strong>2:</strong> Allows read and update actions.</li>
+                                <li><strong>3:</strong> Allows reading and creating actions.</li>
+                                <li><strong>4: </strong>Allows read and write actions (create, update)</li>
+                                <!-- li><strong>5: </strong>Allow all possible actions on the resource</li -->
+                        </ul>
+                </div>
+
+                <div id="auth_protocols">
+                        <h3><a href="#auth_protocols">Auth Protocols: </a></h3>
+                        <ul>
+                                <li> BASIC </li>
+                                <li> SAML </li>
+                                <li> OAUTH_PKCE </li>
+                                <li> OAUTH_AUTHORIZATION_CODE </li>
+                                <li> OAUTH_CLIENT_CREDENTIAL </li>
+                                <li> OAUTH_ROPC </li>
+                        </ul>
+                </div>
+                <p>If you need to consult a quick guide to solving and understanding problems, it is recommended to
+                        review the
+                        topic
+                        known as <a href="{{url.page}}/FAQs"><strong> FAQs. </strong> </a></p>
+        </section>
+</details>

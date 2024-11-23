@@ -1,0 +1,38 @@
+{
+  "metadata": {
+	"name": "MyCom DEMO SERVICE",
+	"description": "MyCom API Docs from API-SW!!",
+	"version": "1.2.0",
+	"icon": "secure",
+	"image": "secure",
+	"group": "MyCom",
+	"date": "1706826885000"
+  },
+  "cfg": {
+    "scope": "public"
+  },
+  "path": {
+	"api": "{root}/{schema}/api",
+	"page": "{root}/{schema}/page",
+	"lang": "{root}/{schema}/lang",
+	"config": "{root}/{schema}/config",
+	"resource": "{root}/{schema}/resource",
+	"core": "{root}/{schema}/core",
+	"cache": "{core}/cache"
+  },
+  "route": {
+	"login": "{base}/{schema}/sec/login",
+	"logout": "{base}/{schema}/sec/logout",
+	"access": "{base}/{schema}/sec/access",
+	"unauthorized": "{base}/{schema}/sec/access",
+	"base": "{root}/{lang}",
+	"public": "{resource}/{schema}",
+	"home": "{base}/{schema}",
+	"pag": "{base}/{schema}/{page}",
+	"api": "{base}/{schema}/api",
+	"src": "{base}/{schema}/src"
+  },
+  "template": {
+	  "layout": "{lib}/template/page.layout.html"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "metadata": {
+    "name": "MyCom AUTH SERVICE",
+    "description": "REST API for the Auth Server, which in the MyCom ecosystem serves as a vital intermediary and mediator service for security reasons.",
+    "version": "1.7.0",
+    "icon": "secure",
+    "image": "secure",
+    "group": "MyCom",
+    "date": "1706135685000"
+  },
+  "cfg": {
+    "scope": "public",
+    "auth": {
+      "required": true
+    },
+    "menu": [
+      { "name": "Introduction" },
+      { "name": "Onboarding" },
+      { "name": "Domain" },
+      { "name": "Credential" },
+      { "name": "Login" },
+      { "name": "Logout" },
+      { "name": "Refresh" },
+      { "name": "Account" },
+      { "name": "Constants" },
+      { "name": "Builds" },
+      { "name": "Alerts" },
+      { "name": "Logs" },
+      { "name": "Troubleshooting" },
+      { "name": "FAQs" }
+    ]
+  },
+  "template": {
+    "layout": "{lib}/template/page.layout.html",
+    "desc": "{lib}/template/fragment.des.migration.html"
+  },
+  "global": {
+	  "url": {
+		  "task": "https://jira.aircraft-MyCom.com/browse"
+	  }
+  }
+}

@@ -1,0 +1,151 @@
+paths:
+  /v1/person/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+        description: The person ID
+
+    get:
+      tags:
+        - person
+      description:
+          Select a person
+      produces:
+        - application/json
+      responses:
+        200:
+          description: person entity
+          content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/person'
+                example:
+                  $ref: '#/components/examples/person'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+    put:
+      tags:
+        - person
+      description:
+          Edit or update a person
+      produces:
+        - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/person'
+              required:
+                - name
+            example: 
+              $ref: '#/components/examples/person'
+
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/person'
+            example: 
+              $ref: '#/components/examples/person'
+      responses:
+        200:
+          description: Access token, refresh token and user data
+          content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/person'
+                example:
+                  $ref: '#/components/examples/person'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+    delete:
+      tags:
+        - person
+      description:
+          Delete or remove a person
+      produces:
+        - application/json
+      responses:
+        200:
+          description: The deleted person entity
+          content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/person'
+                example:
+                  $ref: '#/components/examples/person'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        500:
+          $ref: '#/components/responses/InternalError'
+                  
+  /v1/person:
+    get:
+      tags:
+        - person
+      description:
+          Get a list of persons. For further information about this service, consult [the complete documentation here](/doc/view)
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+
+      responses:
+        200:
+          description: person entity
+          content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/person'
+                example:
+                  $ref: '#/components/examples/person'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        500:
+          $ref: '#/components/responses/InternalError'
+
+    post:
+      tags:
+        - person
+      description:
+          Create a person
+      produces:
+        - application/json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/person'
+              required:
+                - name
+            example: 
+              $ref: '#/components/examples/person'
+
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/person'
+            example: 
+              $ref: '#/components/examples/person'
+
+      responses:
+        200:
+          description: Access token, refresh token and user data
+          content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/person'
+                example:
+                  $ref: '#/components/examples/person'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        500:
+          $ref: '#/components/responses/InternalError'
+

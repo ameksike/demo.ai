@@ -1,0 +1,178 @@
+/v1/login:
+   post:
+     description:
+         Log In - grantType => 'password' | 'authorizationCode'
+         For grantType => 'password' you need to send username, password, grantType and productId
+         For grantType => 'authorizationCode' you need to send username, password, grantType, deviceUid, deviceName and productId
+         If you send productId as array, with any of the provided products, you will be able to log in
+         If you send incorrect password for 5 times, your account will be locked until you reset your password via email (recover password) or backoffice. No alerts will be sent according to the requirements.
+     produces:
+       - application/json
+     tags:
+       - Legacy
+     requestBody:
+       content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - username
+              - password
+              - grantType
+              - productId
+            properties:
+              username:
+                type: string
+                description: username or email
+              password:
+                type: string
+              grantType:
+                type: string
+                description: For basic auth, password. With refresh token, authorizationCode
+              deviceUid:
+                type: string
+                description: Optional for basic auth. Required for autorization auth
+              deviceName:
+                type: string
+                description: Optional for basic auth. Required for autorization auth
+              productId:
+                type: string|number|Array<string|number>
+                description: Product id or array of product ids. If not provided, default product id (5) will be used. If provided as array, any of the provided products will be used. If the user does not have access to any of the provided products, the login will fail.
+            encoding:
+              contentType: application/json
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required:
+              - username
+              - password
+              - grantType
+              - productId
+            properties:
+              username:
+                type: string
+                description: username or email
+              password:
+                type: string
+              grantType:
+                type: string
+                description: For basic auth, password. With refresh token, authorizationCode
+              deviceUid:
+                type: string
+                description: Optional for basic auth. Required for autorization auth
+              deviceName:
+                type: string
+                description: Optional for basic auth. Required for autorization auth
+              productId:
+                type: string|number|Array<string|number>
+                description: Product id or array of product ids. If not provided, default product id (5) will be used. If provided as array, any of the provided products will be used. If the user does not have access to any of the provided products, the login will fail.
+            encoding:
+              contentType: application/json
+     responses:
+       200:
+         description: Access token, refresh token and user data
+       400  E_${PARAMETER}_REQUIRED :
+         description: Missing parameters on body
+       400  E_BAD_REQUEST :
+         description: Default 400
+       400  E_LIMIT_DEVICES :
+         description: You have reached the user device limit
+       404 - E_INCORRECT_CREDENTIALS:
+         description: Incorrect username or password, or user not exists, or user is inactive, or user is locked, or user is expired, or product is not active in user profile
+       500 - E_INTERNAL_SERVER_ERROR:
+         description: Internal server error
+
+/v1/token:
+  post:
+    description: Renew access token by refreshToken - grantType => 'refreshToken'
+    produces:
+      - application/json
+    tags:
+      - Legacy
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - refreshToken
+              - grantType
+            properties:
+              refreshToken:
+                type: string
+                description: Required
+              grantType:
+                type: string
+                description: Required, "refreshToken"
+            encoding:
+              contentType: application/json
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required:
+              - refreshToken
+              - grantType
+            properties:
+              refreshToken:
+                type: string
+                description: Required
+              grantType:
+                type: string
+                description: Required, "refreshToken"
+            encoding:
+              contentType: application/json
+    responses:
+      200:
+        description: New access token
+      400  E_${PARAMETER}_REQUIRED :
+        description: Missing parameters on body
+      400  E_INCORRECT_TOKEN :
+        description: Incorrect token or not exists
+      400  E_INCORRECT_grantType :
+        description: Incorrect grantType value
+      400  E_INACTIVE_USER :
+        description: Inactive user
+      400  E_INACTIVE_DEVICE :
+        description: Inactive device associated to the token
+      400  E_INCORRECT_refreshToken :
+        description: Refresh token not exists or is not associated with the device
+      500 - E_INTERNAL_SERVER_ERROR:
+        description: Internal server error
+  delete:
+    description: Revoke access token - logout - grantType => 'refreshToken'
+    produces:
+      - application/json
+    tags:
+      - Legacy
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - refreshToken
+              - grantType
+            properties:
+              refreshToken:
+                type: string
+                description: Required
+              grantType:
+                type: string
+                description: Required, "refreshToken"
+    responses:
+      200:
+        description: OK
+      400  E_${PARAMETER}_REQUIRED :
+        description: Missing parameters on body
+      400  E_INCORRECT_TOKEN :
+        description: Incorrect token or not exists
+      400  E_INCORRECT_grantType :
+        description: Incorrect grantType value
+      400  E_INACTIVE_USER :
+        description: Inactive user
+      400  E_INACTIVE_DEVICE :
+        description: Inactive device associated to the token
+      400  E_INCORRECT_refreshToken :
+        description: Refresh token not exists or is not associated with the device
+      500 - E_INTERNAL_SERVER_ERROR:
+        description: Internal server error

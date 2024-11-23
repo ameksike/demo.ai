@@ -1,0 +1,23 @@
+components:
+  schemas:
+    Response:
+      type: object
+      properties:
+        page:
+          type: number
+          default: 0
+          description: Current page or group of records
+        size:
+          type: number
+          default: 10
+          description: Maximum number of records per page
+        total:
+          type: number
+          default: 0
+          description: Maximum number of records
+        data:
+          type: array
+          description: List of records or generic objects
+          items:
+            type: object
+            description: Generic object that describes the record 

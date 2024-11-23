@@ -1,0 +1,100 @@
+<details>
+        <summary>
+                <h1>Monitoring: Logs</h1>
+        </summary>
+
+        <section>
+                <div id="auth_process">
+                        <h3>How to check SSO Authentication process using auth service logs in Kibana</h3>
+                        <p><span style="letter-spacing: 0.0px;">The monitoring process of the new implementation for the
+                                        Auth
+                                        server is based on its log system and Kibana. For example, if we need to know
+                                        what
+                                        happened with an user like <strong class="external-link">HOZLER@THY.COM</strong>
+                                        <em>(Please do not expect this user to exist, it is only an example for this
+                                                documentation)</em>. After the search we should proceed with the
+                                        following
+                                        steps:&nbsp;</span></p>
+
+                        <h4>1- Searching by email</h4>
+                        <a href="{{url.public}}/img/elastic.search.email.png"><img alt="table.credential"
+                                        src="{{url.public}}/img/elastic.search.email.png" /></a>
+
+                        <h4>2- Searching by Flow ID</h4>
+                        <a href="{{url.public}}/img/elastic.search.flow-0.png"><img alt="table.credential"
+                                        src="{{url.public}}/img/elastic.search.flow-0.png" /></a>
+
+                        <a href="{{url.public}}/img/elastic.search.flow-1.png"><img alt="table.credential"
+                                        src="{{url.public}}/img/elastic.search.flow-1.png" /></a>
+                        <a href="{{url.public}}/img/elastic.search.flow-2.png"><img alt="table.credential"
+                                        src="{{url.public}}/img/elastic.search.flow-2.png" /></a>
+                        <a href="{{url.public}}/img/elastic.search.flow-3.png"><img alt="table.credential"
+                                        src="{{url.public}}/img/elastic.search.flow-3.png" /></a>
+                        <p>We can be sure that the authentication process finish successfully when we are able to
+                                identify the 3
+                                mandatories STEP, like the example above. If the Step 3 doesn't appear, we should check
+                                the last
+                                step and get the related log with level value in 1 or 2. <span
+                                        style="letter-spacing: 0.0px;">For further information in regard to the auth
+                                        logs level,
+                                        see the section named as “</span><em style="letter-spacing: 0.0px;">Log level
+                                        convention</em><span style="letter-spacing: 0.0px;">”.</span></p>
+                </div>
+
+                <div id="auth_db">
+                        <h3>How to check SSO Authentication in database</h3>
+                        <p>It also is possible to check and monitoring the status of the authentication process from the
+                                database. In this case, it is a more limited option because we will have only visibility
+                                to
+                                those users who were able to make login into the Auth Server<span
+                                        style="letter-spacing: 0.0px;">.&nbsp; For instance, if we go to the Credential
+                                        State
+                                        table, we will see something similar to the follow:&nbsp;</span></p>
+                        <a href="{{url.public}}/img/table.credential-state2.png"><img alt="table.credential"
+                                        src="{{url.public}}/img/table.credential-state2.png" /></a>
+                        <p>As we can see in the screenshot above, there is a relation between credential, domain, and
+                                user. So
+                                we can check the metadata received from the IDP, the updated time, the related Flow ID
+                                and the
+                                status. &nbsp;<span>For further information in regard to the credential status, see the
+                                        section
+                                        named as <a href="{{url.page}}/Constants"> “<em>Credential status
+                                                        convention</em></span><span>”. </a>On the other hand, the
+                                        state column stores the relation between the <strong><em>Domain ID</em></strong>
+                                        and
+                                        <strong><em>Product ID</em></strong>.&nbsp;</span></p>
+                </div>
+
+                <div id="auth_legacy">
+                        <h3>How to check the legacy authentication logs in Kibana</h3>
+                        <p><span>There are different causes of errors when executing a login action, one of the most
+                                        common is when access to a product is requested and it is not assigned to the
+                                        user. One option to understand what is happening would be to check if there are
+                                        any logs related to the authentication type, in case of legacy code or basic
+                                        login it would be using
+                                        a driver filter like. For example, <strong>Controller:basicAuth:login</strong>
+                                        we
+                                        should see the following logs:&nbsp;</span></p>
+                        <h4>Searching by controller </h4>
+                        <a href="{{url.public}}/img/elastic.search.old.auth.invalid.product2.png"><img alt="table.credential"
+                                        src="{{url.public}}/img/elastic.search.old.auth.invalid.product2.png" /></a>
+                        <p>Note how the log level indicates the value 1, which means that it is an error type log
+                                record, and in
+                                these cases the relationship of products and users is shown.</p>
+                        <a href="{{url.public}}/img/elastic.search.old.auth.invalid.product.png"><img alt="table.credential"
+                                        src="{{url.public}}/img/elastic.search.old.auth.invalid.product.png" /></a>
+                        <p>In both examples we will see the following properties:</p>
+                        <ul>
+                                <li><strong>productsRequest:</strong> Refers to the list of products to which access is
+                                        requested</li>
+                                <li><strong>productsContent:</strong> Refers to the list of products that the current
+                                        user is
+                                        allowed access to </li>
+                        </ul>
+                </div>
+                <p>If you need to consult a quick guide to solving and understanding problems, it is recommended to
+                        review the topic
+                        known as <a href="{{url.page}}/FAQs"><strong> FAQs. </strong> </a></p>
+
+        </section>
+</details>

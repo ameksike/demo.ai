@@ -1,0 +1,179 @@
+<details>
+        <summary>
+                <h1>Logout</h1>
+        </summary>
+
+        <section>
+                <p class="auto-cursor-target">Logging out means to end access to a MyCom system, in other words, this
+                        action informs the MyCom Auth Server that the current user wishes to end all opened sessions.
+                        This action can be performed using different HTTP methods like GET, POST and DELETE over
+                        <span><em><strong> <a href="{{url.page}}/Domain#as_url_revoke">as_url_revoke</a>
+                                        </strong></em>or<strong> <em> <a
+                                                        href="{{url.page}}/Domain#as_url_token">as_url_token</a>
+                                        </em>. </strong>On each
+                                case, it will be required a valid ACCESS TOKEN from a logged user.</span>
+                </p>
+                <p class="auto-cursor-target">Note, this URL <a class="external-link"
+                                href="https://auth-dev.qa.ewas.aero/v1/oauth/revoke"
+                                rel="nofollow">https://auth-dev.qa.ewas.aero/v1/oauth/revoke</a><span>&nbsp;</span>come
+                        as result of the first authentication STEP in<span> <strong><a
+                                                href="{{url.page}}/Domain#as_url_revoke">as_url_revoke</a>
+                                </strong></span>property.&nbsp;</p>
+
+                <div id="access">
+                        <h3><a href="{{url.page}}/Logout#access">Access Token revoking</a> </h3>
+                        <code-view>https://auth-dev.qa.ewas.aero/v1/oauth/revoke?token=ACCESS_TOKEN </code-view>
+                        <p>If an application type credential is not used or the selected domain does not require SP
+                                verification, it is possible to use the authorization variable to specify the access
+                                token that you want to invalidate, forcing the end user to logout. In other cases, it
+                                will be necessary to use the authorization property to send the client_id and
+                                client_secret in basic encoding format, as well as the access_token or refresh_token
+                                into the token in the token property. </p>
+                        <code-view>https://auth-dev.qa.ewas.aero/v1/oauth/revoke?authorization=ACCESS_TOKEN </code-view>
+                        <p class="auto-cursor-target">It should be an HTTP GET action, like the example below.</p>
+                        <code-view>https://auth-dev.qa.ewas.aero/v1/oauth/revoke?authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoxODc3MTgsImNyZWRlbnRpYWxJZCI6NDMsImRvbWFpbklkIjo3LCJkZXZpY2UiOiJlYjM1MGNjNTg5ZDU4Y2I1YWRhODhlYWRmYjM4ZmFkZiIsIm1haWwiOiJ1c2VyMUBleGFtcGxlLmNvbSIsImNyZWRlbnRpYWxUeXBlIjoxLCJpYXQiOjE2ODkwNzg4MzMsImV4cCI6MTY4OTUxMDgzM30.BHcUbHsJML8m1xyRh6-zed7zT9W8rYwvRq-VUoc5jK8</code-view>
+                        <p>Also, the ACCESS_TOKEN should be set on the authorization header property instead of a GET
+                                variable.
+                        </p>
+                        <p>The login process ends with a redirect to the URL defined in the credential property called
+                                redirect URL. Such as the example below:</p>
+                        <code-view>https://oauth.pstmn.io/v1/callback?state=logout&email=user1@example.com</code-view>
+                        <p>Note in the example above that the redirect URL will receive two parameters: status and
+                                email.</p>
+                        <p>In case of the application does not have any redirect_uri in their backend, the Auth server
+                                provides an empty URL that make possible to receive in the Webview component the
+                                response from the IDP as following:</p>
+                        <code-view>https://auth-dev.qa.ewas.aero/v1/oauth/token?state=logout&email=user1@example.com</code-view>
+
+                </div>
+
+                <div id="refresh">
+                        <h3><a href="{{url.page}}/Logout#refresh">Refresh Token revoking</a> </h3>
+                        <p>If you want to <strong> revoke the refresh token</strong>, you must specify the value of the
+                                <em>token_type_hint</em> with the value <em>"refresh_token"</em>, if not specified it
+                                adopts the
+                                value <em>"access_token"</em>.
+                        </p>
+                        <code-view>https://auth-dev.qa.ewas.aero/v1/oauth/revoke?token=REFRESH_TOKEN&token_type_hint=refresh_token </code-view>
+                        <p>The refresh token revocation flow behaves the same as that of the access token and
+                                automatically
+                                invalidates the access token as well.</p>
+                </div>
+
+
+                <div id="response">
+                        <h3><a href="{{url.page}}/Logout#response">Response Type</a> </h3>
+                        <p>The response type determines the way and format in which the data is received from the
+                                server, which is
+                                described below:</p>
+                        <ul>
+                                <li> <strong>body: </strong> It implies that the response will be received in the
+                                        response body in JSON format.
+                                        <code-view>https://auth-dev.qa.ewas.aero/v1/oauth/revoke?token=ACCESS_TOKEN&response_type=body </code-view>
+                                        <p>As you can see in the previous example, it is specified explicitly, but it is
+                                                not necessary because this is the value that is taken by default if the
+                                                <strong><em>response_type</em></strong> property is not specified. As a
+                                                result of this configuration you will obtain a response payload like the
+                                                following:
+                                        </p>
+                                        <code-view>{
+                                                "success": true,
+                                                "state":"logout",
+                                                "email":"user1@example.com"
+                                        }</code-view>
+                                        <p>In case of <strong>error</strong>, properties such as <strong>error</strong>
+                                                and <strong>error_description</strong> would be received. The
+                                                format depends on the type of response specified, as shown in the
+                                                example below.
+                                        </p>
+                                        <code-view>{              
+                                                "error": "invalid_request",
+                                                "error_description": "The request is missing a required parameter",
+                                                "success": false,
+                                                "msg": "E_BAD_REQUEST" 
+                                        }</code-view>
+                                        <p>Please note that the <strong>success</strong> and <strong>msg</strong>
+                                                properties are deprecated and will not be included in future versions.
+                                        </p>
+                                </li>
+                                <li> <strong>redirect: </strong> The redirect response type indicates to the AS that all
+                                        response data will be
+                                        received as GET parameters at the URL specified in the
+                                        <strong><em>redirect_uri</em></strong> option.
+                                        <code-view>https://auth-dev.qa.ewas.aero/v1/oauth/revoke?token=ACCESS_TOKEN&response_type=redirect </code-view>
+                                        <p>As a result of this configuration you will obtain a response like the
+                                                following:
+                                        </p>
+                                        <code-view>https://oauth.pstmn.io/v1/callback?success=true&state=logout&email=user1%40example.com</code-view>
+                                        <p>The <strong><em>redirect_uri</em></strong> option is taken from the
+                                                configuration indicated in the credential, it can be specified in the
+                                                URL of both the logout and login. In any case, said URL will be verified
+                                                with the configuration defined in the Credential. </p>
+
+                                        <p>In case of <strong>error</strong>, properties such as <strong>error</strong>
+                                                and <strong>error_description</strong> would be received. The
+                                                format depends on the type of response specified, as shown in the
+                                                example below.
+                                        </p>
+                                        <code-view>https://oauth.pstmn.io/v1/callback?error=invalid_request&error_description=The+request+is+missing+a+required+parameter&success=false&msg=E_BAD_REQUEST</code-view>
+                                        <p>Please note that the <strong>success</strong> and <strong>msg</strong>
+                                                properties are deprecated and will not be included in future versions.
+                                        </p>
+                                </li>
+                        </ul>
+                        <p>Keep in mind that in SAML-based integrations, the user is sometimes required to access a
+                                screen from the external IDP to complete the logout process, very similar to
+                                how login works. This is not mandatory because the AS would be in charge of closing the
+                                transfer in the event that said process is not complete, but it is still not the
+                                recommended procedure.</p>
+                </div>
+
+                <div id="mode">
+                        <h3><a href="{{url.page}}/Logout#mode">Response Mode</a> </h3>
+                        <p>The response mode determines how the AS would behave during the user logout process. There
+                                are two main flows, which are described below:</p>
+                        <ul>
+                                <li><strong>fast</strong>: With the objective of speeding up the session closing
+                                        process, the SP can decide not to wait for the IDP's confirmation, it would
+                                        entrust this process only to the AS who would be in charge of carrying out the
+                                        communication with the IDP in the background to ensure the closing of the
+                                        session in the external IDP.
+                                        <code-view>https://auth-dev.qa.ewas.aero/v1/oauth/revoke?token=ACCESS_TOKEN&response_type=body&response_mode=fast </code-view>
+                                        <p>If the <strong><em>response_mode</em></strong> property is not specified, it
+                                                will take the value <em>"fast"</em> by default. Usually this option is
+                                                combined with the <strong><em>response_type</em></strong> in the
+                                                <em>"body"</em> but it is not mandatory.
+                                        </p>
+                                </li>
+                                <li><strong>slow</strong>: As opposed to the <strong>fast</strong> option, this tells
+                                        the AS that logout confirmation from the external IDP is required.
+                                        <code-view>https://auth-dev.qa.ewas.aero/v1/oauth/revoke?token=ACCESS_TOKEN&response_type=redirect&response_mode=slow </code-view>
+                                        <p> In this case you must specify the property known as
+                                                <strong><em>response_mode</em></strong>
+                                                with value <em>"slow"</em>. Usually this option is combined with the
+                                                <strong><em>response_type</em></strong> in the <em>"redirect"</em> but
+                                                it is
+                                                not mandatory.
+                                        </p>
+                                </li>
+                        </ul>
+
+                </div>
+                <p>In case the <strong><em>"response_type=body&response_mode=fast"</em> </strong> options are used, it
+                        is recommended to perform the token revocation using the <strong>HTTP POST or DELETE</strong>
+                        method.</p>
+
+                <p>In case the <strong><em>"response_type=redirect&response_mode=slow"</em> </strong> options are used,
+                        it
+                        is recommended to perform the token revocation using the <strong>HTTP GET</strong> method.</p>
+
+                <div>
+                        <span>You may be interested in viewing the following topics:</span>
+                        <ul>
+                                <li><a href="{{url.page}}/Login">Login</a></li>
+                                <li><a href="{{url.page}}/Refresh">Refresh</a></li>
+                                <li><a href="{{url.page}}/Account">Introspection </a></li>
+                        </ul>
+                </div>
+        </section>
+</details>

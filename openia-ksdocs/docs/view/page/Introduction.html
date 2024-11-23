@@ -1,0 +1,64 @@
+<details class="topic">
+    <summary>
+        <h1>Introduction</h1>
+    </summary>
+    <section class="custom-summary">
+        <p>
+            The Auth Server in the MyCom ecosystem serves as a vital intermediary and mediator service, implementing the
+            AAA security model and tending to a microservices' architecture approach. It acts as a unified hub, ensuring
+            a common language between all MyCom applications and its Backend (SP), including support for external
+            security subsystems like Identity Providers (IDP), Authorization Servers (AS), and others. By leveraging
+            OAuth as the main integration standard, the Auth Server efficiently handles client authentication,
+            authorization, and accounting, granting secure access to protected resources. Its approach enables
+            scalability, flexibility, and easy management, streamlining the integration and interaction between MyCom
+            applications and various security components. Overall, the Auth Server plays a pivotal role in maintaining
+            the security and seamless flow of information within the MyCom ecosystem, fostering a secure and unified
+            environment for all applications involved. It is important to mention that this solution is not only for
+            SAML, over time it should support different standard like: Kerberos, SASL, OIDC, OAuth, etc.
+        </p>
+        <img src="{{url.public}}/img/auth-solution-2.jpg" alt="solution" />
+        <p id="SP"><strong>SP:</strong> Service Provider refers to a component, system, or application that offers
+            services or
+            resources that can be utilized by other applications or systems. It plays a crucial role in enabling
+            integration between different software applications within a larger ecosystem.</p>
+        <p id="IDP"><strong>IDP:</strong> Identity Provider is a critical component in software application integration,
+            providing authentication services, managing user identities, enabling SSO, and establishing trust
+            relationships with service providers. It plays a pivotal role in ensuring secure and seamless access to
+            integrated applications while maintaining strong security measures and central control over user identities.
+        </p>
+        <p id="AC"><strong>AC:</strong> Accounting subsystem refers to a component that tracks and records the actions
+            of users
+            and resources within an application. It plays a vital role in ensuring accountability, resource management,
+            and security within an application. It helps organizations understand how resources are utilized, monitor
+            user behavior, and maintain a record of system activities for various operational and security purposes.</p>
+        <p id="AS"><strong>AS:</strong> The Authorization Server is a crucial component responsible for handling the
+            Authorization aspect of the security model. It plays a central role in granting access to protected
+            resources based on the results of the authentication process.</p>
+        <p id="Auditing"><strong>Auditing:</strong> This is a component responsible for collecting and recording
+            detailed information
+            about user activities, resource usage, and security-related events within a system. By providing
+            comprehensive event logging and forensic capabilities, the auditing subsystem enhances the overall security
+            posture of the system and aids in detecting and mitigating security threats.</p>
+        <p id="Domain"><a href="{{url.page}}/Domain"><strong>Domain:</strong></a> This is an entity that stores all the
+            relevant information related to Identity
+            Providers, Authorization Servers, Service Providers, and general security values. By providing a flexible
+            and configurable solution, the Domain Entity enhances the system's adaptability to handle different
+            components and configurations, making it a valuable and powerful component in the implementation.</p>
+        <p id="Credential"><a href="{{url.page}}/Credential"><strong>Credential:</strong></a> It is a collection of
+            information that represents the identity of a client
+            device or application. It contains the necessary data for client authentication and authorization during the
+            OAuth 2.0 flow. The credential is crucial for securely identifying and granting access to the client on
+            behalf of the user, ensuring the protection of sensitive data and resources within the system.</p>
+        <p id="License"><a href="{{url.page}}/Credential#license_new"><strong>License:</strong></a> It is part of a
+            client's credential. It is a combination of vital information such
+            as the <a href="{{url.page}}/Credential#client_id">client_id</a>, <a
+                href="{{url.page}}/Credential#client_secret">client_secret</a>, and <a
+                href="{{url.page}}/Credential#metadata">metadata</a> defining the client's behavior and allowed
+            services. The
+            license facilitates centralized configuration and customization by the enterprise, enabling efficient
+            management and control of client credentials across the system. The Authorization Manager uses the license
+            to validate client behavior and ensure secure and authorized access to services and resources.</p>
+        <p>If you need to consult a quick guide to solving and understanding problems, it is recommended to review the
+            topic known as <a href="{{url.page}}/FAQs"><strong> FAQs. </strong> </a></p>
+    </section>
+</details>

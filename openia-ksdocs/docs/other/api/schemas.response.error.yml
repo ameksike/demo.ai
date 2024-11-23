@@ -1,0 +1,13 @@
+components:
+  schemas:
+    ResponseError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          default: false
+        msg:
+          type: string
+        data:
+          type: object
+          properties:

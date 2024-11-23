@@ -1,0 +1,257 @@
+<details>
+        <summary>
+                <h1>Refresh Token</h1>
+        </summary>
+
+        <section>
+                <p>The Refresh Token grant type is used by clients to exchange a refresh token for an access token when
+                        the access token has expired. This allows clients to continue to have a valid access token
+                        without further interaction with the user. <span style="letter-spacing: 0.0px;">Refresh tokens
+                                are credentials used to obtain access tokens. Refresh tokens are issued to the client by
+                                the authorization server and are used to obtain a new access token when the current
+                                access token becomes invalid or expires or to obtain additional access tokens with
+                                identical or narrower scope (access tokens may have a shorter lifetime and fewer
+                                permissions than authorized by the resource owner). Issuing a refresh token is optional
+                                at the discretion of the authorization server. If the authorization server issues a
+                                refresh token, it is included when issuing an access token.</span></p>
+                <div class="code panel pdl conf-macro output-block" data-hasbody="true" data-macro-name="code"
+                        style="border-width: 1px;">
+                        <div class="codeContent panelContent pdl">
+                                <div>
+                                        <div id="highlighter_670013"
+                                                class="syntaxhighlighter sh-confluence nogutter  java">
+                                                <table border="0" cellpadding="0" cellspacing="0">
+                                                        <tbody>
+                                                                <tr>
+                                                                        <td class="code">
+                                                                                <div class="container"
+                                                                                        title="Hint: double-click to select code">
+                                                                                        <div
+                                                                                                class="line number1 index0 alt2">
+                                                                                                <code
+                                                                                                        class="java plain">+--------+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +---------------+</code>
+                                                                                        </div>
+                                                                                        <div
+                                                                                                class="line number2 index1 alt1">
+                                                                                                <code
+                                                                                                        class="java plain">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |--(A)------- Authorization Grant ---------&gt;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</code>
+                                                                                        </div>
+                                                                                        <div
+                                                                                                class="line number3 index2 alt2">
+                                                                                                <code
+                                                                                                        class="java plain">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</code>
+                                                                                        </div>
+                                                                                        <div
+                                                                                                class="line number4 index3 alt1">
+                                                                                                <code
+                                                                                                        class="java plain">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&lt;-(B)----------- Access Token -------------|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</code>
+                                                                                        </div>
+                                                                                        <div
+                                                                                                class="line number5 index4 alt2">
+                                                                                                <code
+                                                                                                        class="java plain">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &amp; Refresh Token&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</code>
+                                                                                        </div>
+                                                                                        <div
+                                                                                                class="line number6 index5 alt1">
+                                                                                                <code
+                                                                                                        class="java plain">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</code>
+                                                                                        </div>
+                                                                                        <div
+                                                                                                class="line number7 index6 alt2">
+                                                                                                <code
+                                                                                                        class="java plain">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +----------+&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</code>
+                                                                                        </div>
+                                                                                        <div
+                                                                                                class="line number8 index7 alt1">
+                                                                                                <code
+                                                                                                        class="java plain">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |--(C)---- Access Token ----&gt;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</code>
+                                                                                        </div>
+                                                                                        <div
+                                                                                                class="line number9 index8 alt2">
+                                                                                                <code
+                                                                                                        class="java plain">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</code>
+                                                                                        </div>
+                                                                                        <div
+                                                                                                class="line number10 index9 alt1">
+                                                                                                <code
+                                                                                                        class="java plain">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&lt;-(D)- Protected Resource --| Resource |&nbsp;&nbsp; | Authorization |</code>
+                                                                                        </div>
+                                                                                        <div
+                                                                                                class="line number11 index10 alt2">
+                                                                                                <code
+                                                                                                        class="java plain">| Client |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp; Server&nbsp; |&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp; Server&nbsp;&nbsp;&nbsp; |</code>
+                                                                                        </div>
+                                                                                        <div
+                                                                                                class="line number12 index11 alt1">
+                                                                                                <code
+                                                                                                        class="java plain">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |--(E)---- Access Token ----&gt;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</code>
+                                                                                        </div>
+                                                                                        <div
+                                                                                                class="line number13 index12 alt2">
+                                                                                                <code
+                                                                                                        class="java plain">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</code>
+                                                                                        </div>
+                                                                                        <div
+                                                                                                class="line number14 index13 alt1">
+                                                                                                <code
+                                                                                                        class="java plain">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&lt;-(F)- Invalid Token Error -|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</code>
+                                                                                        </div>
+                                                                                        <div
+                                                                                                class="line number15 index14 alt2">
+                                                                                                <code
+                                                                                                        class="java plain">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +----------+&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</code>
+                                                                                        </div>
+                                                                                        <div
+                                                                                                class="line number16 index15 alt1">
+                                                                                                <code
+                                                                                                        class="java plain">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</code>
+                                                                                        </div>
+                                                                                        <div
+                                                                                                class="line number17 index16 alt2">
+                                                                                                <code
+                                                                                                        class="java plain">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |--(G)----------- Refresh Token -----------&gt;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</code>
+                                                                                        </div>
+                                                                                        <div
+                                                                                                class="line number18 index17 alt1">
+                                                                                                <code
+                                                                                                        class="java plain">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</code>
+                                                                                        </div>
+                                                                                        <div
+                                                                                                class="line number19 index18 alt2">
+                                                                                                <code
+                                                                                                        class="java plain">|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&lt;-(H)----------- Access Token -------------|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |</code>
+                                                                                        </div>
+                                                                                        <div
+                                                                                                class="line number20 index19 alt1">
+                                                                                                <code
+                                                                                                        class="java plain">+--------+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &amp; Optional Refresh Token&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; +---------------+</code>
+                                                                                        </div>
+                                                                                </div>
+                                                                        </td>
+                                                                </tr>
+                                                        </tbody>
+                                                </table>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+                <p>A refresh token is a string representing the authorization granted to the client by the resource
+                        owner. The string is usually opaque to the client. The token denotes an identifier used to
+                        retrieve the authorization information. Unlike access tokens, refresh tokens are intended for
+                        use only with authorization servers and are never sent to resource servers.</p>
+                <p>The flow illustrated in Figure 2 includes the following steps:</p>
+                <ul>
+                        <li>
+                                <p><strong>A:</strong> The client requests an access token by authenticating with the
+                                        authorization server and presenting an authorization grant.</p>
+                        </li>
+                        <li>
+                                <p><strong>B:</strong> The authorization server authenticates the client and validates
+                                        the authorization grant, and if valid, issues an access token and a refresh
+                                        token.</p>
+                        </li>
+                        <li>
+                                <p><strong>C:</strong> The client makes a protected resource request to the resource
+                                        server by presenting the access token.</p>
+                        </li>
+                        <li>
+                                <p><strong>D:</strong> The resource server validates the access token, and if valid,
+                                        serves the request.</p>
+                        </li>
+                        <li>
+                                <p><strong>E:</strong> Steps (C) and (D) repeat until the access token expires. If the
+                                        client knows the access token expired, it skips to step (G); otherwise, it makes
+                                        another protected resource request.</p>
+                        </li>
+                        <li>
+                                <p><strong>F:</strong> Since the access token is invalid, the resource server returns an
+                                        invalid token error.</p>
+                        </li>
+                        <li>
+                                <p><strong>G:</strong> The client requests a new access token by authenticating with the
+                                        authorization server and presenting the refresh token. The client authentication
+                                        requirements are based on the client type and on the authorization server
+                                        policies.</p>
+                        </li>
+                        <li>
+                                <p><strong>H:</strong> The authorization server authenticates the client and validates
+                                        the refresh token, and if valid, issues a new access token (and, optionally, a
+                                        new refresh token).</p>
+                        </li>
+                </ul>
+                <code-view>POST https://auth-dev.qa.ewas.aero/v1/oauth/token </code-view>
+                <code-view>{
+                                "grant_type":"refresh_token",
+                                "client_id": "2342R34R34R43",
+                                "client_secret": "DSFEF33XE3XEX3",
+                                "refresh_token": "qqJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eI..."
+                            }</code-view>
+                <p>Note, this URL <a class="external-link" href="https://auth-dev.qa.ewas.aero/v1/oauth/token"
+                                rel="nofollow">https://auth-dev.qa.ewas.aero/v1/oauth/token</a><span>&nbsp;</span>come
+                        as result of the first authentication STEP
+                        in<span>&nbsp;</span><strong>as_url_token<span>&nbsp;</span></strong>property. It should be an
+                        HTTP POST action, like the example above. <span style="letter-spacing: 0.0px;">As a response,
+                                you should receive:&nbsp;</span></p>
+
+                <code-view>{
+                                        "access_token": "UzI1NiIsInR5ceyJhbGciOiJICI6IkpXVCJ9.eyJl...",
+                                        "refresh_token": "NiIsInR5cCI6IqqJhbGciOiJIUzI1kpXVCJ9.eI6...",
+                                        "token_type": "Bearer",
+                                        "expires_in": "1311281970",
+                                        "scope": "DISPATCH EDITION,DISPATCH ALERTS,DISPATCH COMMENTS,DISPATCH REROUTING,DISPATCH ROUTEFINDER,DISPATCH EDIT ALERT CRITERIA"
+                                    }</code-view>
+                <p>Note in the response there are different values:</p>
+                <ul>
+                        <li><strong>access_token:</strong> Access token credentials (as well as any confidential access
+                                token attributes) MUST be kept confidential in transit and storage, and only shared
+                                among the authorization server, the resource servers the access token is valid for, and
+                                the client to whom the access token is issued. Access token credentials MUST only be
+                                transmitted using TLS.</li>
+                        <li><strong>refresh_token:</strong> Refresh tokens MUST be kept confidential in transit and
+                                storage, and shared only among the authorization server and the client to whom the
+                                refresh tokens were issued. &nbsp;The authorization server MUST maintain the binding
+                                between a refresh token and the client to whom it was issued.</li>
+                        <li><strong>token_type:</strong> It is usually Bearer. The access token type provides the client
+                                with the information required to successfully utilize the access token to make a
+                                protected resource request (along with type-specific attributes). &nbsp;The client MUST
+                                NOT use an access token if it does not understand the token type. For example, the
+                                "bearer" token type defined in RFC 6750, it is utilized by simply including the access
+                                token string in the request.</li>
+                        <li><strong>expires_in:</strong> This is a timestamp that indicates the expiration time of the
+                                access token. Like the access token is a JWT itself, this is the time after which the
+                                JWT must not be accepted for processing. Its meaning is specifically the same as the
+                                attribute known as exp. The "exp" claim is used to prevent JWT token abuse, and to
+                                ensure that the JWT is not used for an extended period of time. In other cases, it will
+                                be The lifetime in seconds of the access token. For example, the value "3600" denotes
+                                that the access token will expire in one hour from the time the response was generated.
+                        </li>
+                        <li><strong>scope:</strong> The same as described in the below step.<span> The authorization and
+                                        token endpoints allow the client to specify the scope of the access request
+                                        using the "scope" request parameter. &nbsp;In turn, the authorization server
+                                        uses the "scope" response parameter to inform the client of the scope of the
+                                        access token issued. The value of the scope parameter is expressed as a list of
+                                        space-delimited, case-sensitive strings. The authorization server defines the
+                                        strings. If the value contains multiple space-delimited strings, their order
+                                        does not matter, and each string adds an additional access range to the
+                                        requested scope. If the client omits the scope parameter when requesting
+                                        authorization, the authorization server MUST either process the request using a
+                                        pre-defined default value or fail the request indicating an invalid scope.</li>
+                </ul>
+                <p>For further information about expiration times options read the section named as <a
+                                href="{{url.page}}/Domain">Domain</a>. Especially look at the properties
+                        <strong>expiration</strong> and <strong>refresh</strong>, and how those fields can be
+                        overwritten depending on the configuration
+                        in the <strong>Enterprise – Products</strong> relationship.
+                </p>
+                <div>
+
+                        <span>You may be interested in viewing the following topics:</span>
+                        <ul>
+                                <li><a href="{{url.page}}/Login">Login</a></li>
+                                <li><a href="{{url.page}}/Logout">Logout</a></li>
+                                <li><a href="{{url.page}}/Account">User Account and Token Introspection </a></li>
+                        </ul>
+                </div>
+
+        </section>
+</details>
