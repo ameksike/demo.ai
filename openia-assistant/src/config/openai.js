@@ -6,13 +6,38 @@ const config = {
     basePath: "https://api.openai.com/v1",
     models: {
         "basic": "gpt-3.5-turbo-0125",
-        "basic2":"gpt-3.5-turbo",
+        "basic2": "gpt-3.5-turbo",
         "simple": "gpt-4o-mini",
         "average": "gpt-4",
         "advanced": "gpt-4o",
     },
     tools: [
         {
+            type: "function",
+            function: {
+                name: "weather_get",
+                description: "Get current temperature for provided coordinates in celsius or for a given location.",
+                parameters: {
+                    type: "object",
+                    properties: {
+                        latitude: { type: "number" },
+                        longitude: { type: "number" },
+                        city: {
+                            "type": "string",
+                            "description": "City e.g. Bogotá, Barcelona"
+                        },
+                        country: {
+                            "type": "string",
+                            "description": "Country e.g. Colombia, Spain"
+                        }
+                    },
+                    required: ["latitude", "longitude", "city", "country"],
+                    additionalProperties: false
+                },
+                strict: true
+            }
+        },
+        /*{
             "type": "function",
             "function": {
                 "name": "get_weather",
@@ -32,11 +57,11 @@ const config = {
                 },
                 "strict": true
             }
-        },
+        },*/
         {
             "type": "function",
             "function": {
-                "name": "send_email",
+                "name": "email_send",
                 "description": "Send an email to a given recipient with a subject and message.",
                 "parameters": {
                     "type": "object",
@@ -121,6 +146,11 @@ const config = {
                 "strict": true
             }
         }
-    ]
+    ],
+    defaults: {
+        assistant: process.env.OPENAI_ASSISTANT_ID,
+        thread: process.env.OPENAI_THREAD_ID,
+    },
+    assistant: {}
 }
 export default config;

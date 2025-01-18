@@ -1,6 +1,7 @@
 import express from 'express';
 import { getFromMeta, path } from '../utils/polyfill.js';
-import * as srvOpenIA from '../services/openiaService.js';
+import * as srvOpenIA from '../services/openia.service.js';
+import * as locator from '../utils/locator.js';
 
 /**
  * Default controller for WebSocket messages
@@ -8,9 +9,16 @@ import * as srvOpenIA from '../services/openiaService.js';
  * @param {import('ws').WebSocket} ws 
  */
 export async function onMessage(message, ws) {
-    console.log(`Received: ${message}`, ws.request);
-    const res = await srvOpenIA.process(message);
-    ws.send(res.content);
+    console.log(" >>>>> ", { message, ws });
+    let { tasks, content } = await srvOpenIA.process(message);
+
+    if (Array.isArray(tasks)) {
+        let list = await Promise.all(tasks.map(task => locator.run(task)));
+        content += ` >> ${JSON.stringify(list)}`
+    }
+
+    // const res1 = await srvOpenIA.assist(message);
+    ws.send(content);
 }
 
 /**

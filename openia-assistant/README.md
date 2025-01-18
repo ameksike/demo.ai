@@ -43,6 +43,9 @@ openia-assistant/
 - OpenAI
     - [Function calling](https://platform.openai.com/docs/guides/function-calling?lang=node.js&example=search-knowledge-base)
     - [Embeddings](https://platform.openai.com/docs/guides/embeddings)
+    - [Streaming](https://platform.openai.com/docs/api-reference/streaming)
+    - [Assistants](https://platform.openai.com/docs/api-reference/assistants)
+    - [Threads](https://platform.openai.com/docs/api-reference/threads)
 
 - Google 
     - 
