@@ -1,11 +1,11 @@
 import { OpenAI } from "openai";
 import config from "../../cfg/openai.js";
 import * as doc from "../../cfg/documents.js";
-import { BaseAIService } from "./baseai.service.js";
+import { BaseAIService } from "./baseai.js";
 
 export class OpenAICompletions extends BaseAIService {
     constructor(config) {
-        super({ training: doc.assistants.basic });
+        super({ training: doc.assistants.basic, roles: { "tool": "function" } });
 
         // define OpenAI SDK
         this.driver = new OpenAI({

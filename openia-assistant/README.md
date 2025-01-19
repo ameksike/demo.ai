@@ -1,24 +1,40 @@
-
+## Assistant Demo App
 
 ## Project Structure
 ```
 openia-assistant/
+├── cfg/
+│   │   └── openai.js
 ├── src/
-│   ├── config/
-│   │   └── openaiConfig.js
+│   ├── models/
+│   │   └── chat.js
+│   ├── controllers/
+│   │   └── chat.js
+│   ├── plugins/
+│   │   ├── calendar.js
+│   │   ├── email.js
+│   │   └── external.js
+│   │   └── weather.js
 │   ├── services/
-│   │   ├── emailService.js
-│   │   ├── calendarService.js
-│   │   └── externalTaskExecutor.js
+│   │   ├── llama.js
+│   │   ├── openia.assistants.js
+│   │   └── openia.completions.js
+│   │   └── openai.embeddings.js
 │   ├── utils/
-│   │   └── apiClient.js
-│   ├── training/
-│   │   └── documents.js
-│   └── main.js
+│   │   └── fetch.api.js
+│   │   └── locator.js
+│   │   └── polyfill.js
+│   │   └── server.ws.js
+│   │   └── server.web.js
+│   ├── views/
+│   │   └── chat.html
+│   └── server.js
 ├── package.json
 ├── .env
 └── README.md
 ```
+
+![screenshot](./doc/screenshot.jpg)
 
 ## Install & Configure
 1. Install Required Libraries:
