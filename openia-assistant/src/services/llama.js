@@ -1,7 +1,7 @@
 import fetchApi from '../utils/fetch.api.js';
 import config from "../../cfg/openai.js";
 import * as doc from "../../cfg/documents.js";
-import { BaseAIService } from "./baseai.service.js";
+import { BaseAIService } from "./baseai.js";
 
 const {
     LLAMA_API_URL = "http://127.0.0.1:1234"

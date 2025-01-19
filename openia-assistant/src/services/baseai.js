@@ -24,15 +24,21 @@ export class BaseAIService {
     inThread;
 
     constructor(options = null) {
-        const { plugin = locator, thread = [], training, inThread = true } = options || {};
+        const { plugin = locator, thread = [], training, inThread = true, roles } = options || {};
 
         this.plugin = plugin.default;
         this.thread = thread;
         this.inThread = inThread;
+        this.roles = {
+            "system": "system",
+            "tool": "tool",
+            "user": "user",
+            ...roles
+        };
 
         if (this.inThread && Array.isArray(this.thread) && training?.name) {
             this.thread.push({
-                "role": "system",
+                "role": this.roles.system,
                 "content": `
                     You are an AI assistant named "${training?.name}". 
                     Your primary role is defined as follows:
@@ -85,7 +91,7 @@ export class BaseAIService {
             if (!result) {
                 return null;
             }
-            return { role: 'tool', content: this.encode({ toolCallId: id, toolName: name, output: result }) };
+            return { role: this.roles.tool, name, id, content: this.encode({ name, output: result }) };
         }));
         return res.filter(v => !!v);
     }
@@ -174,7 +180,7 @@ export class BaseAIService {
 
         // Keep messages in the conversation thread if required
         if (content && this.inThread) {
-            thread.push({ "role": "system", content });
+            thread.push({ "role": this.roles.system, content });
         }
         return content;
     }
@@ -186,7 +192,7 @@ export class BaseAIService {
      * @returns {Promise<string>} content 
      */
     async run(messages, thread = null) {
-        messages = typeof messages === "string" ? [{ "role": "user", "content": messages }] : messages;
+        messages = typeof messages === "string" ? [{ "role": this.roles.user, "content": messages }] : messages;
         let content = await this.process(messages, thread);
         return content;
     }
