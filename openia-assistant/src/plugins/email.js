@@ -1,5 +1,8 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import { getFromMeta, path } from '../utils/polyfill.js';
+
+const { __dirname } = getFromMeta(import.meta);
 
 /**
  * @link https://www.nodemailer.com/smtp/oauth2/
@@ -9,17 +12,19 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const {
-    EMAIL_OUT_PORT = 465,
+    EMAIL_OUT_PORT = 587, // 465
+    EMAIL_OUT_SSL = false, // true
     EMAIL_OUT_HOST = "smtp.gmail.com",
-    EMAIL_OUT_SSL = true,
     EMAIL_USER,
     EMAIL_PASS,
     EMAIL_TOKEN,
-    EMAIL_TYPE = "OAuth2",
-    EMAIL_SRV = "gmail"
+    EMAIL_TYPE = "basic",
+    EMAIL_SRV = "gmail",
+    EMAIL_PATH = path.resolve(__dirname, "../../public")
 } = process.env;
 
-export async function send({ to, subject = "Notification", body = "Hello!" }) {
+export async function send(options) {
+    const { to, subject = "Notification", body = "Hello!", attachments } = options || {};
     try {
         const auth = EMAIL_TYPE === "OAuth2" ? {
             type: "OAuth2",
@@ -36,15 +41,25 @@ export async function send({ to, subject = "Notification", body = "Hello!" }) {
             secure: EMAIL_OUT_SSL,
             service: EMAIL_SRV,
         };
+        if (Array.isArray(attachments)) {
+            attachments = attachments.map(att => {
+                return {
+                    fileName: att.fileName,
+                    path: att.path || path.resolve(EMAIL_PATH, att.fileName),
+                    contentType: att.contentType || "application/pdf"
+                }
+            })
+        }
         const transporter = nodemailer.createTransport(transport);
-        const options = {
+        const emailOptions = {
             to,
-            from: process.env.EMAIL_USER,
+            from: EMAIL_USER,
             subject,
-            html: body
+            html: body,
+            attachments
             // text: body,
         };
-        const info = await transporter.sendMail(options);
+        const info = await transporter.sendMail(emailOptions);
         return { status: "success", message: "Email sent successfully!", info };
     } catch (error) {
         return { status: "error", message: error.message };

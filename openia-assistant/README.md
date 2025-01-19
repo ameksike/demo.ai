@@ -73,3 +73,7 @@ openia-assistant/
     - [Examples](https://github.com/openai/openai-assistants-quickstart/tree/main/app/examples)
 
 - [oLlama](https://ollama.com/)
+
+- Google
+    - [Sign in with app passwords](https://support.google.com/mail/answer/185833?hl=en)
+    - [Create & use app passwords](https://myaccount.google.com/apppasswords)
