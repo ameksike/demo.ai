@@ -13,18 +13,19 @@ export async function onMessage(message, ws) {
     let drv = tmp.length > 1 ? tmp[0].trim() : "llama";
     let provider = (await ioc.get(drv, "../services"))?.lib;
     let intsance = provider?.default || provider;
+    let available = intsance.run instanceof Function;
 
     console.log({
         src: "Controller:Chat:onMessage",
         data: {
-            intsance: !!intsance,
+            available,
             provider: drv,
             message: msg,
             keyword: ">>>"
         }
     });
 
-    let content = intsance.run instanceof Function && await intsance.run(msg);
+    let content = available && await intsance.run(msg);
     ws.send(content ? content : "I don't have an answer for your question");
 }
 
