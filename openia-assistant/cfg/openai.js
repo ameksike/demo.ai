@@ -72,7 +72,7 @@ const config = {
         {
             "type": "function",
             "function": {
-                "name": "search_knowledge_base",
+                "name": "external_search",
                 "description": "Query a knowledge base to retrieve relevant info on a topic.",
                 "parameters": {
                     "type": "object",

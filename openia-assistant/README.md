@@ -61,7 +61,11 @@ openia-assistant/
     - [REST API](https://lmstudio.ai/docs/api/rest-api)
     - [lmstudio.js](https://github.com/lmstudio-ai/lmstudio.js)
     - [Runtimes](https://github.com/ggerganov/llama.cpp/tree/master/examples/server)
-- OpenAI
+
+- [oLlama](https://ollama.com/)
+    - [Llama Cookbook: The Official Guide to building with Llama Models](https://github.com/meta-llama/llama-cookbook)
+
+- [OpenAI](https://platform.openai.com/docs)
     - [Function calling](https://platform.openai.com/docs/guides/function-calling?lang=node.js&example=search-knowledge-base)
     - [Embeddings](https://platform.openai.com/docs/guides/embeddings)
     - [Streaming](https://platform.openai.com/docs/api-reference/streaming)
@@ -70,5 +74,7 @@ openia-assistant/
     - [Assistants & Threads Quick Start](https://platform.openai.com/docs/assistants/quickstart)
     - [Completion](https://platform.openai.com/docs/api-reference/chat/create)
     - [Examples](https://github.com/openai/openai-assistants-quickstart/tree/main/app/examples)
-- Google 
-    - 
+
+- Google
+    - [Sign in with app passwords](https://support.google.com/mail/answer/185833?hl=en)
+    - [Create & use app passwords](https://myaccount.google.com/apppasswords)

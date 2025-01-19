@@ -6,7 +6,7 @@ import * as locator from '../utils/locator.js';
  * @typedef  {import('../models/types.js').TResponse} TResponse
  */
 
-export class BaseAIService {
+export class ProviderAI {
 
     /**
      * @type {typeof locator}
@@ -89,7 +89,7 @@ export class BaseAIService {
             let { arguments: args, name } = func;
             let result = type === "function" && await this.plugin.run({ name, args: this.decode(args) });
             if (!result) {
-                return null;
+                return { role: this.roles.tool, name, id, content: "Bad plugin request, there is no content to share." };
             }
             return { role: this.roles.tool, name, id, content: this.encode({ name, output: result }) };
         }));

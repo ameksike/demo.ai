@@ -1,9 +1,9 @@
 import { OpenAI } from "openai";
 import config from "../../cfg/openai.js";
 import * as doc from "../../cfg/documents.js";
-import { BaseAIService } from "./baseai.js";
+import { ProviderAI } from "./provider.ai.js";
 
-export class OpenAICompletions extends BaseAIService {
+export class OpenAICompletions extends ProviderAI {
     constructor(config) {
         super({ training: doc.assistants.basic, roles: { "tool": "function" } });
 
