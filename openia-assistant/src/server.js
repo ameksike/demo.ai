@@ -1,17 +1,20 @@
 import dotenv from "dotenv";
-import { startWeb, startWs } from "./utils/server.js";
-import { onMessage, router as chatRouter  } from "./controllers/chat.js";
-
 dotenv.config();
 
-startWs({
+import * as wsServer from "./utils/server.ws.js";
+import * as webServer from "./utils/server.web.js";
+import { onMessage, router as chatRouter } from "./controllers/chat.js";
+
+wsServer.start({
     port: process.env.WP_PORT || 8080,
-    controller: onMessage
+    routes: {
+        "/": { controller: onMessage }
+    }
 });
 
-startWeb({
+webServer.start({
     port: process.env.PORT || 3000,
-    routes: [
-        { path: "/chat", router: chatRouter }
-    ]
+    routes: {
+        "/chat": { router: chatRouter }
+    }
 });
