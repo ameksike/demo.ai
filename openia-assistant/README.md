@@ -1,4 +1,4 @@
-
+## Assistant Demo App
 
 ## Project Structure
 ```
@@ -33,6 +33,8 @@ openia-assistant/
 ├── .env
 └── README.md
 ```
+
+![screenshot](./doc/screenshot.jpg)
 
 ## Install & Configure
 1. Install Required Libraries:
