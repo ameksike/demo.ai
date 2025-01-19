@@ -91,7 +91,7 @@ export class BaseAIService {
     }
 
     /**
-     * @description Get the task list
+     * @description Overwritable function for get the task list
      * @param {TResponse} response 
      * @returns {TTask} tasks
      */
@@ -100,7 +100,7 @@ export class BaseAIService {
     }
 
     /**
-     * @description Get the response content
+     * @description Overwritable function for get the response content
      * @param {TResponse} response 
      * @returns {string} content
      */
@@ -109,12 +109,11 @@ export class BaseAIService {
     }
 
     /**
-     * @description Prosess a group of messages in a thread
-     * @param {Array<TMsg>} thread 
-     * @param {Array<TMsg>} [messages] 
+     * @description Overwritable function for prosess a group of messages in a thread
+     * @param {Array<TMsg>} messages 
      * @returns {Promise<TResponse>} response 
      */
-    analyse(thread, messages) {
+    analyse(messages) {
         return Promise.resolve({
             choices: [
                 {
@@ -124,6 +123,18 @@ export class BaseAIService {
                 }
             ]
         });
+    }
+
+    /**
+     * @description Overwritable function for RAG values ​​reporting
+     * @param {<Array<TMsg>} results 
+     * @param {<Array<TMsg>} thread 
+     * @returns {Promise<string>} content 
+     */
+    async notify(results, thread) {
+        if (results?.length) {
+            return await this.process(results, thread);
+        }
     }
 
     /**
@@ -146,14 +157,15 @@ export class BaseAIService {
         }
 
         // Process a messages list 
-        const response = await this.analyse(thread, messages);
+        const response = await this.analyse(thread);
 
         // process tasks or tool calls 
         const tasks = this.getTasks(response);
         if (tasks?.length) {
             let results = await this.retrive(tasks);
-            if (results?.length) {
-                return await this.process(results, thread);
+            let res = await this.notify(results, thread);
+            if (res) {
+                return res;
             }
         }
 

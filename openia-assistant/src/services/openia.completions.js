@@ -5,10 +5,8 @@ import { BaseAIService } from "./baseai.service.js";
 
 export class OpenAICompletions extends BaseAIService {
     constructor(config) {
-        super({
-            training: doc.assistants.basic
-        });
-        
+        super({ training: doc.assistants.basic });
+
         // define OpenAI SDK
         this.driver = new OpenAI({
             apiKey: config.apiKey,
@@ -23,13 +21,13 @@ export class OpenAICompletions extends BaseAIService {
         };
     }
 
-    async analyse(thread, messages) {
+    async analyse(messages) {
         try {
             const stream = await this.driver.chat.completions.create({
                 stream: this.option.stream,
                 model: this.option.model,
                 tools: this.option.tools,
-                messages: thread,
+                messages,
             });
             return stream;
         }
