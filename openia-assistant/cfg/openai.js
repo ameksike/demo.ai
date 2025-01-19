@@ -5,6 +5,7 @@ const config = {
     apiKey: process.env.OPENAI_API_KEY,
     basePath: "https://api.openai.com/v1",
     models: {
+        "lmstudio": "qwen2.5-7b-instruct",
         "basic": "gpt-3.5-turbo-0125",
         "basic2": "gpt-3.5-turbo",
         "simple": "gpt-4o-mini",
@@ -37,27 +38,6 @@ const config = {
                 strict: true
             }
         },
-        /*{
-            "type": "function",
-            "function": {
-                "name": "get_weather",
-                "description": "Get current temperature for a given location.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "location": {
-                            "type": "string",
-                            "description": "City and country e.g. Bogotá, Colombia"
-                        }
-                    },
-                    "required": [
-                        "location"
-                    ],
-                    "additionalProperties": false
-                },
-                "strict": true
-            }
-        },*/
         {
             "type": "function",
             "function": {
