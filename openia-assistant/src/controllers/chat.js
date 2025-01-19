@@ -1,7 +1,6 @@
 import express from 'express';
 import { getFromMeta, path } from '../utils/polyfill.js';
-import * as srvOpenIA from '../services/openia.service.js';
-import * as locator from '../utils/locator.js';
+import srvOpenIA from '../services/openia.completions.js';
 
 /**
  * Default controller for WebSocket messages
@@ -10,15 +9,8 @@ import * as locator from '../utils/locator.js';
  */
 export async function onMessage(message, ws) {
     console.log(" >>>>> ", { message, ws });
-    let { tasks, content } = await srvOpenIA.process(message);
-
-    if (Array.isArray(tasks)) {
-        let list = await Promise.all(tasks.map(task => locator.run(task)));
-        content += ` >> ${JSON.stringify(list)}`
-    }
-
-    // const res1 = await srvOpenIA.assist(message);
-    ws.send(content);
+    let content = await srvOpenIA.run(message);
+    ws.send(content ? content : "I don't have an answer for your question");
 }
 
 /**
@@ -26,12 +18,14 @@ export async function onMessage(message, ws) {
  * @param {*} req 
  * @param {*} res 
  */
-function onGet(req, res) {
+export function onGet(req, res) {
+    const { __dirname } = getFromMeta(import.meta);
     res.sendFile(path.join(__dirname, '../views/chat.html'));
 }
 
-// router definition and export 
-const { __dirname } = getFromMeta(import.meta);
+/**
+ * Export Router definition  
+ */
 const router = express.Router();
 router.get('/', onGet);
 export { router };
