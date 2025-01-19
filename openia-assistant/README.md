@@ -44,6 +44,7 @@ openia-assistant/
     - [Docs](https://lmstudio.ai/docs)
     - [REST API](https://lmstudio.ai/docs/api/rest-api)
     - [lmstudio.js](https://github.com/lmstudio-ai/lmstudio.js)
+    - [Runtimes](https://github.com/ggerganov/llama.cpp/tree/master/examples/server)
 - OpenAI
     - [Function calling](https://platform.openai.com/docs/guides/function-calling?lang=node.js&example=search-knowledge-base)
     - [Embeddings](https://platform.openai.com/docs/guides/embeddings)
@@ -51,6 +52,7 @@ openia-assistant/
     - [Assistants](https://platform.openai.com/docs/api-reference/assistants)
     - [Threads](https://platform.openai.com/docs/api-reference/threads)
     - [Assistants & Threads Quick Start](https://platform.openai.com/docs/assistants/quickstart)
-
+    - [Completion](https://platform.openai.com/docs/api-reference/chat/create)
+    - [Examples](https://github.com/openai/openai-assistants-quickstart/tree/main/app/examples)
 - Google 
     - 
