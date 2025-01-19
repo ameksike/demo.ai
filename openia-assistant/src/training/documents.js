@@ -1,3 +1,10 @@
+export const assistants = {
+    basic: {
+        instructions: "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",
+        name: "Math Tutor",
+    }
+}
+
 export const trainingDocuments = [
     {
         role: "system",
