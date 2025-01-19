@@ -1,6 +1,6 @@
 import { OpenAI } from "openai";
-import config from "../config/openai.js";
-import * as doc from "../training/documents.js";
+import config from "../../cfg/openai.js";
+import * as doc from "../../cfg/documents.js";
 
 export const openai = new OpenAI({
     apiKey: config.apiKey,
@@ -59,7 +59,7 @@ async function addMesage({ thread, content }) {
  * @returns {Promise<string>} - The assistant's response to the user's message.
  * @throws {Error} - If an error occurs while handling the user's message.
  */
-export async function assist(message) {
+export async function process(message) {
     try {
         config.assistant.basic = config.assistant.basic || await getAssistant();
         const { assistant, thread, error } = config.assistant.basic;
@@ -156,101 +156,6 @@ export async function assist(message) {
             content: "OpenAI ERROR: " + error.message,
             tasks: [],
         };
-    }
-}
-
-/**
- * Process a message using OpenAI SDK
- * @link https://platform.openai.com/docs/api-reference/chat
- * @param {string} message 
- * @returns {Promise<{content: string, tasks: any[]}>}
- */
-export async function process(message) {
-    try {
-        const { models, tools } = config;
-        const stream = await openai.chat.completions.create({
-            model: models["basic"],
-            messages: [{ role: "user", content: message }],
-            tools,
-            // stream: true,
-        });
-
-        /*for await (const chunk of stream) {
-            process.stdout.write(
-                chunk.choices[0]?.delta?.content || ""
-            );
-        }*/
-
-        console.log("<<<<< OpenIA RES: ", stream);
-
-        let tasks = [];
-        let content = "";
-
-        if (Array.isArray(stream.choices)) {
-            for (let choice of stream.choices) {
-                if (Array.isArray(choice?.message?.tool_calls)) {
-                    for (const task of choice.message.tool_calls) {
-                        tasks.push({
-                            id: task.id,
-                            type: task.type,
-                            name: task.function?.name,
-                            parameters: task?.function?.arguments && JSON.parse(task.function.arguments),
-                        });
-                    }
-                }
-                content += choice?.message?.content || "";
-            }
-        }
-
-        return { content, tasks };
-    }
-    catch (error) {
-        return {
-            content: "OpenAI ERROR: " + error.message,
-            tasks: [],
-        };
-    }
-}
-
-/**
- * Get embeddings for a message
- * @link https://platform.openai.com/docs/guides/embeddings
- * @param {string} message 
- * @returns {Promise<{data: any}>}
- */
-export async function getEmbeddings(message) {
-    try {
-        const embedding = await openai.embeddings.create({
-            model: "text-embedding-3-small",
-            input: message,
-            encoding_format: "float",
-        });
-        /**
-            {
-                "object": "list",
-                "data": [
-                    {
-                        "object": "embedding",
-                        "index": 0,
-                        "embedding": [
-                            -0.006929283495992422,
-                            -0.005336422007530928,
-                            -4.547132266452536e-05,
-                            -0.024047505110502243
-                        ],
-                    }
-                ],
-                "model": "text-embedding-3-small",
-                "usage": {
-                    "prompt_tokens": 5,
-                    "total_tokens": 5
-                }
-            }
-        */
-        return { data: embedding.data[0] };
-    }
-    catch (error) {
-        return { error }
     }
 }
 
