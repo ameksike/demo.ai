@@ -9,9 +9,22 @@ import ioc from '../utils/locator.js';
  */
 export async function onMessage(message, ws) {
     let tmp = message.split(">>>");
-    let driver = tmp.length > 1 ? tmp[0].trim() : "llama";
-    let drv = (await ioc.get(driver, "../services"))?.lib;
-    let content = await (drv?.default || drv)?.run(tmp.length > 1 ? tmp[1] : tmp[0]);
+    let msg = tmp.length > 1 ? tmp[1] : tmp[0];
+    let drv = tmp.length > 1 ? tmp[0].trim() : "llama";
+    let provider = (await ioc.get(drv, "../services"))?.lib;
+    let intsance = provider?.default || provider;
+
+    console.log({
+        src: "Controller:Chat:onMessage",
+        data: {
+            intsance: !!intsance,
+            provider: drv,
+            message: msg,
+            keyword: ">>>"
+        }
+    });
+
+    let content = intsance.run instanceof Function && await intsance.run(msg);
     ws.send(content ? content : "I don't have an answer for your question");
 }
 
