@@ -28,19 +28,27 @@ export async function getAssistant() {
             ? await openai.beta.threads.retrieve(defaults.thread)
             : await openai.beta.threads.create();
 
-        const run = await openai.beta.threads.runs.create(
+        /*const run = await openai.beta.threads.runs.create(
             thread.id,
             { assistant_id: assistant.id }
-        );
+        );*/
 
         console.log('Thread initialized:', thread.id);
         console.log('Assistant created:', assistant.id);
 
-        return { assistant, thread, run };
+        return { assistant, thread };
     }
     catch (error) {
         return { error };
     }
+}
+
+async function addMesage({ thread, content }) {
+    await openai.beta.threads.messages.create(thread.id, { role: "user", content });
+    const stream = openai.beta.threads.runs.stream(thread.id, {
+        assistant_id: assistantId,
+    });
+    return stream.toReadableStream();
 }
 
 /**
@@ -53,7 +61,7 @@ export async function getAssistant() {
  */
 export async function assist(message) {
     try {
-        config.assistant.basic = config.assistant.basic || getAssistant();
+        config.assistant.basic = config.assistant.basic || await getAssistant();
         const { assistant, thread, error } = config.assistant.basic;
 
         if (error) {
@@ -61,15 +69,64 @@ export async function assist(message) {
             return { error };
         }
 
-        console.log('Assistant created:', assistant.id);
-        console.log('Thread initialized:', thread.id);
+        const msg = await addMesage({ thread, content: message });
 
-        const response = await openai.threads.sendMessage({
-            threadId: thread.id,
-            message: { role: 'user', content: message },
-        });
+        const run = await openai.beta.threads.runs.createAndPoll(
+            thread.id,
+            {
+                assistant_id: assistant.id,
+                instructions: "Please address the user as Jane Doe. The user has a premium account."
+            }
+        );
 
-        // Check if the assistant calls a function
+        if (run.status === 'completed') {
+            const messages = await openai.beta.threads.messages.list(
+                run.thread_id
+            );
+            for (const message of messages.data.reverse()) {
+                console.log(`${message.role} > ${message.content[0].text.value}`);
+            }
+        } else {
+            console.log(run.status);
+        }
+
+        /*const run = openai.beta.threads.runs
+            .stream(thread.id, { assistant_id: assistant.id })
+            .on('textCreated', (text) => {
+                // process.stdout.write('\nassistant > ')
+                console.log("textCreated", text);
+            })
+            .on('textDelta', (textDelta, snapshot) => {
+                // process.stdout.write(textDelta.value)
+                console.log("textDelta", { textDelta, snapshot });
+            })
+            .on('toolCallCreated', (toolCall) => {
+                // process.stdout.write(`\nassistant > ${toolCall.type}\n\n`)
+                console.log("toolCallCreated", { toolCall });
+            })
+            .on('toolCallDelta', (toolCallDelta, snapshot) => {
+                console.log("toolCallDelta", { toolCallDelta, snapshot });
+
+                if (toolCallDelta.type === 'code_interpreter') {
+                    if (toolCallDelta.code_interpreter.input) {
+                        console.log("toolCallDelta:code_interpreter", toolCallDelta.code_interpreter);
+                        // process.stdout.write(toolCallDelta.code_interpreter.input);
+                    }
+                    if (toolCallDelta.code_interpreter.outputs) {
+                        // process.stdout.write("\noutput >\n");
+                        toolCallDelta.code_interpreter.outputs.forEach(output => {
+                            console.log("toolCallDelta:code_interpreter:outputs", output);
+                            /*if (output.type === "logs") {
+                                process.stdout.write(`\n${output.logs}\n`);
+                            }
+                        });
+                    }
+                }
+            });*/
+
+        console.log("message", msg);
+        console.log("run", run);
+        /*// Check if the assistant calls a function
         if (response.data?.function_call) {
             const { name, arguments: args } = response.data.function_call;
             console.log(`Assistant called function: ${name}`, args);
@@ -89,9 +146,9 @@ export async function assist(message) {
 
             return finalResponse.data.choices[0].message.content;
         }
-        // Return the assistant's response if no function is called
+        // Return the assistant's response if no function is called*/
         return {
-            content: response.data.choices[0].message.content,
+            content: "AAAA",
             tasks: [],
         };
     } catch (error) {
