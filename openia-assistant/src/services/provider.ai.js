@@ -6,7 +6,7 @@ import * as locator from '../utils/locator.js';
  * @typedef  {import('../models/types.js').TResponse} TResponse
  */
 
-export class BaseAIService {
+export class ProviderAI {
 
     /**
      * @type {typeof locator}

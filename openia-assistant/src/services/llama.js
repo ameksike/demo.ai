@@ -1,7 +1,7 @@
 import fetchApi from '../utils/fetch.api.js';
 import config from "../../cfg/openai.js";
 import * as doc from "../../cfg/documents.js";
-import { BaseAIService } from "./baseai.js";
+import { ProviderAI } from "./provider.ai.js";
 
 /**
  * @link https://lmstudio.ai/docs/api/rest-api
@@ -11,7 +11,7 @@ const {
     LLAMA_API_URL = "http://127.0.0.1:1234"
 } = process.env;
 
-export class LlanaAICompletions extends BaseAIService {
+export class LlanaAICompletions extends ProviderAI {
     constructor(config) {
         super({ training: doc.assistants.basic });
 
