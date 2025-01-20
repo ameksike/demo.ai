@@ -39,4 +39,11 @@
  * @property {Record<string, any>|string} arguments The arguments passed to the function.
  */
 
+/**
+ * Data training and instructions 
+ * @typedef  {Object} TTraining
+ * @property {String} name
+ * @property {String} instructions  
+ */
+
 export default {};
