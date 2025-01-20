@@ -3,7 +3,8 @@ import * as locator from '../utils/locator.js';
 /**
  * @typedef  {import('../models/types.js').TMsg} TMsg
  * @typedef  {import('../models/types.js').TTask} TTask
- * @typedef  {import('../models/types.js').TResponse} TResponse
+ * @typedef  {import('../models/types.js').TResponse} TResponse 
+ * @typedef  {import('../models/types.js').TTraining} TTraining
  */
 
 export class ProviderAI {
@@ -23,9 +24,21 @@ export class ProviderAI {
      */
     inThread;
 
-    constructor(options = null) {
-        const { plugin = locator, thread = [], training, inThread = true, roles } = options || {};
+    /**
+     * @type {TTraining}
+     */
+    training;
 
+    /**
+     * @type {typeof console}
+     */
+    logger;
+
+    constructor(options = null) {
+        const { plugin = locator, thread = [], training, inThread = true, roles, logger } = options || {};
+
+        this.logger = logger || console;
+        this.training = training;
         this.plugin = plugin.default;
         this.thread = thread;
         this.inThread = inThread;
