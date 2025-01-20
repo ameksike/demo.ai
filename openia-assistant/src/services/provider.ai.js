@@ -125,7 +125,7 @@ export class ProviderAI {
 
     /**
      * @description RAG processing for external content based on tasks or tools calls
-     * @param {Array<Object>} tasks
+     * @param {Array<TTask>} tasks
      * @returns {Promise<Array<TMsg>>} results
      */
     async retrive(tasks) {
@@ -192,13 +192,30 @@ export class ProviderAI {
     }
 
     /**
-     * @description Prosess a group of messages in a thread
-     * @param {Array<TMsg>} messages 
-     * @param {Array<TMsg>} [thread] 
-     * @returns {Promise<string>} content 
+     * @description Add content to the conversation thread, to keep it updated
+     * @param {*} content 
+     * @param {<Array<TMsg>} thread 
+     * @param {Object} options 
+     * @param {string} options.role 
+     * @returns {<Array<TMsg>} thread
      */
-    async process(messages, thread = null) {
+    setThread(content, thread, options) {
+        const { role = this.roles.system } = options || {};
+        if (this.option?.inThread) {
+            thread = thread || this.thread;
+            content && thread.push({ role, content });
+        }
+        return thread;
+    }
 
+    /**
+     * @description Get the collection of messages in a conversation thread
+     * @param {*} content 
+     * @param {<Array<TMsg>} messages 
+     * @param {<Array<TMsg>} thread 
+     * @returns {<Array<TMsg>} thread
+     */
+    getThread(messages, thread) {
         if (this.option?.inThread) {
             // Keep messages in the conversation thread if required
             thread = thread || this.thread;
@@ -207,8 +224,20 @@ export class ProviderAI {
             }
         } else {
             // Avoid conversation thread
-            thread = message;
+            thread = messages;
         }
+        return thread;
+    }
+
+    /**
+     * @description Prosess a group of messages in a thread
+     * @param {Array<TMsg>} messages 
+     * @param {Array<TMsg>} [thread] 
+     * @returns {Promise<string>} content 
+     */
+    async process(messages, thread = null) {
+
+        thread = this.getThread(messages, thread);
 
         // Process a messages list 
         const response = await this.analyse(thread);
@@ -227,9 +256,8 @@ export class ProviderAI {
         const content = this.getContent(response);
 
         // Keep messages in the conversation thread if required
-        if (content && this.option?.inThread) {
-            thread.push({ "role": this.roles.system, content });
-        }
+        this.setThread(content, thread)
+
         return content;
     }
 
