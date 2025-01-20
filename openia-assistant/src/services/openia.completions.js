@@ -3,8 +3,13 @@ import config from "../../cfg/openai.js";
 import * as doc from "../../cfg/documents.js";
 import { ProviderAI } from "./provider.ai.js";
 
+/**
+ * @typedef  {import('../models/types.js').TMsg} TMsg
+ * @typedef  {import('../models/types.js').TResponse} TResponse 
+ */
+
 export class OpenAICompletions extends ProviderAI {
-    
+
     constructor(config) {
         super({
             logger: config?.logger,
@@ -30,6 +35,14 @@ export class OpenAICompletions extends ProviderAI {
         });
     }
 
+    /**
+     * Assists the user by creating a new assistant, initializing a thread, and handling the user's message.
+     * The assistant is configured to act as a personal math tutor, capable of writing and running Python code to answer questions.
+     *
+     * @param {Array<TMsg>|Stream} messages 
+     * @returns {Promise<TResponse>} response 
+     * @override
+     */
     async analyse(messages) {
         try {
             const stream = await this.driver.chat.completions.create({
