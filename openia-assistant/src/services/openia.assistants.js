@@ -110,7 +110,9 @@ export class OpenAIAssistant extends OpenAICompletions {
         let toolCalls = null;
         let content = null;
         for await (const item of stream) {
-            console.log("fromStream", item);
+
+            this.logger?.log({ src: "OpenAIAssistant:fromStream", data: item });
+
             if (item?.event === 'thread.run.created') {
                 this.cache.run = item?.data;
             }
