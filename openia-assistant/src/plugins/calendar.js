@@ -14,14 +14,19 @@ oAuth2Client.setCredentials({ refresh_token });
 
 const calendar = google.calendar({ version: "v3", auth: oAuth2Client });
 
-export const createCalendarEvent = async (eventDetails) => {
+export const create = async (eventDetails) => {
     try {
         const response = await calendar.events.insert({
             calendarId: "primary",
             resource: eventDetails,
         });
-        console.log("Event created: ", response.data);
+        console.log({
+            src: "Plugin:Calendar:create",
+            data: { options: eventDetails, data: response.data }
+        });
+        return response.data;
     } catch (error) {
-        console.error("Error creating event: ", error);
+        console.log({ src: "Plugin:Calendar:create", error });
+        return null;
     }
 };

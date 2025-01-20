@@ -60,8 +60,13 @@ export async function send(options) {
             // text: body,
         };
         const info = await transporter.sendMail(emailOptions);
+        console.log({
+            src: "Plugin:Email:send",
+            data: { to, from, subject, completed: info }
+        });
         return { status: "success", message: "Email sent successfully!", info };
     } catch (error) {
+        console.log({ src: "Plugin:Email:send", error });
         return { status: "error", message: error.message };
     }
 }
