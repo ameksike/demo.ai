@@ -139,6 +139,7 @@ export class ProviderAI {
             } else {
                 response.content = this.encode({ name, output: result });
             }
+            this.logger?.log({ src: "ProviderAI:retrive", data: { name, id, content: result } });
             return response;
         }));
         return res.filter(v => !!v);
@@ -181,8 +182,8 @@ export class ProviderAI {
 
     /**
      * @description Overwritable function for RAG values ​​reporting
-     * @param {<Array<TMsg>} results 
-     * @param {<Array<TMsg>} thread 
+     * @param {Array<TMsg>} results 
+     * @param {Array<TMsg>} thread 
      * @returns {Promise<string>} content 
      */
     async notify(results, thread) {
@@ -194,10 +195,10 @@ export class ProviderAI {
     /**
      * @description Add content to the conversation thread, to keep it updated
      * @param {*} content 
-     * @param {<Array<TMsg>} thread 
+     * @param {Array<TMsg>} thread 
      * @param {Object} options 
      * @param {string} options.role 
-     * @returns {<Array<TMsg>} thread
+     * @returns {Array<TMsg>} thread
      */
     setThread(content, thread, options) {
         const { role = this.roles.system } = options || {};
@@ -211,9 +212,9 @@ export class ProviderAI {
     /**
      * @description Get the collection of messages in a conversation thread
      * @param {*} content 
-     * @param {<Array<TMsg>} messages 
-     * @param {<Array<TMsg>} thread 
-     * @returns {<Array<TMsg>} thread
+     * @param {Array<TMsg>} messages 
+     * @param {Array<TMsg>} thread 
+     * @returns {Array<TMsg>} thread
      */
     getThread(messages, thread) {
         if (this.option?.inThread) {
