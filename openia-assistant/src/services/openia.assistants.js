@@ -1,162 +1,239 @@
-import { OpenAI } from "openai";
 import config from "../../cfg/openai.js";
-import * as doc from "../../cfg/documents.js";
-
-export const openai = new OpenAI({
-    apiKey: config.apiKey,
-    // organization: process.env.OPENAI_ORG_ID
-});
+import { OpenAICompletions } from "./openia.completions.js";
 
 /**
- * Create assistant and thread resouces
- * @returns {Promise<{assistant?: Object, thread?: Object, error?: Object}>}
+ * @typedef  {import('../models/types.js').TMsg} TMsg
+ * @typedef  {import('../models/types.js').TTask} TTask
+ * @typedef  {import('../models/types.js').TResponse} TResponse 
  */
-export async function getAssistant() {
-    try {
-        const { models, tools, defaults } = config;
-        // Create a new assistant with the specified instructions, name, tools, and model
-        const assistant = defaults?.assistant
-            ? await openai.beta.assistants.retrieve(defaults.assistant)
-            : await openai.beta.assistants.create({
-                instructions: doc?.assistants?.basic?.instructions,
-                name: doc?.assistants?.basic.name,
-                tools,
-                model: models["simple"],
-            });
 
-        const thread = defaults?.thread
-            ? await openai.beta.threads.retrieve(defaults.thread)
-            : await openai.beta.threads.create();
+export class OpenAIAssistant extends OpenAICompletions {
 
-        /*const run = await openai.beta.threads.runs.create(
-            thread.id,
-            { assistant_id: assistant.id }
-        );*/
+    constructor(config) {
+        config = config || {};
+        config.option = config.option || {};
+        config.option.inThread = false;
 
-        console.log('Thread initialized:', thread.id);
-        console.log('Assistant created:', assistant.id);
-
-        return { assistant, thread };
+        super(config);
+        this.cache = {};
+        this.defaults = config?.defaults || {};
     }
-    catch (error) {
-        return { error };
+
+    /**
+     * @param {Object} payload 
+     * @param {Object} payload.thread
+     * @param {Array<TMsg>} payload.messages 
+     * @returns {APIPromise<Message>} message
+     */
+    async addMesage(payload) {
+        const { thread, messages } = payload;
+        return await Promise.all(messages.map(message => this.driver.beta.threads.messages.create(thread.id, {
+            role: message.role || "user",
+            content: message.content
+        })));
     }
-}
 
-async function addMesage({ thread, content }) {
-    await openai.beta.threads.messages.create(thread.id, { role: "user", content });
-    const stream = openai.beta.threads.runs.stream(thread.id, {
-        assistant_id: assistantId,
-    });
-    return stream.toReadableStream();
-}
-
-/**
- * Assists the user by creating a new assistant, initializing a thread, and handling the user's message.
- * The assistant is configured to act as a personal math tutor, capable of writing and running Python code to answer questions.
- *
- * @param {string} message - The user's message to be processed by the assistant.
- * @returns {Promise<string>} - The assistant's response to the user's message.
- * @throws {Error} - If an error occurs while handling the user's message.
- */
-export async function process(message) {
-    try {
-        config.assistant.basic = config.assistant.basic || await getAssistant();
-        const { assistant, thread, error } = config.assistant.basic;
-
-        if (error) {
-            console.log('Assistant error:', error);
-            return { error };
-        }
-
-        const msg = await addMesage({ thread, content: message });
-
-        const run = await openai.beta.threads.runs.createAndPoll(
-            thread.id,
-            {
-                assistant_id: assistant.id,
-                instructions: "Please address the user as Jane Doe. The user has a premium account."
+    /**
+     * @description Retrieve or create a remote thread 
+     * @returns {Promise<Object|null>} Thread
+     */
+    async getAssistantThread() {
+        try {
+            if (this.cache.thread) {
+                return this.cache?.thread;
             }
-        );
+            this.cache.thread = this.defaults?.thread
+                ? await this.driver.beta.threads.retrieve(this.defaults.thread)
+                : await this.driver.beta.threads.create();
 
-        if (run.status === 'completed') {
-            const messages = await openai.beta.threads.messages.list(
-                run.thread_id
-            );
-            for (const message of messages.data.reverse()) {
-                console.log(`${message.role} > ${message.content[0].text.value}`);
-            }
-        } else {
-            console.log(run.status);
+            this.logger?.log({ src: "OpenAIAssistant:getAssistantThread", data: { threadId: this.cache.thread.id } });
+            return this.cache.thread;
         }
+        catch (error) {
+            this.logger?.log({ src: "OpenAIAssistant:getAssistantThread", error });
+            return null;
+        }
+    }
 
-        /*const run = openai.beta.threads.runs
-            .stream(thread.id, { assistant_id: assistant.id })
-            .on('textCreated', (text) => {
-                // process.stdout.write('\nassistant > ')
-                console.log("textCreated", text);
-            })
-            .on('textDelta', (textDelta, snapshot) => {
-                // process.stdout.write(textDelta.value)
-                console.log("textDelta", { textDelta, snapshot });
-            })
-            .on('toolCallCreated', (toolCall) => {
-                // process.stdout.write(`\nassistant > ${toolCall.type}\n\n`)
-                console.log("toolCallCreated", { toolCall });
-            })
-            .on('toolCallDelta', (toolCallDelta, snapshot) => {
-                console.log("toolCallDelta", { toolCallDelta, snapshot });
+    /**
+     * @description Create assistant and thread resouces
+     * @returns {Promise<Object|null>} Assistant
+     */
+    async getAssistant() {
+        try {
+            if (this.cache.assistant) {
+                return this.cache?.assistant;
+            }
 
-                if (toolCallDelta.type === 'code_interpreter') {
-                    if (toolCallDelta.code_interpreter.input) {
-                        console.log("toolCallDelta:code_interpreter", toolCallDelta.code_interpreter);
-                        // process.stdout.write(toolCallDelta.code_interpreter.input);
-                    }
-                    if (toolCallDelta.code_interpreter.outputs) {
-                        // process.stdout.write("\noutput >\n");
-                        toolCallDelta.code_interpreter.outputs.forEach(output => {
-                            console.log("toolCallDelta:code_interpreter:outputs", output);
-                            /*if (output.type === "logs") {
-                                process.stdout.write(`\n${output.logs}\n`);
-                            }
-                        });
+            this.cache.assistant = this.defaults?.assistant
+                ? await this.driver.beta.assistants.retrieve(this.defaults.assistant)
+                : await this.driver.beta.assistants.create({
+                    instructions: this.option?.training?.instructions,
+                    name: this.option?.training?.name,
+                    model: this.option.model,
+                    tools: this.option.tools,
+                });
+
+            this.logger?.log({ src: "OpenAIAssistant:getAssistant", data: { assistantId: this.cache.assistant.id } });
+            return this.cache?.assistant;
+        }
+        catch (error) {
+            this.logger?.log({ src: "OpenAIAssistant:getAssistant", error });
+            return null;
+        }
+    }
+
+    /**
+     * @description Utility to collect all Tool Calls from the stream events
+     * @param {Object} event 
+     * @param {Array<TTask>} taskList 
+     * @returns {Array<TTask>} toolCalls
+     */
+    collectToolCalls(event, taskList) {
+        const toolCalls = event?.data?.delta?.step_details?.tool_calls || [];
+        for (const toolCall of toolCalls) {
+            const { index } = toolCall;
+            if (!taskList[index]) {
+                taskList[index] = toolCall;
+            }
+            taskList[index].function.arguments += toolCall.function.arguments;
+        }
+        return taskList;
+    }
+
+    /**
+     * @description precess the stream data 
+     * @param {Stream} stream 
+     * @returns {TResponse} response
+     */
+    async fromStream(stream) {
+        let toolCalls = null;
+        let content = null;
+        for await (const item of stream) {
+
+            this.logger?.log({ src: "OpenAIAssistant:fromStream", data: item });
+
+            if (item?.event === 'thread.run.created') {
+                this.cache.run = item?.data;
+            }
+            if (item?.event === 'thread.message.completed') {
+                content = item?.data?.content;
+                content = Array.isArray(content) ? content.map(elm => (elm?.type === "text" && elm?.text?.value) || "").join(" ") : content;
+            }
+            toolCalls = toolCalls || item?.data?.required_action?.submit_tool_outputs?.tool_calls;
+        }
+        return {
+            choices: [
+                {
+                    message: {
+                        content,
+                        tool_calls: toolCalls || []
                     }
                 }
-            });*/
-
-        console.log("message", msg);
-        console.log("run", run);
-        /*// Check if the assistant calls a function
-        if (response.data?.function_call) {
-            const { name, arguments: args } = response.data.function_call;
-            console.log(`Assistant called function: ${name}`, args);
-
-            // Execute the corresponding action
-            const actionResult = await handleAction(name, JSON.parse(args));
-
-            // Inform the assistant about the result of the function call
-            const finalResponse = await openai.threads.sendMessage({
-                threadId: thread.id,
-                message: {
-                    role: 'function',
-                    name,
-                    content: JSON.stringify(actionResult),
-                },
-            });
-
-            return finalResponse.data.choices[0].message.content;
-        }
-        // Return the assistant's response if no function is called*/
-        return {
-            content: "AAAA",
-            tasks: [],
-        };
-    } catch (error) {
-        return {
-            content: "OpenAI ERROR: " + error.message,
-            tasks: [],
+            ]
         };
     }
+
+    /**
+     * @description Overwritable function for RAG values ​​reporting
+     * @param {Array<TMsg>} results 
+     * @param {Array<TMsg>} thread 
+     * @returns {Promise<string>} content 
+     */
+    async notify(results, thread) {
+        try {
+            const toolOutput = results.map(item => ({ output: item.content, tool_call_id: item.tool_call_id }));
+            const stream = await this.driver.beta.threads.runs.submitToolOutputs(
+                this.cache.thread.id,
+                this.cache.run.id,
+                {
+                    tool_outputs: toolOutput,
+                    stream: true
+                }
+            );
+
+            return await this.process(stream, thread);
+        }
+        catch (error) {
+            this.logger?.log({ src: "OpenAIAssistant:getAssistantThread", error });
+            return null;
+        }
+    }
+
+    /**
+     * Assists the user by creating a new assistant, initializing a thread, and handling the user's message.
+     * The assistant is configured to act as a personal math tutor, capable of writing and running Python code to answer questions.
+     *
+     * @param {Array<TMsg>|Stream} messages 
+     * @returns {Promise<TResponse>} response 
+     * @override
+     */
+    async analyse(messages) {
+        try {
+            let [assistant, thread] = await Promise.all([
+                this.getAssistant(),
+                this.getAssistantThread()
+            ]);
+
+            messages?.length && (await this.addMesage({ thread, messages }));
+
+            let stream = messages?.constructor?.name === "Stream"
+                ? messages
+                : await this.driver.beta.threads.runs.create(
+                    thread.id,
+                    {
+                        assistant_id: assistant.id,
+                        stream: true
+                    }
+                );
+
+            let result = await this.fromStream(stream);
+            return result;
+        } catch (error) {
+            return {
+                choices: [
+                    {
+                        message: {
+                            content: "OpenAI ERROR: " + error.message
+                        }
+                    }
+                ]
+            }
+        }
+    }
+
 }
 
-export default openai;
+export default new OpenAIAssistant(config);
+
+/*
+
+            if (run.status === 'completed') {
+                const messages = await openai.beta.threads.messages.list(
+                    run.thread_id
+                );
+                for (const message of messages.data.reverse()) {
+                    console.log(`${message.role} > ${message.content[0].text.value}`);
+                }
+            } else {
+                console.log(run.status);
+            }*
+
+
+            // Check if the assistant calls a function
+            if (response.data?.function_call) {
+                const { name, arguments: args } = response.data.function_call;
+                // Execute the corresponding action
+                const actionResult = await handleAction(name, JSON.parse(args));
+                // Inform the assistant about the result of the function call
+                const finalResponse = await openai.threads.sendMessage({
+                    threadId: thread.id,
+                    message: {
+                        role: 'function',
+                        name,
+                        content: JSON.stringify(actionResult),
+                    },
+                });
+                return finalResponse.data.choices[0].message.content;
+            }
+            */

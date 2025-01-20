@@ -13,14 +13,19 @@ const {
 
 export class LlanaAICompletions extends ProviderAI {
     constructor(config) {
-        super({ training: doc.assistants.basic });
-
-        // Preconfigure options 
-        this.option = {
-            stream: false,
-            model: config?.models["lmstudio"],
-            tools: config?.tools || []
-        };
+        super({
+            logger: config?.logger,
+            plugin: config?.plugin,
+            thread: config?.thread,
+            roles: config?.roles,
+            option: {
+                stream: false,
+                tools: config?.tools || [],
+                model: config?.models["lmstudio"],
+                training: doc.assistants.basic,
+                ...config?.option
+            },
+        });
     }
 
     /**

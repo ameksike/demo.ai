@@ -1,7 +1,7 @@
 import { getFromMeta, path } from '../utils/polyfill.js';
 const { __dirname } = getFromMeta(import.meta);
 
-export class Loader {
+export class ServiceLocator {
 
     /**
      * @type {Record<string, any>}
@@ -43,7 +43,7 @@ export class Loader {
             return this.cache[name];
         }
         catch (error) {
-            this.logger?.log({ src: "tils:locator:get", error, data: { location, name } });
+            this.logger?.log({ src: "Utils:ServiceLocator:get", error, data: { location, name } });
             return null;
         }
     }
@@ -64,10 +64,10 @@ export class Loader {
             return await action.apply(scope || {}, [task.arguments || task.args]);
         }
         catch (error) {
-            this.logger?.log({ src: "utils:locator:run", error });
+            this.logger?.log({ src: "Utils:ServiceLocator:run", error });
             return null;
         }
     }
 }
 
-export default new Loader();
+export default new ServiceLocator();

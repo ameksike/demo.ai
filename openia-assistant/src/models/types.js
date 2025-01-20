@@ -39,4 +39,30 @@
  * @property {Record<string, any>|string} arguments The arguments passed to the function.
  */
 
+/**
+ * Data training and instructions 
+ * @typedef  {Object} TTraining
+ * @property {String} name
+ * @property {String} instructions  
+ */
+
+/**
+ * Provider AI Options
+ * @typedef  {Object} TOption
+ * @property {Boolean} stream
+ * @property {String} model
+ * @property {TTraining} training
+ * @property {Array<TTask>} tools  
+ */
+
+/**
+ * Provider AI Payload Options
+ * @typedef  {Object} TAiPayload
+ * @property {Console} logger
+ * @property {Object} plugin 
+ * @property {Array<TMsg>} thread  
+ * @property {TOption} option  
+ * @property {Record<string,string>} roles  
+ */
+
 export default {};

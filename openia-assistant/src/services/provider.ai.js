@@ -3,7 +3,9 @@ import * as locator from '../utils/locator.js';
 /**
  * @typedef  {import('../models/types.js').TMsg} TMsg
  * @typedef  {import('../models/types.js').TTask} TTask
- * @typedef  {import('../models/types.js').TResponse} TResponse
+ * @typedef  {import('../models/types.js').TResponse} TResponse 
+ * @typedef  {import('../models/types.js').TTraining} TTraining 
+ * @typedef  {import('../models/types.js').TAiPayload} TAiPayload 
  */
 
 export class ProviderAI {
@@ -19,36 +21,79 @@ export class ProviderAI {
     thread;
 
     /**
-     * @type {boolean}
+     * @type {Console}
      */
-    inThread;
+    logger;
 
-    constructor(options = null) {
-        const { plugin = locator, thread = [], training, inThread = true, roles } = options || {};
+    /**
+     * @type {Record<string, string>}
+     */
+    roles;
 
-        this.plugin = plugin.default;
-        this.thread = thread;
-        this.inThread = inThread;
+    /**
+     * @param {TAiPayload} payload 
+     */
+    constructor(payload = null) {
         this.roles = {
             "system": "system",
             "tool": "tool",
             "user": "user",
-            ...roles
         };
+        this.option = {
+            inThread: true,
+            stream: false
+        };
+        this.configure(payload);
+    }
 
-        if (this.inThread && Array.isArray(this.thread) && training?.name) {
-            this.thread.push({
-                "role": this.roles.system,
-                "content": `
-                    You are an AI assistant named "${training?.name}". 
-                    Your primary role is defined as follows:
-                        ${training?.instructions}
-                    Always respond clearly and concisely, adapting your tone to the context. 
-                    Ensure accuracy and provide step-by-step explanations when appropriate. 
-                    Stay within your defined scope and handle requests with professionalism and precision.
-                `
-            });
+    /**
+     * @param {TAiPayload} payload 
+     * @returns {ProviderAI} self
+     */
+    configure(payload) {
+        const {
+            logger = console,
+            plugin = locator,
+            thread = [],
+            option,
+            roles,
+        } = payload || {};
+
+        logger && (this.logger = logger);
+        plugin && (this.plugin = plugin?.default || plugin);
+        thread && (this.thread = thread);
+
+        this.roles = { ...this.roles, ...roles };
+        this.option = { ...this.option, ...option };
+
+        if (this.option?.inThread && this.thread.length === 0) {
+            this.setTraining()
         }
+        return this;
+    }
+
+    /**
+     * @description set training instructions 
+     * @param {Array<TMsg>} thread
+     * @returns {ProviderAI} self
+     */
+    setTraining(thread) {
+        thread = thread || this.thread;
+        if ((!this.option?.training?.name && !this.option?.training?.instructions) || !Array.isArray(thread)) {
+            return this;
+        }
+        thread.push({
+            "role": this.roles.system,
+            "content": `
+                You are an AI assistant named "${this.option?.training?.name}". 
+                Your primary role is defined as follows:
+                    ${this.option?.training?.instructions}
+                Always respond clearly and concisely, adapting your tone to the context. 
+                Ensure accuracy and provide step-by-step explanations when appropriate. 
+                Stay within your defined scope and handle requests with professionalism and precision.
+            `
+        });
+        return this;
     }
 
     /**
@@ -80,18 +125,22 @@ export class ProviderAI {
 
     /**
      * @description RAG processing for external content based on tasks or tools calls
-     * @param {Array<Object>} tasks
+     * @param {Array<TTask>} tasks
      * @returns {Promise<Array<TMsg>>} results
      */
     async retrive(tasks) {
         let res = await Promise.all(tasks.map(async (task) => {
             let { type, id, function: func } = task;
             let { arguments: args, name } = func;
+            let response = { role: this.roles.tool, name, tool_call_id: id };
             let result = type === "function" && await this.plugin.run({ name, args: this.decode(args) });
             if (!result) {
-                return { role: this.roles.tool, name, id, content: "Bad plugin request, there is no content to share." };
+                response.content = "Bad plugin request, there is no content to share.";
+            } else {
+                response.content = this.encode({ name, output: result });
             }
-            return { role: this.roles.tool, name, id, content: this.encode({ name, output: result }) };
+            this.logger?.log({ src: "ProviderAI:retrive", data: { name, id, content: result } });
+            return response;
         }));
         return res.filter(v => !!v);
     }
@@ -133,14 +182,52 @@ export class ProviderAI {
 
     /**
      * @description Overwritable function for RAG values ​​reporting
-     * @param {<Array<TMsg>} results 
-     * @param {<Array<TMsg>} thread 
+     * @param {Array<TMsg>} results 
+     * @param {Array<TMsg>} thread 
      * @returns {Promise<string>} content 
      */
     async notify(results, thread) {
         if (results?.length) {
             return await this.process(results, thread);
         }
+    }
+
+    /**
+     * @description Add content to the conversation thread, to keep it updated
+     * @param {*} content 
+     * @param {Array<TMsg>} thread 
+     * @param {Object} options 
+     * @param {string} options.role 
+     * @returns {Array<TMsg>} thread
+     */
+    setThread(content, thread, options) {
+        const { role = this.roles.system } = options || {};
+        if (this.option?.inThread) {
+            thread = thread || this.thread;
+            content && thread.push({ role, content });
+        }
+        return thread;
+    }
+
+    /**
+     * @description Get the collection of messages in a conversation thread
+     * @param {*} content 
+     * @param {Array<TMsg>} messages 
+     * @param {Array<TMsg>} thread 
+     * @returns {Array<TMsg>} thread
+     */
+    getThread(messages, thread) {
+        if (this.option?.inThread) {
+            // Keep messages in the conversation thread if required
+            thread = thread || this.thread;
+            for (let message of messages) {
+                thread.push(message);
+            }
+        } else {
+            // Avoid conversation thread
+            thread = messages;
+        }
+        return thread;
     }
 
     /**
@@ -151,16 +238,7 @@ export class ProviderAI {
      */
     async process(messages, thread = null) {
 
-        if (this.inThread) {
-            // Keep messages in the conversation thread if required
-            thread = thread || this.thread;
-            for (let message of messages) {
-                thread.push(message);
-            }
-        } else {
-            // Avoid conversation thread
-            thread = message;
-        }
+        thread = this.getThread(messages, thread);
 
         // Process a messages list 
         const response = await this.analyse(thread);
@@ -179,9 +257,8 @@ export class ProviderAI {
         const content = this.getContent(response);
 
         // Keep messages in the conversation thread if required
-        if (content && this.inThread) {
-            thread.push({ "role": this.roles.system, content });
-        }
+        this.setThread(content, thread)
+
         return content;
     }
 
