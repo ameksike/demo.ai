@@ -1,4 +1,4 @@
-import { OpenAICompletions } from "../openia.completions/index.js";
+import OpenAICompletions from "../openia.completions/index.js";
 
 /**
  * @typedef  {import('../../../models/types.js').TMsg} TMsg
@@ -11,8 +11,7 @@ class OpenAIAssistant extends OpenAICompletions {
 
     constructor(config) {
         config = config || {};
-        config.option = config.option || {};
-        config.option.inThread = false;
+        config.persist = false;
 
         super(config);
         this.cache = {};
@@ -42,10 +41,10 @@ class OpenAIAssistant extends OpenAICompletions {
             if (this.cache.thread) {
                 return this.cache?.thread;
             }
-            this.cache.thread = profile?.defaults?.thread
-                ? await this.driver.beta.threads.retrieve(this.defaults.thread)
-                : await this.driver.beta.threads.create();
 
+            this.cache.thread = profile?.defaults?.thread
+                ? await this.driver.beta.threads.retrieve(profile?.defaults?.thread)
+                : await this.driver.beta.threads.create();
 
             profile.defaults = profile.defaults || {};
             profile.defaults.thread = this.cache.thread.id;
@@ -69,7 +68,7 @@ class OpenAIAssistant extends OpenAICompletions {
             }
 
             this.cache.assistant = profile.defaults?.assistant
-                ? await this.driver.beta.assistants.retrieve(this.defaults.assistant)
+                ? await this.driver.beta.assistants.retrieve(profile.defaults?.assistant)
                 : await this.driver.beta.assistants.create({
                     instructions: profile?.training?.instructions,
                     name: profile.training?.name,
@@ -178,7 +177,7 @@ class OpenAIAssistant extends OpenAICompletions {
         try {
             let [assistant, thread] = await Promise.all([
                 this.getAssistant(profile),
-                this.getAssistantThread()
+                this.getAssistantThread(profile)
             ]);
 
             messages?.length && (await this.addMesage({ thread, messages }));

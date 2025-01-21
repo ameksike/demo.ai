@@ -13,6 +13,7 @@ class OpenAICompletions extends ProviderAI {
         super({
             logger: config?.logger,
             plugin: config?.plugin,
+            persist: config?.persist,
             roles: {
                 "tool": "function",
                 ...config?.roles

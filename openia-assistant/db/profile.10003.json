@@ -1,22 +1,32 @@
 {
-    "provider": "openia.assistants",
-    "model": "simple",
-    "stream": false,
-    "persist": true,
-    "training": {
-        "instructions": "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",
-        "name": "Math Tutor"
+  "name": "profile.10003",
+  "model": "simple",
+  "tools": [
+    {
+      "name": "weather"
     },
-    "tools": [
-        {
-            "name": "weather"
-        },
-        {
-            "name": "email"
-        },
-        {
-            "name": "external"
-        }
-    ],
-    "thread": []
+    {
+      "name": "email"
+    },
+    {
+      "name": "external"
+    }
+  ],
+  "roles": {
+    "system": "system",
+    "tool": "function",
+    "user": "user"
+  },
+  "stream": false,
+  "thread": [],
+  "provider": "openia.assistants",
+  "persist": false,
+  "training": {
+    "instructions": "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",
+    "name": "Math Tutor"
+  },
+  "defaults": {
+    "thread": "thread_u1SUO9ieAOFkNqWwxOMCrRTa",
+    "assistant": "asst_h7hQpSqMwcmE7W3XKn1n24F7"
+  }
 }

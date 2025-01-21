@@ -27,6 +27,11 @@ export class ProviderAI {
     roles;
 
     /**
+     * @type {Boolean}
+     */
+    persist
+
+    /**
      * @param {TAiPayload} payload 
      */
     constructor(payload = null) {
@@ -44,6 +49,7 @@ export class ProviderAI {
      */
     configure(payload) {
         const {
+            persist = true,
             logger = console,
             plugin = locator,
             roles,
@@ -51,6 +57,7 @@ export class ProviderAI {
 
         logger && (this.logger = logger);
         plugin && (this.plugin = plugin?.default || plugin);
+        this.persist = persist ?? true;
 
         this.roles = { ...this.roles, ...roles };
         return this;
@@ -132,9 +139,13 @@ export class ProviderAI {
      * @param {Array<TMsg>} [thread] 
      * @returns {Promise<string>} content 
      */
-    async process(messages, profile = null) {
+    async process(messages, profile = {}) {
+        // Control data persistence from Provider
+        profile.persist = profile.persist && this.persist;
+        profile.roles = { ...profile.roles, ...this.roles };
+
         // Get the current conversation thread
-        const thread = profile?.process(messages)?.thread || messages;
+        const thread = Array.isArray(messages) ? profile?.process(messages) : messages;
 
         // Process a messages list 
         const response = await this.analyse(thread, profile);
