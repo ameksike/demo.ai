@@ -20,6 +20,7 @@ export class Profile {
         this.persist = true;
         this.defaults = null;
         this.training = null;
+        this.compatible = false;
         this.roles = {
             "system": "system",
             "tool": "tool",
@@ -38,6 +39,7 @@ export class Profile {
             this.stream = data.stream ?? this.stream;
             this.thread = data.thread || this.thread;
             this.persist = data.persist ?? this.persist;
+            this.compatible = data.compatible ?? this.compatible;
             this.training = data.training || this.training;
             this.defaults = data.defaults || this.defaults;
             this.roles = { ...this.roles, ...data.roles };
@@ -64,6 +66,7 @@ export class Profile {
             persist: this.persist,
             training: this.training,
             defaults: this.defaults,
+            compatible: this.compatible,
         }
     }
 

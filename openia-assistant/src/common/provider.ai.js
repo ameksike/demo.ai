@@ -36,6 +36,7 @@ export class ProviderAI {
      */
     constructor(payload = null) {
         this.roles = {
+            "assistant": "assistant",
             "system": "system",
             "tool": "tool",
             "user": "user",
@@ -104,6 +105,20 @@ export class ProviderAI {
     }
 
     /**
+     * @description Check message compatibility between providers, If profile.compatible is active it has a negative impact on performance
+     * @param {Array<TMsg>} messages 
+     * @param {TProfile} profile 
+     * @returns {Array<TMsg>} messages 
+     */
+    checkMessages(messages, profile) {
+        return Promise.resolve(profile?.compatible && Array.isArray(messages) ? messages.map(message => {
+            this.logger?.log({ src: "ProviderAI:checkMessages", data: { old: message.role, new: this.roles.tool } });
+            message.role = message.role === "function" ? this.roles.tool : message.role;
+            return message;
+        }) : messages);
+    }
+
+    /**
      * @description Overwritable function for prosess a group of messages in a thread
      * @param {Array<TMsg>} messages 
      * @param {TProfile} profile 
@@ -147,8 +162,11 @@ export class ProviderAI {
         // Get the current conversation thread
         const thread = Array.isArray(messages) ? profile?.process(messages) : messages;
 
+        // Verify the compatibility of messages 
+        const msgs = await this.checkMessages(thread, profile);
+
         // Process a messages list 
-        const response = await this.analyse(thread, profile);
+        const response = await this.analyse(msgs, profile);
 
         // process tasks or tool calls 
         const tasks = this.getTasks(response);
