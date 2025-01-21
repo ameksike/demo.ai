@@ -5,9 +5,10 @@ import { OpenAICompletions } from "../openia.completions/index.js";
  * @typedef  {import('../../../models/types.js').TMsg} TMsg
  * @typedef  {import('../../../models/types.js').TTask} TTask
  * @typedef  {import('../../../models/types.js').TResponse} TResponse 
+ * @typedef  {import('../../../models/profile.js').Profile} TProfile 
  */
 
-export class OpenAIAssistant extends OpenAICompletions {
+class OpenAIAssistant extends OpenAICompletions {
 
     constructor(config) {
         config = config || {};
@@ -37,15 +38,18 @@ export class OpenAIAssistant extends OpenAICompletions {
      * @description Retrieve or create a remote thread 
      * @returns {Promise<Object|null>} Thread
      */
-    async getAssistantThread() {
+    async getAssistantThread(profile = {}) {
         try {
             if (this.cache.thread) {
                 return this.cache?.thread;
             }
-            this.cache.thread = this.defaults?.thread
+            this.cache.thread = profile?.defaults?.thread
                 ? await this.driver.beta.threads.retrieve(this.defaults.thread)
                 : await this.driver.beta.threads.create();
 
+
+            profile.defaults = profile.defaults || {};
+            profile.defaults.thread = this.cache.thread.id;
             this.logger?.log({ src: "OpenAIAssistant:getAssistantThread", data: { threadId: this.cache.thread.id } });
             return this.cache.thread;
         }
@@ -59,21 +63,23 @@ export class OpenAIAssistant extends OpenAICompletions {
      * @description Create assistant and thread resouces
      * @returns {Promise<Object|null>} Assistant
      */
-    async getAssistant() {
+    async getAssistant(profile = {}) {
         try {
             if (this.cache.assistant) {
                 return this.cache?.assistant;
             }
 
-            this.cache.assistant = this.defaults?.assistant
+            this.cache.assistant = profile.defaults?.assistant
                 ? await this.driver.beta.assistants.retrieve(this.defaults.assistant)
                 : await this.driver.beta.assistants.create({
-                    instructions: this.option?.training?.instructions,
-                    name: this.option?.training?.name,
-                    model: this.option.model,
-                    tools: this.option.tools,
+                    instructions: profile?.training?.instructions,
+                    name: profile.training?.name,
+                    model: profile.model,
+                    tools: profile.tools,
                 });
 
+            profile.defaults = profile.defaults || {};
+            profile.defaults.assistant = this.cache.assistant.id;
             this.logger?.log({ src: "OpenAIAssistant:getAssistant", data: { assistantId: this.cache.assistant.id } });
             return this.cache?.assistant;
         }
@@ -165,13 +171,14 @@ export class OpenAIAssistant extends OpenAICompletions {
      * The assistant is configured to act as a personal math tutor, capable of writing and running Python code to answer questions.
      *
      * @param {Array<TMsg>|Stream} messages 
+     * @param {TProfile} profile 
      * @returns {Promise<TResponse>} response 
      * @override
      */
-    async analyse(messages) {
+    async analyse(messages, profile) {
         try {
             let [assistant, thread] = await Promise.all([
-                this.getAssistant(),
+                this.getAssistant(profile),
                 this.getAssistantThread()
             ]);
 
@@ -204,36 +211,4 @@ export class OpenAIAssistant extends OpenAICompletions {
 
 }
 
-export default new OpenAIAssistant(config);
-
-/*
-
-            if (run.status === 'completed') {
-                const messages = await openai.beta.threads.messages.list(
-                    run.thread_id
-                );
-                for (const message of messages.data.reverse()) {
-                    console.log(`${message.role} > ${message.content[0].text.value}`);
-                }
-            } else {
-                console.log(run.status);
-            }*
-
-
-            // Check if the assistant calls a function
-            if (response.data?.function_call) {
-                const { name, arguments: args } = response.data.function_call;
-                // Execute the corresponding action
-                const actionResult = await handleAction(name, JSON.parse(args));
-                // Inform the assistant about the result of the function call
-                const finalResponse = await openai.threads.sendMessage({
-                    threadId: thread.id,
-                    message: {
-                        role: 'function',
-                        name,
-                        content: JSON.stringify(actionResult),
-                    },
-                });
-                return finalResponse.data.choices[0].message.content;
-            }
-            */
+export default OpenAIAssistant;

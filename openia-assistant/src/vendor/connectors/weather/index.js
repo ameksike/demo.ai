@@ -1,5 +1,5 @@
 /**
- * get Weather 
+ * Tool Call Action
  * @param {{latitude: string, longitude: string}} options 
  * @returns {[{"time":"2025-01-18T17:15","interval":900,"temperature_2m":13.1,"wind_speed_10m":7.7}]} result
  */
@@ -19,4 +19,33 @@ export async function get(options) {
         return null;
     }
 
+}
+
+/**
+ * Tool Call Definiton 
+ */
+export const definition = {
+    type: "function",
+    function: {
+        name: "weather_get",
+        description: "Get current temperature for provided coordinates in celsius or for a given location.",
+        parameters: {
+            type: "object",
+            properties: {
+                latitude: { type: "number" },
+                longitude: { type: "number" },
+                city: {
+                    "type": "string",
+                    "description": "City e.g. Bogotá, Barcelona"
+                },
+                country: {
+                    "type": "string",
+                    "description": "Country e.g. Colombia, Spain"
+                }
+            },
+            required: ["latitude", "longitude", "city", "country"],
+            additionalProperties: false
+        },
+        strict: true
+    }
 }

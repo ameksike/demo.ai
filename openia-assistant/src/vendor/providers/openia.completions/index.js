@@ -1,27 +1,20 @@
 import { OpenAI } from "openai";
-import config from "../../../../cfg/openai.js";
+import config from "../../../../cfg/config.js";
 import * as doc from "../../../../cfg/documents.js";
 import { ProviderAI } from "../../../common/provider.ai.js";
 
 /**
  * @typedef  {import('../../../common/types.js').TMsg} TMsg
  * @typedef  {import('../../../common/types.js').TResponse} TResponse 
+ * @typedef  {import('../../../models/profile.js').Profile} TProfile 
  */
 
-export class OpenAICompletions extends ProviderAI {
+class OpenAICompletions extends ProviderAI {
 
     constructor(config) {
         super({
             logger: config?.logger,
             plugin: config?.plugin,
-            thread: config?.thread,
-            option: {
-                stream: false,
-                tools: config?.tools || [],
-                model: config?.models["basic"],
-                training: doc.assistants.basic,
-                ...config?.option
-            },
             roles: {
                 "tool": "function",
                 ...config?.roles
@@ -30,7 +23,7 @@ export class OpenAICompletions extends ProviderAI {
 
         // define OpenAI SDK
         this.driver = new OpenAI({
-            apiKey: config.apiKey,
+            apiKey: process.env.OPENAI_API_KEY,
             // organization: process.env.OPENAI_ORG_ID
         });
     }
@@ -39,16 +32,17 @@ export class OpenAICompletions extends ProviderAI {
      * Assists the user by creating a new assistant, initializing a thread, and handling the user's message.
      * The assistant is configured to act as a personal math tutor, capable of writing and running Python code to answer questions.
      *
-     * @param {Array<TMsg>|Stream} messages 
+     * @param {Array<TMsg>} messages 
+     * @param {TProfile} profile 
      * @returns {Promise<TResponse>} response 
      * @override
      */
-    async analyse(messages) {
+    async analyse(messages, profile) {
         try {
             const stream = await this.driver.chat.completions.create({
-                stream: this.option.stream,
-                model: this.option.model,
-                tools: this.option.tools,
+                stream: profile.stream,
+                model: profile.model,
+                tools: profile.tools,
                 messages,
             });
             return stream;
@@ -67,4 +61,4 @@ export class OpenAICompletions extends ProviderAI {
     }
 }
 
-export default new OpenAICompletions(config);
+export default OpenAICompletions;

@@ -1,44 +1,34 @@
 import fetchApi from '../../../common/fetch.api.js';
-import config from "../../../../cfg/openai.js";
-import * as doc from "../../../../cfg/documents.js";
 import { ProviderAI } from "../../../common/provider.ai.js";
 
 /**
  * @link https://lmstudio.ai/docs/api/rest-api
  */
 
+/**
+ * @typedef  {import('../../../models/types.js').TMsg} TMsg
+ * @typedef  {import('../../../models/types.js').TTask} TTask
+ * @typedef  {import('../../../models/profile.js').Profile} TProfile 
+ */
+
 const {
     LLAMA_API_URL = "http://127.0.0.1:1234"
 } = process.env;
 
-export class LlanaAICompletions extends ProviderAI {
-    constructor(config) {
-        super({
-            logger: config?.logger,
-            plugin: config?.plugin,
-            thread: config?.thread,
-            roles: config?.roles,
-            option: {
-                stream: false,
-                tools: config?.tools || [],
-                model: config?.models["lmstudio"],
-                training: doc.assistants.basic,
-                ...config?.option
-            },
-        });
-    }
+class LlanaAICompletions extends ProviderAI {
 
     /**
      * @description Overwritable function for prosess a group of messages in a thread
-     * @param {Array<TMsg>} thread 
+     * @param {Array<TMsg>} messages 
+     * @param {TProfile} profile 
      * @returns {Promise<TResponse>} response 
      */
-    async analyse(messages) {
+    async analyse(messages, profile) {
         try {
             const stream = await this.send({
-                stream: this.option.stream,
-                model: this.option.model,
-                tools: this.option.tools,
+                stream: profile.stream,
+                model: profile.model,
+                tools: profile.tools,
                 messages,
             });
             return stream;
@@ -86,4 +76,4 @@ export class LlanaAICompletions extends ProviderAI {
     }
 }
 
-export default new LlanaAICompletions(config);
+export default LlanaAICompletions;

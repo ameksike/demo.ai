@@ -1,0 +1,56 @@
+{
+  "name": "profile.10001",
+  "model": "simple",
+  "tools": [
+    {
+      "name": "weather"
+    },
+    {
+      "name": "email"
+    },
+    {
+      "name": "external"
+    }
+  ],
+  "roles": {
+    "system": "system",
+    "tool": "tool",
+    "user": "user"
+  },
+  "stream": false,
+  "thread": [
+    {
+      "role": "system",
+      "content": "\n                You are an AI assistant named \"Math Tutor\". \n                Your primary role is defined as follows:\n                    You are a personal math tutor. When asked a question, write and run Python code to answer the question.\n                Always respond clearly and concisely, adapting your tone to the context. \n                Ensure accuracy and provide step-by-step explanations when appropriate. \n                Stay within your defined scope and handle requests with professionalism and precision.\n            "
+    },
+    {
+      "role": "user",
+      "content": "Hello, can you tell me the temperature in Barcelona?"
+    },
+    {
+      "role": "function",
+      "name": "weather_get",
+      "tool_call_id": "call_sNiMYmgWGxYWU7H7rs7UteWd",
+      "content": "{\"name\":\"weather_get\",\"output\":{\"current\":{\"time\":\"2025-01-21T18:00\",\"interval\":900,\"temperature_2m\":12.4,\"wind_speed_10m\":4.6},\"options\":{\"latitude\":41.3851,\"longitude\":2.1734,\"city\":\"Barcelona\",\"country\":\"Spain\"}}}"
+    },
+    {
+      "role": "system",
+      "content": "The current temperature in Barcelona is 12.4°C, with a wind speed of 4.6 m/s."
+    },
+    {
+      "role": "user",
+      "content": "que temperatura me habias dicho"
+    },
+    {
+      "role": "system",
+      "content": "La temperatura actual en Barcelona es de 12.4°C."
+    }
+  ],
+  "provider": "openia.completions",
+  "inThread": true,
+  "training": {
+    "instructions": "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",
+    "name": "Math Tutor"
+  },
+  "defaults": null
+}

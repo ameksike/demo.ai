@@ -48,14 +48,19 @@ openia-assistant/
 
 ### Commands 
 
-Simple provider specification:
+Simple profile specification:
 ```
-Hello, can you tell me the temperature in Barcelona? >>> llama
+Hello, can you tell me the temperature in Barcelona? >>> profile.10001
 ```
 
-JSON metadata with provider specification:
+JSON metadata with profile specification:
 ```
-Hello, can you tell me the temperature in Barcelona? >>> { "provider": "llama" }
+Hello, can you tell me the temperature in Barcelona? >>> { "name": "profile.10001" }
+```
+
+Metadatos JSON con especificación de perfil y opciones de sobrescritura de perfil:
+```
+Hello, can you tell me the temperature in Barcelona? >>> { "name": "profile.10001", "provider": "openia.completions" }
 ```
 
 

@@ -1,4 +1,5 @@
 import ioc from '../../../common/locator.js';
+import { Profile } from '../../../common/profile.js';
 import KsCryp from 'kscryp';
 
 const keyword = ">>>";
@@ -8,17 +9,18 @@ export async function extract(message) {
         let tmp = message.split(keyword);
         let msg = tmp[0].trim();
         let meta = tmp.length > 1 ? KsCryp.decode(tmp[1].trim(), "json") : "llama";
-        meta = typeof meta === "string" ? { provider: meta } : meta;
+        meta = typeof meta === "string" ? { name: meta } : meta;
 
-        let provider = await ioc.getProvider(meta.provider);
+        let profile = await (new Profile()).configure(meta);
+        let provider = await ioc.getProvider(profile?.provider);
         let available = provider.run instanceof Function;
 
         return {
             keyword,
             available,
             provider,
-            providerName: meta.provider,
-            message: msg
+            message: msg,
+            profile
         };
     }
     catch (error) {

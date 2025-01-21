@@ -20,23 +20,30 @@
 /**
  * Represents a message with content and optional tool calls.
  * @typedef {Object} TChoiceMessage
- * @property {string} content The content of the message.
+ * @property {String} content The content of the message.
  * @property {Array<TTask>} [tool_calls] An optional array of tool calls.
  */
 
 /**
  * Represents a tool call with an ID, function, and arguments.
  * @typedef {Object} TTask
- * @property {string} id The unique identifier of the tool call.
- * @property {string} type The type of the tool call: function | etc.
+ * @property {String} [id] The unique identifier of the tool call.
+ * @property {String} type The type of the tool call: function | etc.
  * @property {TAction} function The function called by the tool.
+ */
+
+/**
+ * Represents a Connector type
+ * @typedef {Object} TConnector
+ * @property {String} [name] The unique identifier of the connector plugin.
+ * @property {TTask} definition The Tool Call prototype definition.
  */
 
 /**
  * Represents a function called by a tool with a name and arguments.
  * @typedef {Object} TAction
- * @property {string} name The name of the function.
- * @property {Record<string, any>|string} arguments The arguments passed to the function.
+ * @property {String} name The name of the function.
+ * @property {Record<String, any>|String} arguments The arguments passed to the function.
  */
 
 /**
@@ -62,7 +69,7 @@
  * @property {Object} plugin 
  * @property {Array<TMsg>} thread  
  * @property {TOption} option  
- * @property {Record<string,string>} roles  
+ * @property {Record<String,String>} roles  
  */
 
 export default {};

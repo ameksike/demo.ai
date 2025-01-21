@@ -8,14 +8,15 @@ import * as srvRouter from '../services/router.js';
  * @param {import('ws').WebSocket} ws 
  */
 export async function onMessage(msg, ws) {
-    const { available, provider, providerName, message, keyword } = await srvRouter.extract(msg)
+    const { available, provider, profile, message, keyword } = await srvRouter.extract(msg)
 
     console.log({
         src: "Controller:Chat:onMessage",
-        data: { available, providerName, message, keyword }
+        data: { available, provider: profile?.provider, profile: profile?.name, message, keyword }
     });
 
-    let content = available && await provider.run(message);
+    let content = available && await provider.run(message, profile);
+    profile?.save();
     ws.send(content ? content : "I don't have an answer for your question");
 }
 
