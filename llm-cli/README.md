@@ -1,18 +1,42 @@
 
-## Run
-- python src/server.py
-- http://localhost:8000/docs
 
-- llama-cli -m ./Qwen2.5-7B-Instruct-Q4_K_M.gguf -p "¿Qué es la inteligencia artificial?"
-- llama-server --port 8088 -m C:\Users\user\.lmstudio\models\lmstudio-community\Qwen2.5-7B-Instruct-GGUF\Qwen2.5-7B-Instruct-Q4_K_M.gguf
+## Python Approach
+- FastAPI
+    - pip install fastapi
+    - python src/FastAPI.py
+    - http://localhost:8000/docs
 
-## llama.cpp
+- Langchain
+    - pip install langchain
+    - python src/Langchain.py
+
+- Transformers
+    - pip install transformers torch
+    - pip install -r requirements.txt
+    - python src/Transformers.py
+
+
+## Text Generation Webui
+- https://github.com/oobabooga/text-generation-webui
+- git clone https://github.com/oobabooga/text-generation-webui.git
+- cd text-generation-webui
+- 
+
+## llama C++
 - git clone https://github.com/ggerganov/llama.cpp
 - cd llama.cpp
 - mkdir build
 - cd build
 - cmake .. && cmake --build .
 - cmake --build . --config Release
+- run
+    - llama-cli -m ./Qwen2.5-7B-Instruct-Q4_K_M.gguf -p "¿Qué es la inteligencia artificial?"
+    - llama-server --port 8088 -m C:\Users\user\.lmstudio\models\lmstudio-community\Qwen2.5-7B-Instruct-GGUF\Qwen2.5-7B-Instruct-Q4_K_M.gguf
+        ```
+        main: server is listening on http://127.0.0.1:8088 - starting the main loop
+        srv  update_slots: all slots are idle
+        got exception: {"code":500,"message":"Unsupported param: tools","type":"server_error"}
+        ```
 
 ## Make
 - [CMake](https://cmake.org/download/)
