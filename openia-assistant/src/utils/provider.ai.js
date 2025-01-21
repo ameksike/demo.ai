@@ -1,4 +1,4 @@
-import * as locator from '../utils/locator.js';
+import * as locator from './locator.js';
 
 /**
  * @typedef  {import('../models/types.js').TMsg} TMsg
