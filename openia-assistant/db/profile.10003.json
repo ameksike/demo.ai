@@ -2,7 +2,7 @@
     "provider": "openia.assistants",
     "model": "simple",
     "stream": false,
-    "inThread": true,
+    "persist": true,
     "training": {
         "instructions": "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",
         "name": "Math Tutor"
