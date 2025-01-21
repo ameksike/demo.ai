@@ -1,9 +1,9 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-import * as wsServer from "./utils/server.ws.js";
-import * as webServer from "./utils/server.web.js";
-import { onMessage, router as chatRouter } from "./controllers/chat.js";
+import * as wsServer from "./common/server.ws.js";
+import * as webServer from "./common/server.web.js";
+import { onMessage, router as chatRouter } from "./modules/chat/controllers/chat.js";
 
 wsServer.start({
     port: process.env.WP_PORT || 8080,

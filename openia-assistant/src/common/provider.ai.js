@@ -1,11 +1,11 @@
 import * as locator from './locator.js';
 
 /**
- * @typedef  {import('../models/types.js').TMsg} TMsg
- * @typedef  {import('../models/types.js').TTask} TTask
- * @typedef  {import('../models/types.js').TResponse} TResponse 
- * @typedef  {import('../models/types.js').TTraining} TTraining 
- * @typedef  {import('../models/types.js').TAiPayload} TAiPayload 
+ * @typedef  {import('./types.js').TMsg} TMsg
+ * @typedef  {import('./types.js').TTask} TTask
+ * @typedef  {import('./types.js').TResponse} TResponse 
+ * @typedef  {import('./types.js').TTraining} TTraining 
+ * @typedef  {import('./types.js').TAiPayload} TAiPayload 
  */
 
 export class ProviderAI {

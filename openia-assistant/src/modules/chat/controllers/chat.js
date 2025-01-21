@@ -1,30 +1,21 @@
 import express from 'express';
-import { getFromMeta, path } from '../utils/polyfill.js';
-import ioc from '../utils/locator.js';
+import { getFromMeta, path } from '../../../common/polyfill.js';
+import * as srvRouter from '../services/router.js';
 
 /**
  * Default controller for WebSocket messages
  * @param {string} message 
  * @param {import('ws').WebSocket} ws 
  */
-export async function onMessage(message, ws) {
-    let tmp = message.split(">>>");
-    let msg = tmp.length > 1 ? tmp[1] : tmp[0];
-    let drv = tmp.length > 1 ? tmp[0].trim() : "llama";
-    let provider = (await ioc.get(drv, "../vendor/providers"))?.default;
-    let available = provider.run instanceof Function;
+export async function onMessage(msg, ws) {
+    const { available, provider, providerName, message, keyword } = await srvRouter.extract(msg)
 
     console.log({
         src: "Controller:Chat:onMessage",
-        data: {
-            available,
-            provider: drv,
-            message: msg,
-            keyword: ">>>"
-        }
+        data: { available, providerName, message, keyword }
     });
 
-    let content = available && await provider.run(msg);
+    let content = available && await provider.run(message);
     ws.send(content ? content : "I don't have an answer for your question");
 }
 

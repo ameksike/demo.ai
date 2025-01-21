@@ -1,4 +1,4 @@
-import { getFromMeta, path } from '../utils/polyfill.js';
+import { getFromMeta, path } from './polyfill.js';
 const { __dirname } = getFromMeta(import.meta);
 
 export class SrvLocator {
@@ -68,6 +68,14 @@ export class SrvLocator {
             this.logger?.log({ src: "Utils:SrvLocator:run", error });
             return null;
         }
+    }
+
+    async getConnector(name) {
+        return (await this.get(name, "../vendor/connectors"))?.default;
+    }
+
+    async getProvider(name) {
+        return (await this.get(name, "../vendor/providers"))?.default;
     }
 }
 
