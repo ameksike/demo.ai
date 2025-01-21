@@ -46,6 +46,19 @@ openia-assistant/
 
 ![screenshot](./doc/screenshot.jpg)
 
+### Commands 
+
+Simple provider specification:
+```
+Hello, can you tell me the temperature in Barcelona? >>> llama
+```
+
+JSON metadata with provider specification:
+```
+Hello, can you tell me the temperature in Barcelona? >>> { "provider": "llama" }
+```
+
+
 ## Install & Configure
 1. Install Required Libraries:
     - npm init -y
