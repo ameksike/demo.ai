@@ -1,5 +1,5 @@
 {
-    "provider": "llama",
+    "provider": "openia.assistants",
     "model": "simple",
     "stream": false,
     "inThread": true,
