@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
-import { getFromMeta, path } from '../../../utils/polyfill.js';
+import { getFromMeta, path } from '../../../common/polyfill.js';
 
 const { __dirname } = getFromMeta(import.meta);
 
@@ -23,6 +23,10 @@ const {
     EMAIL_PATH = path.resolve(__dirname, "../../public")
 } = process.env;
 
+
+/**
+ * Tool Call Action
+ */
 export async function send(options) {
     const { to, subject = "Notification", body = "Hello!", attachments } = options || {};
     try {
@@ -68,5 +72,41 @@ export async function send(options) {
     } catch (error) {
         console.log({ src: "Plugin:Email:send", error });
         return { status: "error", message: error.message };
+    }
+}
+
+
+/**
+ * Tool Call Definiton 
+ */
+export const definition = {
+    "type": "function",
+    "function": {
+        "name": "email_send",
+        "description": "Send an email to a given recipient with a subject and message.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "to": {
+                    "type": "string",
+                    "description": "The recipient email address."
+                },
+                "subject": {
+                    "type": "string",
+                    "description": "Email subject line."
+                },
+                "body": {
+                    "type": "string",
+                    "description": "Body of the email message."
+                }
+            },
+            "required": [
+                "to",
+                "subject",
+                "body"
+            ],
+            "additionalProperties": false
+        },
+        "strict": true
     }
 }

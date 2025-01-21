@@ -1,0 +1,22 @@
+{
+    "provider": "openia.assistants",
+    "model": "simple",
+    "stream": false,
+    "inThread": true,
+    "training": {
+        "instructions": "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",
+        "name": "Math Tutor"
+    },
+    "tools": [
+        {
+            "name": "weather"
+        },
+        {
+            "name": "email"
+        },
+        {
+            "name": "external"
+        }
+    ],
+    "thread": []
+}

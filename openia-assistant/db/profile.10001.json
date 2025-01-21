@@ -1,0 +1,70 @@
+{
+  "name": "profile.10001",
+  "model": "simple",
+  "tools": [
+    {
+      "name": "weather"
+    },
+    {
+      "name": "email"
+    },
+    {
+      "name": "external"
+    }
+  ],
+  "roles": {
+    "system": "system",
+    "tool": "tool",
+    "user": "user"
+  },
+  "stream": false,
+  "thread": [
+    {
+      "role": "system",
+      "content": "\n                You are an AI assistant named \"Math Tutor\". \n                Your primary role is defined as follows:\n                    You are a personal math tutor. When asked a question, write and run Python code to answer the question.\n                Always respond clearly and concisely, adapting your tone to the context. \n                Ensure accuracy and provide step-by-step explanations when appropriate. \n                Stay within your defined scope and handle requests with professionalism and precision.\n            "
+    },
+    {
+      "role": "user",
+      "content": "por favor dime la tempera de Barcelona"
+    },
+    {
+      "role": "function",
+      "name": "weather_get",
+      "tool_call_id": "call_hLKZ936RvQkxn3ehQtrNcIaL",
+      "content": "{\"name\":\"weather_get\",\"output\":{\"current\":{\"time\":\"2025-01-21T20:00\",\"interval\":900,\"temperature_2m\":12,\"wind_speed_10m\":3.9},\"options\":{\"latitude\":41.3851,\"longitude\":2.1734,\"city\":\"Barcelona\",\"country\":\"España\"}}}"
+    },
+    {
+      "role": "function",
+      "name": "weather_get",
+      "tool_call_id": "call_9xLVeEhyL9sX6hnoTj8ei9rL",
+      "content": "{\"name\":\"weather_get\",\"output\":{\"current\":{\"time\":\"2025-01-21T20:00\",\"interval\":900,\"temperature_2m\":12,\"wind_speed_10m\":3.9},\"options\":{\"latitude\":41.3851,\"longitude\":2.1734,\"city\":\"Barcelona\",\"country\":\"España\"}}}"
+    },
+    {
+      "role": "system",
+      "content": "La temperatura actual en Barcelona es de 12°C. Además, la velocidad del viento es de 3.9 m/s. Si necesitas más información, ¡házmelo saber!"
+    },
+    {
+      "role": "user",
+      "content": "que temperatura me habias dicho que habia en barcelona"
+    },
+    {
+      "role": "system",
+      "content": "La temperatura actual en Barcelona es de 12°C. Si necesitas más información o tienes alguna otra pregunta, no dudes en decírmelo."
+    },
+    {
+      "role": "user",
+      "content": "que me habias dicho"
+    },
+    {
+      "role": "system",
+      "content": "Te mencioné que la temperatura actual en Barcelona es de 12°C. ¿Hay algo más en lo que pueda ayudarte?"
+    }
+  ],
+  "provider": "openia.completions",
+  "inThread": true,
+  "training": {
+    "instructions": "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",
+    "name": "Math Tutor"
+  },
+  "defaults": null
+}
