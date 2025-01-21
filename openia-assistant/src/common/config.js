@@ -48,3 +48,7 @@ export async function save(data, name = "content", path = "", ext = ".json") {
         return null;
     }
 }
+
+export function flatten(str) {
+    return str.replace(/\s{2,}/g, ' ').trim();
+}
