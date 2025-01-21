@@ -81,7 +81,9 @@ Hello, can you tell me the temperature in Barcelona? >>> { "name": "profile.1000
 
 ## Tools 
 - [OpenAI Usage](https://platform.openai.com/settings/organization/usage)
+    - [Usage](https://platform.openai.com/usage)
 - [OpenAI Billing](https://platform.openai.com/settings/organization/billing/overview)
+- [OpenAI Assistants](https://platform.openai.com/assistants)
 
 ## References 
 - [LM Studio](https://lmstudio.ai/)

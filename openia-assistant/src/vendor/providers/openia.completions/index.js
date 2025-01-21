@@ -13,6 +13,7 @@ class OpenAICompletions extends ProviderAI {
         super({
             logger: config?.logger,
             plugin: config?.plugin,
+            persist: config?.persist,
             roles: {
                 "tool": "function",
                 ...config?.roles
@@ -24,6 +25,20 @@ class OpenAICompletions extends ProviderAI {
             apiKey: process.env.OPENAI_API_KEY,
             // organization: process.env.OPENAI_ORG_ID
         });
+    }
+
+    /**
+     * @description Check message compatibility between providers, If profile.compatible is active it has a negative impact on performance
+     * @param {Array<TMsg>} messages 
+     * @param {TProfile} profile 
+     * @returns {Promise<Array<TMsg>>} messages 
+     */
+    checkMessages(messages, profile) {
+        return Promise.resolve(profile?.compatible && Array.isArray(messages) ? messages.map(message => {
+            message.role = message.role === "tool" ? this.roles.tool : message.role;
+            this.logger?.log({ src: "OpenAICompletions:checkMessages", data: { role: message.role } });
+            return message;
+        }) : messages);
     }
 
     /**

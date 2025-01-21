@@ -14,7 +14,7 @@
   ],
   "roles": {
     "system": "system",
-    "tool": "tool",
+    "tool": "function",
     "user": "user"
   },
   "stream": false,
@@ -28,18 +28,6 @@
       "content": "por favor dime la tempera de Barcelona"
     },
     {
-      "role": "function",
-      "name": "weather_get",
-      "tool_call_id": "call_hLKZ936RvQkxn3ehQtrNcIaL",
-      "content": "{\"name\":\"weather_get\",\"output\":{\"current\":{\"time\":\"2025-01-21T20:00\",\"interval\":900,\"temperature_2m\":12,\"wind_speed_10m\":3.9},\"options\":{\"latitude\":41.3851,\"longitude\":2.1734,\"city\":\"Barcelona\",\"country\":\"España\"}}}"
-    },
-    {
-      "role": "function",
-      "name": "weather_get",
-      "tool_call_id": "call_9xLVeEhyL9sX6hnoTj8ei9rL",
-      "content": "{\"name\":\"weather_get\",\"output\":{\"current\":{\"time\":\"2025-01-21T20:00\",\"interval\":900,\"temperature_2m\":12,\"wind_speed_10m\":3.9},\"options\":{\"latitude\":41.3851,\"longitude\":2.1734,\"city\":\"Barcelona\",\"country\":\"España\"}}}"
-    },
-    {
       "role": "system",
       "content": "La temperatura actual en Barcelona es de 12°C. Además, la velocidad del viento es de 3.9 m/s. Si necesitas más información, ¡házmelo saber!"
     },
@@ -48,8 +36,26 @@
       "content": "que temperatura me habias dicho que habia en barcelona"
     },
     {
+      "role": "user",
+      "content": "que me habias dicho"
+    },
+    {
       "role": "system",
-      "content": "La temperatura actual en Barcelona es de 12°C. Si necesitas más información o tienes alguna otra pregunta, no dudes en decírmelo."
+      "content": "Te mencioné que la temperatura actual en Barcelona es de 12°C. ¿Hay algo más en lo que pueda ayudarte?"
+    },
+    {
+      "role": "user",
+      "content": "Hello, can you tell me the temperature in Barcelona?"
+    },
+    {
+      "role": "function",
+      "name": "weather_get",
+      "tool_call_id": "call_QQrA1oJIbftrIUlauMcoy0SA",
+      "content": "{\"name\":\"weather_get\",\"output\":{\"current\":{\"time\":\"2025-01-21T21:15\",\"interval\":900,\"temperature_2m\":112.1,\"wind_speed_10m\":4.4},\"options\":{\"latitude\":41.3851,\"longitude\":2.1734,\"city\":\"Barcelona\",\"country\":\"Spain\"}}}"
+    },
+    {
+      "role": "system",
+      "content": "The current temperature in Barcelona is 112.1°C, with a wind speed of 4.4 m/s. If you need more information or have other questions, feel free to ask!"
     },
     {
       "role": "user",
@@ -57,11 +63,11 @@
     },
     {
       "role": "system",
-      "content": "Te mencioné que la temperatura actual en Barcelona es de 12°C. ¿Hay algo más en lo que pueda ayudarte?"
+      "content": "Te mencioné que la temperatura actual en Barcelona es de 112.1°C, y la velocidad del viento es de 4.4 m/s. Sin embargo, esta temperatura parece incorrecta, ya que es un valor extremadamente alto. En realidad, las temperaturas normales en Barcelona generalmente no superan los 40°C. Si necesitas información adicional o aclaraciones, no dudes en preguntar."
     }
   ],
   "provider": "openia.completions",
-  "inThread": true,
+  "persist": true,
   "training": {
     "instructions": "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",
     "name": "Math Tutor"

@@ -17,9 +17,10 @@ export class Profile {
         this.thread = [];
         this.stream = false;
         this.provider = "llama";
-        this.inThread = true;
+        this.persist = true;
         this.defaults = null;
         this.training = null;
+        this.compatible = false;
         this.roles = {
             "system": "system",
             "tool": "tool",
@@ -37,7 +38,8 @@ export class Profile {
             this.provider = data.provider || this.provider;
             this.stream = data.stream ?? this.stream;
             this.thread = data.thread || this.thread;
-            this.inThread = data.inThread ?? this.inThread;
+            this.persist = data.persist ?? this.persist;
+            this.compatible = data.compatible ?? this.compatible;
             this.training = data.training || this.training;
             this.defaults = data.defaults || this.defaults;
             this.roles = { ...this.roles, ...data.roles };
@@ -61,14 +63,15 @@ export class Profile {
             stream: this.stream,
             thread: this.thread,
             provider: this.provider,
-            inThread: this.inThread,
+            persist: this.persist,
             training: this.training,
             defaults: this.defaults,
+            compatible: this.compatible,
         }
     }
 
     save() {
-        return this.inThread && srvConfig.save(this.asDto(), this.name, "db");
+        return srvConfig.save(this.asDto(), this.name, "db");
     }
 
     train(options = null) {
@@ -112,13 +115,13 @@ export class Profile {
      * @param {String|TMsg|Array<TMsg>} content 
      * @param {Object} [options] 
      * @param {String} [options.role] 
-     * @param {Boolean} [options.inThread] 
+     * @param {Boolean} [options.persist] 
      * @returns {Profile} self
      */
     process(content, options) {
-        const { role = this.roles.system, inThread = this.inThread } = options || {};
-        const thread = inThread ? this.thread : [];
-        this.train({ ...options, thread });
+        const { role = this.roles.system, persist = this.persist } = options || {};
+        const thread = persist ? this.thread : [];
+        persist && this.train({ ...options, thread });
         if (!content) {
             return thread;
         }
@@ -130,6 +133,6 @@ export class Profile {
                     : { role, ...item }
             );
         }
-        return this;
+        return thread;
     }
 }
