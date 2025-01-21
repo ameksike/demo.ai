@@ -1,7 +1,7 @@
-import fetchApi from '../utils/fetch.api.js';
-import config from "../../cfg/openai.js";
-import * as doc from "../../cfg/documents.js";
-import { ProviderAI } from "./provider.ai.js";
+import fetchApi from '../../../common/fetch.api.js';
+import config from "../../../../cfg/openai.js";
+import * as doc from "../../../../cfg/documents.js";
+import { ProviderAI } from "../../../common/provider.ai.js";
 
 /**
  * @link https://lmstudio.ai/docs/api/rest-api

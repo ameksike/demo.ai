@@ -1,11 +1,11 @@
 import { OpenAI } from "openai";
-import config from "../../cfg/openai.js";
-import * as doc from "../../cfg/documents.js";
-import { ProviderAI } from "./provider.ai.js";
+import config from "../../../../cfg/openai.js";
+import * as doc from "../../../../cfg/documents.js";
+import { ProviderAI } from "../../../common/provider.ai.js";
 
 /**
- * @typedef  {import('../models/types.js').TMsg} TMsg
- * @typedef  {import('../models/types.js').TResponse} TResponse 
+ * @typedef  {import('../../../common/types.js').TMsg} TMsg
+ * @typedef  {import('../../../common/types.js').TResponse} TResponse 
  */
 
 export class OpenAICompletions extends ProviderAI {

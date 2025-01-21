@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
-import { getFromMeta, path } from '../utils/polyfill.js';
+import { getFromMeta, path } from '../../../utils/polyfill.js';
 
 const { __dirname } = getFromMeta(import.meta);
 

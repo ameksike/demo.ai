@@ -6,28 +6,38 @@ openia-assistant/
 ├── cfg/
 │   │   └── openai.js
 ├── src/
-│   ├── models/
-│   │   └── chat.js
-│   ├── controllers/
-│   │   └── chat.js
-│   ├── plugins/
-│   │   ├── calendar.js
-│   │   ├── email.js
-│   │   └── external.js
-│   │   └── weather.js
-│   ├── services/
-│   │   ├── llama.js
-│   │   ├── openia.assistants.js
-│   │   └── openia.completions.js
-│   │   └── openai.embeddings.js
-│   ├── utils/
+│   ├── vendor/
+│   │   ├── connectors/
+│   │   │   ├── calendar/
+│   │   │   │   └── index.js
+│   │   │   ├── email/
+│   │   │   │   └── index.js
+│   │   │   └── weather/
+│   │   │       └── index.js
+│   │   └── providers/
+│   │   │   ├── llama/
+│   │   │   │   └── index.js
+│   │   │   ├── openia.assistants/
+│   │   │   │   └── index.js
+│   │   │   └── openia.completions/
+│   │   │       └── index.js
+│   └── modules/
+│   │   ├── chat/
+│   │   │   ├── controllers/
+│   │   │   ├── services/
+│   │   │   ├── models/
+│   │   │   └── views/
+│   │   └── audio/
+│   │   │   ├── controllers/
+│   │   │   ├── services/
+│   │   │   ├── models/
+│   │   │   └── views/
+│   ├── common/
 │   │   └── fetch.api.js
 │   │   └── locator.js
 │   │   └── polyfill.js
 │   │   └── server.ws.js
 │   │   └── server.web.js
-│   ├── views/
-│   │   └── chat.html
 │   └── server.js
 ├── package.json
 ├── .env
@@ -35,6 +45,19 @@ openia-assistant/
 ```
 
 ![screenshot](./doc/screenshot.jpg)
+
+### Commands 
+
+Simple provider specification:
+```
+Hello, can you tell me the temperature in Barcelona? >>> llama
+```
+
+JSON metadata with provider specification:
+```
+Hello, can you tell me the temperature in Barcelona? >>> { "provider": "llama" }
+```
+
 
 ## Install & Configure
 1. Install Required Libraries:

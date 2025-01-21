@@ -1,10 +1,10 @@
-import config from "../../cfg/openai.js";
-import { OpenAICompletions } from "./openia.completions.js";
+import config from "../../../../cfg/openai.js";
+import { OpenAICompletions } from "../openia.completions/index.js";
 
 /**
- * @typedef  {import('../models/types.js').TMsg} TMsg
- * @typedef  {import('../models/types.js').TTask} TTask
- * @typedef  {import('../models/types.js').TResponse} TResponse 
+ * @typedef  {import('../../../models/types.js').TMsg} TMsg
+ * @typedef  {import('../../../models/types.js').TTask} TTask
+ * @typedef  {import('../../../models/types.js').TResponse} TResponse 
  */
 
 export class OpenAIAssistant extends OpenAICompletions {
