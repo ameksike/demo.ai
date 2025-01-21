@@ -96,7 +96,7 @@ export class Profile {
      * @returns {Array<TTask>}
      */
     async getTools(tools) {
-        let tmp = await Promise.all(tools.map(async tool => {
+        let tmp = Array.isArray(tools) && await Promise.all(tools.map(async tool => {
             if (tool?.definition) {
                 return tool?.definition;
             } else {
