@@ -1,6 +1,4 @@
 import { OpenAI } from "openai";
-import config from "../../../../cfg/config.js";
-import * as doc from "../../../../cfg/documents.js";
 import { ProviderAI } from "../../../common/provider.ai.js";
 
 /**

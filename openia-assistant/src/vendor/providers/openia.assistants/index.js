@@ -1,4 +1,3 @@
-import config from "../../../../cfg/openai.js";
 import { OpenAICompletions } from "../openia.completions/index.js";
 
 /**
