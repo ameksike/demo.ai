@@ -1,7 +1,6 @@
 {
   "name": "profile.10001",
   "model": "lmstudio-qwen2.5",
-  "provider": "llama",
   "tools": [
     {
       "name": "weather"
@@ -27,7 +26,7 @@
       "content": "por favor dime la tempera de Barcelona"
     },
     {
-      "role": "function",
+      "role": "tool",
       "name": "weather_get",
       "tool_call_id": "call_QQrA1oJIbftrIUlauMcoy0SA",
       "content": "{\"name\":\"weather_get\",\"output\":{\"current\":{\"time\":\"2025-01-21T21:15\",\"interval\":900,\"temperature_2m\":112.1,\"wind_speed_10m\":4.4},\"options\":{\"latitude\":41.3851,\"longitude\":2.1734,\"city\":\"Barcelona\",\"country\":\"Spain\"}}}"
@@ -37,11 +36,12 @@
       "content": "The current temperature in Barcelona is 112.1°C, with a wind speed of 4.4 m/s. If you need more information or have other questions, feel free to ask!"
     }
   ],
+  "provider": "llama",
   "persist": true,
   "training": {
     "instructions": "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",
     "name": "Math Tutor"
   },
   "defaults": null,
-  "compatible": true
+  "compatible": false
 }
