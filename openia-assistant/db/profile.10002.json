@@ -1,6 +1,6 @@
 {
     "provider": "llama",
-    "model": "simple",
+    "model": "openai-basic-2",
     "stream": false,
     "persist": true,
     "training": {

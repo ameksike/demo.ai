@@ -1,6 +1,6 @@
 {
   "name": "profile.10001",
-  "model": "lmstudio",
+  "model": "lmstudio-qwen2.5",
   "tools": [
     {
       "name": "weather"
