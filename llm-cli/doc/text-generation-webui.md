@@ -27,3 +27,4 @@ text-generation-webui
 
 ## References 
 - [Github Project](https://github.com/oobabooga/text-generation-webui)
+- [Download models: Qwen2](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct)
