@@ -53,14 +53,17 @@ class LlanaAICompletions extends ProviderAI {
      */
     async send(options) {
         try {
-            const { stream, model, tools, messages } = options || {};
-            const response = await fetchApi.post(LLAMA_API_URL + "/v1/chat/completions", {
+            const { stream = false, model, tools, messages, temperature = 0.7, max_tokens = 600 } = options || {};
+            const url = LLAMA_API_URL + "/v1/chat/completions";
+            const body = {
+                stream,
                 model,
                 messages,
                 tools,
-                temperature: 0.7,
-                max_tokens: 600,
-            });
+                temperature,
+                max_tokens,
+            };
+            const response = await fetchApi.post(url, body);
             return response.body;
         } catch (error) {
             return {
