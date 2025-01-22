@@ -36,7 +36,7 @@ class OpenAICompletions extends ProviderAI {
     checkMessages(messages, profile) {
         return Promise.resolve(profile?.compatible && Array.isArray(messages) ? messages.map(message => {
             message.role = message.role === "tool" ? this.roles.tool : message.role;
-            this.logger?.log({ src: "OpenAICompletions:checkMessages", data: { role: message.role } });
+            this.logger?.log({ src: "Provider:OpenAI:Completions:checkMessages", data: { role: message.role } });
             return message;
         }) : messages);
     }
