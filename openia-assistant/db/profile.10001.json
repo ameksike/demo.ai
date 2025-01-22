@@ -1,51 +1,29 @@
 {
   "name": "profile.10001",
-  "model": "simple",
+  "model": "lmstudio",
   "tools": [
     {
       "name": "weather"
     },
     {
       "name": "email"
-    },
-    {
-      "name": "external"
     }
   ],
   "roles": {
     "system": "system",
-    "tool": "function",
-    "user": "user"
+    "tool": "tool",
+    "user": "user",
+    "assistant": "assistant"
   },
   "stream": false,
   "thread": [
     {
       "role": "system",
-      "content": "\n                You are an AI assistant named \"Math Tutor\". \n                Your primary role is defined as follows:\n                    You are a personal math tutor. When asked a question, write and run Python code to answer the question.\n                Always respond clearly and concisely, adapting your tone to the context. \n                Ensure accuracy and provide step-by-step explanations when appropriate. \n                Stay within your defined scope and handle requests with professionalism and precision.\n            "
+      "content": "\n  You are an AI assistant named \"Math Tutor\". \n  Your primary role is defined as follows:\n      You are a personal math tutor. When asked a question, write and run Python code to answer the question.\n  Always respond clearly and concisely, adapting your tone to the context. \n  Ensure accuracy and provide step-by-step explanations when appropriate. \n  Stay within your defined scope and handle requests with professionalism and precision.\n            "
     },
     {
       "role": "user",
       "content": "por favor dime la tempera de Barcelona"
-    },
-    {
-      "role": "system",
-      "content": "La temperatura actual en Barcelona es de 12°C. Además, la velocidad del viento es de 3.9 m/s. Si necesitas más información, ¡házmelo saber!"
-    },
-    {
-      "role": "user",
-      "content": "que temperatura me habias dicho que habia en barcelona"
-    },
-    {
-      "role": "user",
-      "content": "que me habias dicho"
-    },
-    {
-      "role": "system",
-      "content": "Te mencioné que la temperatura actual en Barcelona es de 12°C. ¿Hay algo más en lo que pueda ayudarte?"
-    },
-    {
-      "role": "user",
-      "content": "Hello, can you tell me the temperature in Barcelona?"
     },
     {
       "role": "function",
@@ -56,21 +34,14 @@
     {
       "role": "system",
       "content": "The current temperature in Barcelona is 112.1°C, with a wind speed of 4.4 m/s. If you need more information or have other questions, feel free to ask!"
-    },
-    {
-      "role": "user",
-      "content": "que me habias dicho"
-    },
-    {
-      "role": "system",
-      "content": "Te mencioné que la temperatura actual en Barcelona es de 112.1°C, y la velocidad del viento es de 4.4 m/s. Sin embargo, esta temperatura parece incorrecta, ya que es un valor extremadamente alto. En realidad, las temperaturas normales en Barcelona generalmente no superan los 40°C. Si necesitas información adicional o aclaraciones, no dudes en preguntar."
     }
   ],
-  "provider": "openia.completions",
+  "provider": "llama",
   "persist": true,
   "training": {
     "instructions": "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",
     "name": "Math Tutor"
   },
-  "defaults": null
+  "defaults": null,
+  "compatible": true
 }
