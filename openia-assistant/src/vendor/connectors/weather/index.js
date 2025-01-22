@@ -9,13 +9,13 @@ export async function get(options) {
         const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m`);
         const data = await response.json();
         console.log({
-            src: "Plugin:Weather:send",
+            src: "Connector:Weather:send",
             data: data.current
         });
         return { current: data.current, options };
     }
     catch (error) {
-        console.log({ src: "Plugin:Weather:send", error });
+        console.log({ src: "Connector:Weather:send", error, data: options });
         return null;
     }
 

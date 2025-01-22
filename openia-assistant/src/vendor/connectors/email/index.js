@@ -28,7 +28,7 @@ const {
  * Tool Call Action
  */
 export async function send(options) {
-    const { to, subject = "Notification", body = "Hello!", attachments, from: EMAIL_USER } = options || {};
+    const { to = EMAIL_USER, from = EMAIL_USER, subject = "Notification", body = "Hello!", attachments } = options || {};
     try {
         const auth = EMAIL_TYPE === "OAuth2" ? {
             type: "OAuth2",
@@ -65,13 +65,13 @@ export async function send(options) {
         };
         const info = await transporter.sendMail(emailOptions);
         console.log({
-            src: "Plugin:Email:send",
+            src: "Connector:Email:send",
             data: { to, from, subject, completed: info }
         });
         return { status: "success", message: "Email sent successfully!", info };
     } catch (error) {
-        console.log({ src: "Plugin:Email:send", error });
-        return { status: "error", message: error.message };
+        console.log({ src: "Connector:Email:send", error });
+        return { status: "error", message: error.message, data: options };
     }
 }
 

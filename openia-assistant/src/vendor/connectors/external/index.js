@@ -23,12 +23,12 @@ export const run = async (options) => {
             ]
         });
         console.log({
-            src: "Plugin:External:send",
+            src: "Connector:External:send",
             data: response.data
         });
         return response.data
     } catch (error) {
-        console.log({ src: "Plugin:External:send", error });
+        console.log({ src: "Connector:External:send", error });
         return null;
     }
 };
