@@ -66,6 +66,7 @@ class LlanaAICompletions extends ProviderAI {
             const response = await fetchApi.post(url, body);
             return response.body;
         } catch (error) {
+            this.logger?.log({ src: "Provider:LlanaAI:send", error, data: options });
             return {
                 choices: [
                     {

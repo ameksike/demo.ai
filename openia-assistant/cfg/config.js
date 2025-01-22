@@ -6,7 +6,7 @@ const config = {
         "openai-mini": "gpt-4o-mini",
         "openai-average": "gpt-4",
         "openai-advanced": "gpt-4o",
-        "ollama-llama3": "llama3.1:latest"
+        "ollama-llama3.1": "llama3.1:latest"
     }
 }
 export default config;

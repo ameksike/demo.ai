@@ -1,7 +1,6 @@
 {
   "name": "profile.10004",
-  "model": "ollama-llama3",
-  "provider": "llama",
+  "model": "ollama-llama3.1",
   "tools": [
     {
       "name": "weather"
@@ -21,6 +20,7 @@
   },
   "stream": false,
   "thread": [],
+  "provider": "llama",
   "persist": false,
   "training": {
     "instructions": "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",
