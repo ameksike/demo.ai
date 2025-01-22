@@ -1,5 +1,22 @@
 
-## Coomon options 
+## Install Linux
+
+```shell
+## download tje installer 
+wget https://ollama.ai/install.sh
+
+## provide execution permissions
+chmod +x install.sh
+
+## run the installer
+./install.sh
+
+## check the service
+systemctl status ollama
+```
+
+## Common options 
+
 ```shell
 ## list all models 
 ollama list
@@ -12,9 +29,7 @@ ollama run aispin/qwen2.5-7b-instruct-abliterated-v2.q4_k_s.gguf
 ollama run llama3.1
 
 ## run the http server 
-ollama serve --port 8080
-
-
+ollama serve # --port 8080
 ```
 
 ### Server management
