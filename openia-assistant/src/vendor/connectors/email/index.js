@@ -28,7 +28,7 @@ const {
  * Tool Call Action
  */
 export async function send(options) {
-    const { to, subject = "Notification", body = "Hello!", attachments } = options || {};
+    const { to, subject = "Notification", body = "Hello!", attachments, from: EMAIL_USER } = options || {};
     try {
         const auth = EMAIL_TYPE === "OAuth2" ? {
             type: "OAuth2",
@@ -57,7 +57,7 @@ export async function send(options) {
         const transporter = nodemailer.createTransport(transport);
         const emailOptions = {
             to,
-            from: EMAIL_USER,
+            from,
             subject,
             html: body,
             attachments
