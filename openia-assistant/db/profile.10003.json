@@ -1,6 +1,7 @@
 {
   "name": "profile.10003",
   "model": "openai-mini",
+  "provider": "openia.assistants",
   "tools": [
     {
       "name": "weather"
@@ -19,7 +20,6 @@
   },
   "stream": false,
   "thread": [],
-  "provider": "openia.assistants",
   "persist": false,
   "training": {
     "instructions": "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",

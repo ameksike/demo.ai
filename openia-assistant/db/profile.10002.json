@@ -1,6 +1,6 @@
 {
-    "provider": "llama",
     "model": "openai-basic-2",
+    "provider": "openia.completions",
     "stream": false,
     "persist": true,
     "training": {
