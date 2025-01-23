@@ -27,7 +27,7 @@ const {
 /**
  * Tool Call Action
  */
-export async function send(options) {
+export async function send(options, task, profile) {
     const { to = EMAIL_USER, from = EMAIL_USER, subject = "Notification", body = "Hello!", attachments } = options || {};
     try {
         const auth = EMAIL_TYPE === "OAuth2" ? {

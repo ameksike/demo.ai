@@ -19,7 +19,7 @@ async function getCoordinates(address) {
  * @param {{latitude: string, longitude: string}} options 
  * @returns {[{"time":"2025-01-18T17:15","interval":900,"temperature_2m":13.1,"wind_speed_10m":7.7}]} result
  */
-export async function get(options) {
+export async function get(options, task, profile) {
     options = options || {};
     try {
         let { latitude, longitude, ...address } = options;
