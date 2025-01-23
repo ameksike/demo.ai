@@ -1,4 +1,37 @@
+import KsCryp from 'kscryp';
+
 export class FetchAPI {
+
+    constructor(options) {
+        this.url = options?.url;
+        this.headers = {
+            'Content-Type': 'application/json',
+            'User-Agent': 'VA',
+            'Accept': '*/*',
+            'Connection': 'keep-alive',
+            ...options?.headers
+        }
+    }
+
+    async getResponse(response) {
+        const body = await response.text();
+        return KsCryp.decode(body, "json");
+    }
+
+    /**
+     * @description Get full URL with params  
+     * @param {Object} options 
+     * @returns {URL} url
+     */
+    getUrl(options) {
+        let { url, query } = options || {};
+        const uri = new URL(url);
+        for (let key in query) {
+            url.searchParams.append(key, query[key]);
+        }
+        return uri;
+    }
+
     /**
      * POST method
      * @param {string} url 
@@ -8,17 +41,14 @@ export class FetchAPI {
      */
     async post(url, data = {}, headers = {}) {
         try {
+            url = url || this.url;
             const options = {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Connection': 'keep-alive',
-                    ...headers
-                },
-                body: JSON.stringify(data),
+                headers: { ...this.headers, ...headers },
+                body: KsCryp.encode(data, "json"),
             };
             const response = await fetch(url, options);
-            const body = await response.json();
+            const body = await this.getResponse(response);
             if (!response.ok) {
                 return {
                     body,
@@ -41,11 +71,12 @@ export class FetchAPI {
      */
     async get(url, headers = {}) {
         try {
+            url = url || this.url;
             const response = await fetch(url, {
                 method: 'GET',
-                headers: { 'Content-Type': 'application/json', ...headers },
+                headers: { ...this.headers, ...headers },
             });
-            const body = await response.json();
+            const body = await this.getResponse(response);
             if (!response.ok) {
                 return {
                     body,
@@ -69,12 +100,13 @@ export class FetchAPI {
      */
     async put(url, data = {}, headers = {}) {
         try {
+            url = url || this.url;
             const response = await fetch(url, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json', ...headers },
-                body: JSON.stringify(data),
+                headers: { ...this.headers, ...headers },
+                body: KsCryp.encode(data, "json"),
             });
-            const body = await response.json();
+            const body = await this.getResponse(response);
             if (!response.ok) {
                 return {
                     body,
@@ -97,11 +129,12 @@ export class FetchAPI {
      */
     async delete(url, headers = {}) {
         try {
+            url = url || this.url;
             const response = await fetch(url, {
                 method: 'DELETE',
-                headers: { 'Content-Type': 'application/json', ...headers },
+                headers: { ...this.headers, ...headers },
             });
-            const body = await response.json();
+            const body = await this.getResponse(response);
             if (!response.ok) {
                 return {
                     body,

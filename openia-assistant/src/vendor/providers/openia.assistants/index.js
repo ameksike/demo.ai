@@ -48,11 +48,11 @@ class OpenAIAssistant extends OpenAICompletions {
 
             profile.defaults = profile.defaults || {};
             profile.defaults.thread = this.cache.thread.id;
-            this.logger?.log({ src: "OpenAIAssistant:getAssistantThread", data: { threadId: this.cache.thread.id } });
+            this.logger?.log({ src: "Provider:OpenAI:Assistant:getAssistantThread", data: { threadId: this.cache.thread.id } });
             return this.cache.thread;
         }
         catch (error) {
-            this.logger?.log({ src: "OpenAIAssistant:getAssistantThread", error });
+            this.logger?.log({ src: "Provider:OpenAI:Assistant:getAssistantThread", error });
             return null;
         }
     }
@@ -78,11 +78,11 @@ class OpenAIAssistant extends OpenAICompletions {
 
             profile.defaults = profile.defaults || {};
             profile.defaults.assistant = this.cache.assistant.id;
-            this.logger?.log({ src: "OpenAIAssistant:getAssistant", data: { assistantId: this.cache.assistant.id } });
+            this.logger?.log({ src: "Provider:OpenAI:Assistant:getAssistant", data: { assistantId: this.cache.assistant.id } });
             return this.cache?.assistant;
         }
         catch (error) {
-            this.logger?.log({ src: "OpenAIAssistant:getAssistant", error });
+            this.logger?.log({ src: "Provider:OpenAI:Assistant:getAssistant", error });
             return null;
         }
     }
@@ -115,7 +115,7 @@ class OpenAIAssistant extends OpenAICompletions {
         let content = null;
         for await (const item of stream) {
 
-            this.logger?.log({ src: "OpenAIAssistant:fromStream", data: item });
+            this.logger?.log({ src: "Provider:OpenAI:Assistant:fromStream", data: item });
 
             if (item?.event === 'thread.run.created') {
                 this.cache.run = item?.data;
@@ -159,7 +159,7 @@ class OpenAIAssistant extends OpenAICompletions {
             return await this.process(stream, thread);
         }
         catch (error) {
-            this.logger?.log({ src: "OpenAIAssistant:getAssistantThread", error });
+            this.logger?.log({ src: "Provider:OpenAI:Assistant:getAssistantThread", error });
             return null;
         }
     }

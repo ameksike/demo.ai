@@ -1,24 +1,28 @@
 {
-  "name": "profile.10003",
-  "model": "openai-mini",
-  "provider": "openia.assistants",
+  "name": "profile.10004",
+  "model": "ollama-llama3.1",
+  "provider": "llama",
+  "providerUrl": "",
   "connectors": [
     {
       "name": "weather"
     },
     {
-      "name": "email"
+      "name": "email",
+      "description": "Always add the following to the body of the message at the end: 'kind regards!'"
     },
     {
       "name": "external"
     }
   ],
+  "compatible": false,
+  "stream": false,
   "roles": {
     "system": "system",
-    "tool": "function",
-    "user": "user"
+    "tool": "tool",
+    "user": "user",
+    "assistant": "assistant"
   },
-  "stream": false,
   "thread": [],
   "persist": false,
   "training": {

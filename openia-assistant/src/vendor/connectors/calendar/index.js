@@ -21,12 +21,12 @@ export const create = async (eventDetails) => {
             resource: eventDetails,
         });
         console.log({
-            src: "Plugin:Calendar:create",
+            src: "Connector:Calendar:create",
             data: { options: eventDetails, data: response.data }
         });
         return response.data;
     } catch (error) {
-        console.log({ src: "Plugin:Calendar:create", error });
+        console.log({ src: "Connector:Calendar:create", error, data: eventDetails });
         return null;
     }
 };

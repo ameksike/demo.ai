@@ -67,14 +67,15 @@ export class ProviderAI {
     /**
      * @description RAG processing for external content based on tasks or tools calls
      * @param {Array<TTask>} tasks
+     * @param {TProfile} profile 
      * @returns {Promise<Array<TMsg>>} results
      */
-    async retrive(tasks) {
+    async retrive(tasks, profile) {
         let res = await Promise.all(tasks.map(async (task) => {
             let { type, id, function: func } = task;
             let { arguments: args, name } = func;
             let response = { role: this.roles.tool, name, tool_call_id: id };
-            let result = type === "function" && await this.plugin.run({ name, args: KsCryp.decode(args, "json") });
+            let result = type === "function" && await this.plugin.run({ name, args: [KsCryp.decode(args, "json"), task, profile] });
             if (!result) {
                 response.content = "Bad plugin request, there is no content to share.";
             } else {
@@ -171,7 +172,7 @@ export class ProviderAI {
         // process tasks or tool calls 
         const tasks = this.getTasks(response);
         if (tasks?.length) {
-            let results = await this.retrive(tasks);
+            let results = await this.retrive(tasks, profile);
             let res = await this.notify(results, profile);
             if (res) {
                 return res;

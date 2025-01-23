@@ -43,7 +43,26 @@
  * Represents a function called by a tool with a name and arguments.
  * @typedef {Object} TAction
  * @property {String} name The name of the function.
- * @property {Record<String, any>|String} arguments The arguments passed to the function.
+ * @property {String} [description] The name of the function.
+ * @property {Boolean} [strict] The name of the function.
+ * @property {Record<String, any>|String} [arguments] The arguments passed to the function.
+ * @property {TActionParams} [parameters] 
+ * @property {Array<String>} [required] 
+ * @property {Boolean} [additionalProperties] 
+ */
+
+/**
+ * Parameters definition for TAction
+ * @typedef {Object} TActionParams
+ * @property {String} type 
+ * @property {Record<String, TProps>} [properties] 
+ */
+
+/**
+ * Parameters definition for TAction
+ * @typedef {Object} TProps
+ * @property {String} name The name of the TProps.
+ * @property {String} description
  */
 
 /**

@@ -12,7 +12,18 @@ export async function onMessage(msg, ws) {
 
     console.log({
         src: "Controller:Chat:onMessage",
-        data: { available, provider: profile?.provider, profile: profile?.name, message, keyword }
+        data: {
+            profile: profile?.name,
+            provider: {
+                available,
+                name: profile?.provider
+            },
+            mode: {
+                name: profile.model,
+                alias: profile.modelKey,
+            },
+            message, keyword
+        }
     });
 
     let content = available && await provider.run(message, profile);

@@ -28,12 +28,12 @@ export class Locator {
      * @description load a service by name and location or path 
      * @param {string} name 
      * @param {Object} [options] 
-     * @param {Object} [options.args] 
+     * @param {Array<*>} [options.args] 
      * @param {string|null} [options.location] 
      * @returns {{mod:Object; meta:{action: string; service: string;}}} service descriptor
      */
     async get(name, options) {
-        const { args = null, location = this.path } = options || null;
+        const { args = [], location = this.path } = options || null;
         try {
             if (!this.cache[location]) {
                 this.cache[location] = {};
@@ -44,7 +44,7 @@ export class Locator {
             let meta = this.extract(name);
             let file = path.resolve(__dirname, "../", location, meta.service, "index.js");
             let mod = await import(new URL("file://" + file));
-            let lib = mod?.default instanceof Function ? new mod.default(args) : (mod.default || mod);
+            let lib = mod?.default instanceof Function ? new mod.default(...args) : (mod.default || mod);
             this.cache[location][name] = { mod, meta, default: mod.default || mod, lib };
             this.logger?.log({ src: "Common:Locator:get", data: { available: !!mod, file } });
             return this.cache[location][name];
@@ -58,17 +58,18 @@ export class Locator {
     /**
      * @description excecute the task action with arguments in the scope
      * @param {{name: string; arguments: Record<string, any>}} task 
-     * @param {Object} [scope] 
+     * @param {Object} [scope]
      * @returns {any} response
      */
-    async run(task, scope) {
+    async run(task, scope = {}) {
         try {
             let { lib, meta } = await this.get(task.name, { location: "vendor/connectors" });
             let action = lib && lib[meta.action];
+            let args = task.arguments || task.args;
             if (!(action instanceof Function)) {
                 return null;
             }
-            return await action.apply(scope || {}, [task.arguments || task.args]);
+            return await action.apply(scope || {}, Array.isArray(args) ? args : [args]);
         }
         catch (error) {
             this.logger?.log({ src: "Common:Locator:run", error });
