@@ -26,6 +26,7 @@ import { Map } from '../components/Map';
 
 import './ConsolePage.scss';
 import { isJsxOpeningLikeElement } from 'typescript';
+import { addToolMoveCard } from '../tools/Kanban';
 
 /**
  * Type for result from get_weather() function call
@@ -55,6 +56,25 @@ interface RealtimeEvent {
 }
 
 export function ConsolePage() {
+
+  // <<< Kanban integration via iframe: openai-realtime-console\src\tools\Kanban.ts
+  const handleMessage = (event: MessageEvent) => {
+    if (event.data.type === "connect") {
+      console.log("Connecting conversation");
+      connectConversation();
+    } else if (event.data.type === "disconnect") {
+      disconnectConversation();
+    } 
+  };
+  useEffect(() => {
+    changeTurnEndType("server_vad");
+    window.addEventListener("message", handleMessage);
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, []);
+  // >>>
+
   /**
    * Ask user for API Key
    * If we're using the local relay server, we don't need this
@@ -62,8 +82,8 @@ export function ConsolePage() {
   const apiKey = LOCAL_RELAY_SERVER_URL
     ? ''
     : localStorage.getItem('tmp::voice_api_key') ||
-      prompt('OpenAI API Key') ||
-      '';
+    prompt('OpenAI API Key') ||
+    '';
   if (apiKey !== '') {
     localStorage.setItem('tmp::voice_api_key', apiKey);
   }
@@ -85,9 +105,9 @@ export function ConsolePage() {
       LOCAL_RELAY_SERVER_URL
         ? { url: LOCAL_RELAY_SERVER_URL }
         : {
-            apiKey: apiKey,
-            dangerouslyAllowAPIKeyInBrowser: true,
-          }
+          apiKey: apiKey,
+          dangerouslyAllowAPIKeyInBrowser: true,
+        }
     )
   );
 
@@ -382,6 +402,8 @@ export function ConsolePage() {
     client.updateSession({ input_audio_transcription: { model: 'whisper-1' } });
 
     // Add tools
+    addToolMoveCard(client);
+
     client.addTool(
       {
         name: 'set_memory',
@@ -411,6 +433,7 @@ export function ConsolePage() {
         return { ok: true };
       }
     );
+
     client.addTool(
       {
         name: 'get_weather',
@@ -565,11 +588,10 @@ export function ConsolePage() {
                         }}
                       >
                         <div
-                          className={`event-source ${
-                            event.type === 'error'
-                              ? 'error'
-                              : realtimeEvent.source
-                          }`}
+                          className={`event-source ${event.type === 'error'
+                            ? 'error'
+                            : realtimeEvent.source
+                            }`}
                         >
                           {realtimeEvent.source === 'client' ? (
                             <ArrowUp />
@@ -639,7 +661,7 @@ export function ConsolePage() {
                               (conversationItem.formatted.audio?.length
                                 ? '(awaiting transcript)'
                                 : conversationItem.formatted.text ||
-                                  '(item sent)')}
+                                '(item sent)')}
                           </div>
                         )}
                       {!conversationItem.formatted.tool &&
