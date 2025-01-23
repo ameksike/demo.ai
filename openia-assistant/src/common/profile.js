@@ -17,6 +17,7 @@ export class Profile {
         this.thread = [];
         this.stream = false;
         this.provider = "llama";
+        this.providerUrl = "";
         this.persist = true;
         this.defaults = null;
         this.training = null;
@@ -35,6 +36,7 @@ export class Profile {
             let data = { ...meta, ...(typeof payload === "object" && payload || {}) };
 
             this.name = name || this.name;
+            this.providerUrl = data.providerUrl || this.providerUrl;
             this.provider = data.provider || this.provider;
             this.stream = data.stream ?? this.stream;
             this.thread = data.thread || this.thread;
@@ -45,11 +47,11 @@ export class Profile {
             this.roles = { ...this.roles, ...data.roles };
             this.model = config.models[data.model] || this.model;
             this.modelKey = data.model;
-            this.tasks = data.tools;
-            this.tools = await this.getTools(data.tools);
+            this.connectors = data.connectors;
+            this.tools = await this.getTools(this.connectors);
         }
         catch (error) {
-            console.log({ src: "Profile:Service:configure", error, data: payload });
+            console.log({ src: "Profile:configure", error, data: payload });
         }
         return this;
     }
@@ -58,15 +60,16 @@ export class Profile {
         return {
             name: this.name,
             model: this.modelKey,
-            tools: this.tasks,
-            roles: this.roles,
-            stream: this.stream,
-            thread: this.thread,
             provider: this.provider,
+            providerUrl: this.providerUrl,
+            connectors: this.connectors,
+            compatible: this.compatible,
+            stream: this.stream,
+            roles: this.roles,
+            thread: this.thread,
             persist: this.persist,
             training: this.training,
             defaults: this.defaults,
-            compatible: this.compatible,
         }
     }
 
@@ -100,13 +103,21 @@ export class Profile {
      */
     async getTools(tools) {
         let tmp = Array.isArray(tools) && await Promise.all(tools.map(async tool => {
-            if (tool?.definition) {
-                return tool?.definition;
-            } else {
-                let conn = tool?.name && await ioc.getConnector(tool.name);
-                return conn?.definition
+            try {
+                if (tool?.definition) {
+                    return tool?.definition;
+                } else {
+                    let conn = tool?.name && await ioc.getConnector(tool.name);
+                    // Add custom context from profile
+                    let defTool = conn?.definition;
+                    tool?.description && (defTool.function.description += " " + tool?.description);
+                    return defTool;
+                }
             }
-        }))
+            catch (error) {
+                console.log({ src: "Profile:getTools", error, data: tool });
+            }
+        }));
         return (Array.isArray(tmp) && tmp.filter(v => !!v)) || [];
     }
 

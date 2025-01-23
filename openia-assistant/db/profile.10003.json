@@ -2,7 +2,7 @@
   "name": "profile.10003",
   "model": "openai-mini",
   "provider": "openia.assistants",
-  "tools": [
+  "connectors": [
     {
       "name": "weather"
     },

@@ -1,7 +1,7 @@
 {
   "name": "profile.10002",
   "model": "openai-basic-2",
-  "tools": [
+  "connectors": [
     {
       "name": "weather"
     },

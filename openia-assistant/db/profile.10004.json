@@ -1,26 +1,29 @@
 {
   "name": "profile.10004",
   "model": "ollama-llama3.1",
-  "tools": [
+  "provider": "llama",
+  "providerUrl": "",
+  "connectors": [
     {
       "name": "weather"
     },
     {
-      "name": "email"
+      "name": "email",
+      "description": "Always add the following to the body of the message at the end: 'kind regards!'"
     },
     {
       "name": "external"
     }
   ],
+  "compatible": false,
+  "stream": false,
   "roles": {
     "system": "system",
     "tool": "tool",
     "user": "user",
     "assistant": "assistant"
   },
-  "stream": false,
   "thread": [],
-  "provider": "llama",
   "persist": false,
   "training": {
     "instructions": "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",
@@ -29,6 +32,5 @@
   "defaults": {
     "thread": "thread_u1SUO9ieAOFkNqWwxOMCrRTa",
     "assistant": "asst_h7hQpSqMwcmE7W3XKn1n24F7"
-  },
-  "compatible": false
+  }
 }

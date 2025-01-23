@@ -62,6 +62,7 @@ export const definition = {
     function: {
         name: "weather_get",
         description: "Get current temperature for a given or address.",
+        strict: true,
         parameters: {
             type: "object",
             properties: {
@@ -82,7 +83,6 @@ export const definition = {
             },
             required: ["latitude", "longitude", "city", "country"],
             additionalProperties: false
-        },
-        strict: true
+        }
     }
 }
