@@ -3,8 +3,10 @@
 ## Project Structure
 ```
 openia-assistant/
+├── db/
+│   │   └── profile.10001.json
 ├── cfg/
-│   │   └── openai.js
+│   │   └── config.js
 ├── src/
 │   ├── vendor/
 │   │   ├── connectors/
@@ -36,6 +38,7 @@ openia-assistant/
 │   │   └── fetch.api.js
 │   │   └── locator.js
 │   │   └── polyfill.js
+│   │   └── profile.js
 │   │   └── server.ws.js
 │   │   └── server.web.js
 │   └── server.js
