@@ -1,3 +1,4 @@
+![generation-web](../rsc/text-generation-web-ui.jpg)
 
 ### Install 
 ```shell
