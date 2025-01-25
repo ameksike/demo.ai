@@ -111,3 +111,7 @@ Hello, can you tell me the temperature in Barcelona? >>> { "name": "profile.1000
 - Google
     - [Sign in with app passwords](https://support.google.com/mail/answer/185833?hl=en)
     - [Create & use app passwords](https://myaccount.google.com/apppasswords)
+
+- Tutorials
+    - [Build a Real-Time Chatbot with Next.js 15, Vercel AI SDK, and Shadcn UI](https://www.youtube.com/watch?v=_tBTfvQr38M)
+    - [Build a Voice-to-Voice AI App with OpenAI API & Twilio in Real Time](https://www.youtube.com/watch?v=GzIXNeaczoc)
