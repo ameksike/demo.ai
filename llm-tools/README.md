@@ -31,16 +31,19 @@
     - [Huggingface](https://huggingface.co/models?sort=modified&search=ggml)
 - Voice
     - [OpenAI Realtime API](https://platform.openai.com/docs/guides/realtime/overview?text-generation-quickstart-example=audio)
+        - [Guides](https://platform.openai.com/docs/guides/realtime)
     - [GPT-4o Realtime API for speech and audio (Preview)](https://learn.microsoft.com/en-us/azure/ai-services/openai/realtime-audio-quickstart?pivots=ai-foundry-portal&tabs=keyless%2Cwindows)
     - [Google Speech‑to‑Text](https://cloud.google.com/speech-to-text/docs?hl=es-419)
     - [SIP Trunks](https://voz.com/trunk-sip-landing-desktop/?utm_source=google&utm_medium=cpc&utm_campaign=16810016847&utm_content=1005424&utm_term=sip%20trunk%20espa%C3%B1a&utm_device=c&gad_source=1&gclid=CjwKCAiAtNK8BhBBEiwA8wVt92wmvKJRNT9DpvQQihnaYTcvRthKgJO5pRFoCuvWbUhpEUr5w6fU_hoCszkQAvD_BwE)
     - [¿En qué consisten las troncales SIP?](https://aws.amazon.com/es/what-is/sip-trunking/)
     - [Speech Assistant with Twilio Voice and the OpenAI Realtime API (Node.js)](https://github.com/twilio-samples/speech-assistant-openai-realtime-api-node)
         - [Tutorial](https://www.twilio.com/en-us/blog/voice-ai-assistant-openai-realtime-api-node)
+        
 - Vectors 
     - [Vectors in Azure AI Search](https://learn.microsoft.com/en-us/azure/search/vector-search-overview)
 - RAG
     - [What is retrieval-augmented generation?](https://research.ibm.com/blog/retrieval-augmented-generation-RAG)
+    - [SuperEasy 100% Local RAG with Ollama + Email RAG](https://github.com/AllAboutAI-YT/easy-local-rag)
 - Tutorials
     - [Desarrollé un Agente de IA Autónomo que Habla como un Humano Real](https://www.youtube.com/watch?v=pzLaFYkSudU)
     - [Cree el Agente de IA Autónomo Más Avanzado (Puede Hacer TODO)](https://www.youtube.com/watch?v=4mpef_cuymY)
