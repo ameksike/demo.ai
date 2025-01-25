@@ -4,7 +4,10 @@
 ```
 openia-assistant/
 ├── db/
-│   │   └── profile.10001.json
+│   ├── 10001/
+│   │   ├── image/
+│   │   ├── audio/
+│   │   └── profile.json
 ├── cfg/
 │   │   └── config.js
 ├── src/
@@ -53,17 +56,17 @@ openia-assistant/
 
 Simple profile specification:
 ```
-Hello, can you tell me the temperature in Barcelona? >>> profile.10001
+Hello, can you tell me the temperature in Barcelona? >>> 10001
 ```
 
 JSON metadata with profile specification:
 ```
-Hello, can you tell me the temperature in Barcelona? >>> { "name": "profile.10001" }
+Hello, can you tell me the temperature in Barcelona? >>> { "name": "10001" }
 ```
 
 Metadatos JSON con especificación de perfil y opciones de sobrescritura de perfil:
 ```
-Hello, can you tell me the temperature in Barcelona? >>> { "name": "profile.10001", "provider": "openia.completions" }
+Hello, can you tell me the temperature in Barcelona? >>> { "name": "10001", "provider": "openia.completions" }
 ```
 
 

@@ -31,11 +31,11 @@ export class Profile {
 
     async configure(payload = "default") {
         try {
-            let name = typeof payload === "string" ? payload : payload.name;
-            let meta = name && await srvConfig.load(name, "db");
+            this.name = (typeof payload === "string" ? payload : payload.name) || this.name;
+
+            let meta = await this.load();
             let data = { ...meta, ...(typeof payload === "object" && payload || {}) };
 
-            this.name = name || this.name;
             this.providerUrl = data.providerUrl || this.providerUrl;
             this.provider = data.provider || this.provider;
             this.stream = data.stream ?? this.stream;
@@ -73,8 +73,12 @@ export class Profile {
         }
     }
 
+    async load() {
+        return this.name && await srvConfig.load(this.name + "/profile", "db");
+    }
+
     save() {
-        return srvConfig.save(this.asDto(), this.name, "db");
+        return srvConfig.save(this.asDto(), this.name + "/profile", "db");
     }
 
     train(options = null) {

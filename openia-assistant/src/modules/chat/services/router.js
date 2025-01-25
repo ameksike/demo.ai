@@ -8,7 +8,7 @@ export async function extract(message) {
     try {
         let tmp = message.split(keyword);
         let msg = tmp[0].trim();
-        let meta = tmp.length > 1 ? KsCryp.decode(tmp[1].trim(), "json") : "profile.10001";
+        let meta = tmp.length > 1 ? KsCryp.decode(tmp[1].trim(), "json") : "10001";
         meta = typeof meta === "string" ? { name: meta } : meta;
 
         let profile = await (new Profile()).configure(meta);
