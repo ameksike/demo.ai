@@ -35,6 +35,7 @@
     - [Google Speech‑to‑Text](https://cloud.google.com/speech-to-text/docs?hl=es-419)
     - [SIP Trunks](https://voz.com/trunk-sip-landing-desktop/?utm_source=google&utm_medium=cpc&utm_campaign=16810016847&utm_content=1005424&utm_term=sip%20trunk%20espa%C3%B1a&utm_device=c&gad_source=1&gclid=CjwKCAiAtNK8BhBBEiwA8wVt92wmvKJRNT9DpvQQihnaYTcvRthKgJO5pRFoCuvWbUhpEUr5w6fU_hoCszkQAvD_BwE)
     - [¿En qué consisten las troncales SIP?](https://aws.amazon.com/es/what-is/sip-trunking/)
+    - [Speech Assistant with Twilio Voice and the OpenAI Realtime API (Node.js)](https://github.com/twilio-samples/speech-assistant-openai-realtime-api-node)
 - Vectors 
     - [Vectors in Azure AI Search](https://learn.microsoft.com/en-us/azure/search/vector-search-overview)
 - RAG
