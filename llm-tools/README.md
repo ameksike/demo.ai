@@ -38,7 +38,7 @@
     - [¿En qué consisten las troncales SIP?](https://aws.amazon.com/es/what-is/sip-trunking/)
     - [Speech Assistant with Twilio Voice and the OpenAI Realtime API (Node.js)](https://github.com/twilio-samples/speech-assistant-openai-realtime-api-node)
         - [Tutorial](https://www.twilio.com/en-us/blog/voice-ai-assistant-openai-realtime-api-node)
-        
+    - [Wav Tools](https://www.npmjs.com/package/wavtools/v/0.1.5): It is a library for both recording and streaming Waveform Audio (.wav) data in the browser. It is intended for managing PCM16 audio streams directly.    
 - Vectors 
     - [Vectors in Azure AI Search](https://learn.microsoft.com/en-us/azure/search/vector-search-overview)
 - RAG
