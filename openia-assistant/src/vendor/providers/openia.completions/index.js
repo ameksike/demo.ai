@@ -61,7 +61,7 @@ class OpenAICompletions extends ProviderAI {
             return stream;
         }
         catch (error) {
-            this.logger?.log({ src: "Provider:OpenAI:Completions:analyse", error });
+            this.logger?.error({ src: "Provider:OpenAI:Completions:analyse", error });
             return {
                 choices: [
                     {
