@@ -65,6 +65,9 @@ class LlanaAICompletions extends ProviderAI {
             } = options || {};
             const body = { stream, model, messages, tools, temperature, max_tokens, };
             const response = await fetchApi.post(url, body);
+            if (response.error) {
+                throw response.error;
+            }
             return response.body;
         } catch (error) {
             this.logger?.log({ src: "Provider:LlanaAI:send", error, data: options });
@@ -72,7 +75,7 @@ class LlanaAICompletions extends ProviderAI {
                 choices: [
                     {
                         message: {
-                            content: "ERROR: " + error.response?.data || error.message
+                            content: "ERROR: " + (error.response?.data || error.message)
                         }
                     }
                 ]

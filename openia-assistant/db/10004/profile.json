@@ -1,5 +1,5 @@
 {
-  "name": "profile.10004",
+  "name": "10004",
   "model": "ollama-llama3.1",
   "provider": "llama",
   "providerUrl": "",

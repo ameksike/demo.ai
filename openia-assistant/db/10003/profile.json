@@ -1,5 +1,5 @@
 {
-  "name": "profile.10003",
+  "name": "10003",
   "model": "openai-mini",
   "provider": "openia.assistants",
   "connectors": [
