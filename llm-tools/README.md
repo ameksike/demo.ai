@@ -26,9 +26,13 @@
 - [Twilio](https://www.twilio.com/en-us): Virtual phone numbers (including Europe)
 
 ## References
+- Hardware
+    - [Advanced Vector Extensions (AVX) Support](https://learn.microsoft.com/es-es/windows/win32/debug/avx-support-portal)
+
 - Models 
     - [Codificador de Qwen 2.5](https://www.datacamp.com/es/tutorial/qwen-coder-2-5?dc_referrer=https%3A%2F%2Fwww.google.com%2F)
     - [Huggingface](https://huggingface.co/models?sort=modified&search=ggml)
+
 - Voice
     - [OpenAI Realtime API](https://platform.openai.com/docs/guides/realtime/overview?text-generation-quickstart-example=audio)
         - [Guides](https://platform.openai.com/docs/guides/realtime)
@@ -39,11 +43,14 @@
     - [Speech Assistant with Twilio Voice and the OpenAI Realtime API (Node.js)](https://github.com/twilio-samples/speech-assistant-openai-realtime-api-node)
         - [Tutorial](https://www.twilio.com/en-us/blog/voice-ai-assistant-openai-realtime-api-node)
     - [Wav Tools](https://www.npmjs.com/package/wavtools/v/0.1.5): It is a library for both recording and streaming Waveform Audio (.wav) data in the browser. It is intended for managing PCM16 audio streams directly.    
+
 - Vectors 
     - [Vectors in Azure AI Search](https://learn.microsoft.com/en-us/azure/search/vector-search-overview)
+
 - RAG
     - [What is retrieval-augmented generation?](https://research.ibm.com/blog/retrieval-augmented-generation-RAG)
     - [SuperEasy 100% Local RAG with Ollama + Email RAG](https://github.com/AllAboutAI-YT/easy-local-rag)
+    
 - Tutorials
     - [Desarrollé un Agente de IA Autónomo que Habla como un Humano Real](https://www.youtube.com/watch?v=pzLaFYkSudU)
     - [Cree el Agente de IA Autónomo Más Avanzado (Puede Hacer TODO)](https://www.youtube.com/watch?v=4mpef_cuymY)
