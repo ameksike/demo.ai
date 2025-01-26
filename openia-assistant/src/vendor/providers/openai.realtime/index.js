@@ -40,7 +40,13 @@ class OpenAIRealtime extends ProviderAI {
                     ]
                 }
             }));
-            this.ws.send(KsCryp.encode({ type: 'response.create' }, "json"));
+            this.ws.send(KsCryp.encode({
+                type: 'response.create',
+                response: {
+                    modalities: ["audio", "text"],
+                    // instructions: "Give me a haiku about code.",
+                }
+            }, "json"));
             this.logger?.log({ src: "Provider:OpenAIRealtime:Send", data: { content: base64AudioData?.length } });
         }
         catch (error) {
@@ -51,6 +57,7 @@ class OpenAIRealtime extends ProviderAI {
     onIncoming(message) {
         try {
             const response = KsCryp.decode(message.toString(), "json");
+            this.logger?.log({ src: "Provider:OpenAIRealtime:onIncoming", data: response });
             switch (response.type) {
                 case this.state.responseDelta:
                     let chunk = audioTool.getChunk(response.delta);
@@ -103,8 +110,8 @@ class OpenAIRealtime extends ProviderAI {
             this.ws = new WebSocket(url, {
                 headers: {
                     "Authorization": "Bearer " + process.env.OPENAI_API_KEY,
+                    "OpenAI-Project": process.env.OPENAI_PROJECT,
                     "OpenAI-Beta": "realtime=v1",
-                    // "OpenAI-Project": process.env.PROJECT
                 },
             });
 
@@ -119,7 +126,7 @@ class OpenAIRealtime extends ProviderAI {
                 resolve(this);
             });
 
-            this.ws.on("message", (message) => this.onIncoming(message));
+            this.ws.on("message", this.onIncoming.bind(this));
 
         });
     }

@@ -94,6 +94,8 @@ Hello, can you tell me the temperature in Barcelona? >>> { "name": "10001", "pro
 - [OpenAI Assistants](https://platform.openai.com/assistants)
 
 ## References 
+- Realtime
+    - [Capabilities](https://platform.openai.com/docs/guides/realtime-model-capabilities)
 - [LM Studio](https://lmstudio.ai/)
     - [Docs](https://lmstudio.ai/docs)
     - [REST API](https://lmstudio.ai/docs/api/rest-api)
