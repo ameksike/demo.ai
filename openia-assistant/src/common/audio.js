@@ -42,7 +42,7 @@ export class AudioTool {
             const arrayBuffer = this.floatTo16BitPCM(float32Array);
             let binary = '';
             let bytes = new Uint8Array(arrayBuffer);
-            this.logger?.error({ src: "Common:AudioTool:floatTo16BitPCM", data: { length: bytes.length } });
+            this.logger?.log({ src: "Common:AudioTool:floatTo16BitPCM", data: { length: bytes.length } });
             for (let i = 0; i < bytes.length; i += chunkSize) {
                 let chunk = bytes.subarray(i, i + chunkSize);
                 binary += String.fromCharCode.apply(null, chunk);

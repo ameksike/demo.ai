@@ -24,6 +24,9 @@ class OpenAIRealtime extends ProviderAI {
 
     send(base64AudioData) {
         try {
+            if (!base64AudioData?.length) {
+                throw new Error("Empty data");
+            }
             this.ws.send(JSON.stringify({
                 type: "conversation.item.create",
                 item: {
