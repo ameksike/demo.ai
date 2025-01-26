@@ -8,7 +8,12 @@
       "name": "weather"
     },
     {
-      "name": "email"
+      "name": "email",
+      "config": {
+        "output": {
+          "user": "tonykssa@gmail.com"
+        }
+      }
     }
   ],
   "compatible": false,

@@ -45,6 +45,23 @@ export class ProviderAI {
     }
 
     /**
+     * @description transform a string to TMsg
+     * @param {String} content 
+     * @returns {TMsg} message
+     */
+    asMessage(content) {
+        return {
+            choices: [
+                {
+                    message: {
+                        content
+                    }
+                }
+            ]
+        }
+    }
+
+    /**
      * @param {TAiPayload} payload 
      * @returns {ProviderAI} self
      */
@@ -126,15 +143,7 @@ export class ProviderAI {
      * @returns {Promise<TResponse>} response 
      */
     analyse(messages, profile) {
-        return Promise.resolve({
-            choices: [
-                {
-                    message: {
-                        content: "No implementation provided"
-                    }
-                }
-            ]
-        });
+        return Promise.resolve(this.asMessage("No implementation provided"));
     }
 
     /**
@@ -195,8 +204,13 @@ export class ProviderAI {
      * @returns {Promise<string>} content 
      */
     async run(messages, profile) {
-        messages = typeof messages === "string" ? [{ "role": this.roles.user, "content": messages }] : messages;
-        let content = await this.process(messages, profile);
-        return content;
+        try {
+            messages = typeof messages === "string" ? [{ "role": this.roles.user, "content": messages }] : messages;
+            let content = await this.process(messages, profile);
+            return content;
+        }
+        catch (error) {
+            this.logger?.error({ src: "ProviderAI:run", data: { messages, profile } });
+        }
     }
 }

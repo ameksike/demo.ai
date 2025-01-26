@@ -52,7 +52,7 @@ class OpenAIAssistant extends OpenAICompletions {
             return this.cache.thread;
         }
         catch (error) {
-            this.logger?.log({ src: "Provider:OpenAI:Assistant:getAssistantThread", error });
+            this.logger?.error({ src: "Provider:OpenAI:Assistant:getAssistantThread", error });
             return null;
         }
     }
@@ -82,7 +82,7 @@ class OpenAIAssistant extends OpenAICompletions {
             return this.cache?.assistant;
         }
         catch (error) {
-            this.logger?.log({ src: "Provider:OpenAI:Assistant:getAssistant", error });
+            this.logger?.error({ src: "Provider:OpenAI:Assistant:getAssistant", error });
             return null;
         }
     }
@@ -159,7 +159,7 @@ class OpenAIAssistant extends OpenAICompletions {
             return await this.process(stream, thread);
         }
         catch (error) {
-            this.logger?.log({ src: "Provider:OpenAI:Assistant:getAssistantThread", error });
+            this.logger?.log({ src: "Provider:OpenAI:Assistant:notify", error });
             return null;
         }
     }
@@ -195,6 +195,7 @@ class OpenAIAssistant extends OpenAICompletions {
             let result = await this.fromStream(stream);
             return result;
         } catch (error) {
+            this.logger?.error({ src: "Provider:OpenAI:Assistant:analyse", error });
             return {
                 choices: [
                     {

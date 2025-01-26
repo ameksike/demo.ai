@@ -60,7 +60,7 @@ export async function get(options, task, profile) {
 export const definition = {
     type: "function",
     function: {
-        name: "weather_get",
+        name: "get",
         description: "Get current temperature for a given or address.",
         strict: true,
         parameters: {
