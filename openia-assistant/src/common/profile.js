@@ -150,7 +150,10 @@ export class Profile {
      * @returns {Array<TTask>}
      */
     async getTools(tools) {
-        let list = [];
+        if (!tools?.length) {
+            return [];
+        }
+        const list = [];
         await Promise.all(tools.map(tool => this.gatherTool(tool, list)));
         return list;
     }
