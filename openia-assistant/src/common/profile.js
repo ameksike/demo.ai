@@ -11,7 +11,9 @@ import config from "../../cfg/config.js";
 
 export class Profile {
 
-    constructor() {
+    constructor(options = null) {
+        const { logger = console } = options || {};
+        this.logger = logger;
         this.name = "default";
         this.model = config.models["basic"];
         this.thread = [];
@@ -51,7 +53,7 @@ export class Profile {
             this.tools = await this.getTools(this.connectors);
         }
         catch (error) {
-            console.log({ src: "Profile:configure", error, data: payload });
+            this.logger?.log({ src: "Profile:configure", error, data: payload });
         }
         return this;
     }
@@ -100,29 +102,57 @@ export class Profile {
         return this;
     }
 
+
+    /**
+     * @description Preprocess a tool and sit it in the list
+     * @param {TConnector} tool 
+     * @param {Array<TTask>} list 
+     */
+    async gatherTool(tool, list) {
+        try {
+            // Validate tool
+            if (!tool?.name) {
+                throw new Error("Invalid tool format");
+            }
+            // Custom tools do not require preprocess
+            if (tool?.definition) {
+                list.push(tool?.definition);
+                return;
+            }
+            // Get definition from Connector 
+            let connector = await ioc.getConnector(tool.name);
+            if (!connector?.definition) {
+                throw new Error("No definition found in Connector: " + tool.name);
+            }
+            // Supports multiple action definitions
+            let defTools = Array.isArray(connector?.definition) ? connector?.definition : [connector?.definition];
+            for (let defTool of defTools) {
+                // Validate tool definition and permissions 
+                if (!defTool?.function?.name || (tool?.allows?.length && !tool?.allows.includes(defTool.function.name))) {
+                    continue;
+                }
+                // Add profile tool name as prefix 
+                defTool.function.name = tool.name + "_" + defTool?.function?.name;
+                // Add custom context from profile tool
+                tool?.description && (defTool.function.description += " " + tool?.description);
+                // Include the function tool in the list
+                list.push(defTool);
+            }
+        }
+        catch (error) {
+            this.logger?.error({ src: "Profile:gatherTool", error, data: tool });
+        }
+    }
+
     /**
      * @description Resolve the task list 
      * @param {Array<TConnector>} tools 
      * @returns {Array<TTask>}
      */
     async getTools(tools) {
-        let tmp = Array.isArray(tools) && await Promise.all(tools.map(async tool => {
-            try {
-                if (tool?.definition) {
-                    return tool?.definition;
-                } else {
-                    let conn = tool?.name && await ioc.getConnector(tool.name);
-                    // Add custom context from profile
-                    let defTool = conn?.definition;
-                    tool?.description && (defTool.function.description += " " + tool?.description);
-                    return defTool;
-                }
-            }
-            catch (error) {
-                console.log({ src: "Profile:getTools", error, data: tool });
-            }
-        }));
-        return (Array.isArray(tmp) && tmp.filter(v => !!v)) || [];
+        let list = [];
+        await Promise.all(tools.map(tool => this.gatherTool(tool, list)));
+        return list;
     }
 
     /**

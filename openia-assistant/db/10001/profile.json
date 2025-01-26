@@ -10,11 +10,10 @@
     {
       "name": "email",
       "config": {
-        "apikey": "sdsdsdsd"
-      },
-      "allows": [
-        "read"
-      ]
+        "output": {
+          "user": "tonykssa@gmail.com"
+        }
+      }
     }
   ],
   "compatible": false,

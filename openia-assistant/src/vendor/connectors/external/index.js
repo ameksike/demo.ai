@@ -39,7 +39,7 @@ export const run = async (options) => {
 export const definition = {
     "type": "function",
     "function": {
-        "name": "external_search",
+        "name": "search",
         "description": "Query a knowledge base to retrieve relevant info on a topic.",
         "parameters": {
             "type": "object",

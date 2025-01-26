@@ -61,7 +61,7 @@ export class Locator {
      * @param {Object} [scope]
      * @returns {any} response
      */
-    async run(task, scope = {}) {
+    async run(task, scope = null) {
         try {
             let { lib, meta } = await this.get(task.name, { location: "vendor/connectors" });
             let action = lib && lib[meta.action];
@@ -69,7 +69,7 @@ export class Locator {
             if (!(action instanceof Function)) {
                 return null;
             }
-            return await action.apply(scope || {}, Array.isArray(args) ? args : [args]);
+            return await action.apply(scope || lib, Array.isArray(args) ? args : [args]);
         }
         catch (error) {
             this.logger?.log({ src: "Common:Locator:run", error });

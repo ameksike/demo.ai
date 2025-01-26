@@ -89,6 +89,8 @@ Hello, can you tell me the temperature in Barcelona? >>> { "name": "10001", "pro
 - [OpenAI Usage](https://platform.openai.com/settings/organization/usage)
     - [Usage](https://platform.openai.com/usage)
 - [OpenAI Billing](https://platform.openai.com/settings/organization/billing/overview)
+    - [Pricing](https://platform.openai.com/docs/pricing)
+    - [Models](https://platform.openai.com/docs/models)
 - [OpenAI Assistants](https://platform.openai.com/assistants)
 
 ## References 
