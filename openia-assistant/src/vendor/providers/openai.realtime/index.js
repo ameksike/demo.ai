@@ -17,8 +17,16 @@ class OpenAIRealtime extends ProviderAI {
             responseDone: "response.done",
         }
         this.status = this.state.disconnected;
-        this.defaults = {
-            buffer: audioTool.gather()
+        this.response = {
+            buffer: audioTool.gather(),
+            text: ""
+        };
+    }
+
+    clean() {
+        this.response = {
+            buffer: audioTool.gather(),
+            text: ""
         };
     }
 
@@ -61,8 +69,13 @@ class OpenAIRealtime extends ProviderAI {
             switch (response.type) {
                 case this.state.responseDelta:
                     let chunk = audioTool.getChunk(response.delta);
-                    audioTool.gather({ chunk, buffer: this.defaults.buffer });
+                    audioTool.gather({ chunk, buffer: this.response.buffer });
                     speackerTool.talk(chunk);
+                    this.answer && this.answer({
+                        type: "buffer",
+                        chunk,
+                        buffer: this.response.buffer
+                    });
                     break;
 
                 case this.state.responseDone:
@@ -71,8 +84,11 @@ class OpenAIRealtime extends ProviderAI {
 
                 case this.state.responsePartDone:
                     const { part } = response;
-                    console.log(part.transcript);
-                    console.log("\n");
+                    this.response.text += part.transcript;
+                    this.answer && this.answer({
+                        type: "text",
+                        content: part.transcript
+                    });
                     break;
             }
         }
@@ -81,16 +97,17 @@ class OpenAIRealtime extends ProviderAI {
         }
     }
 
-    async ask(message = "input-01", profile) {
-        const tmp = await audioTool.load(message, "db/" + profile.name + "/audio/")
+    async process(message = "input-01", profile) {
+        const tmp = await audioTool.load(message, "db/" + profile.name + "/audio/");
         const base64AudioData = await audioTool.toBase64(tmp)
         this.send(base64AudioData)
     }
 
-    async run(message, profile) {
+    async run(messages, profile, answer) {
         try {
+            this.answer = answer instanceof Function ? answer : null;
             await this.connect(profile);
-            this.ask(message, profile);
+            this.process(messages, profile);
             return "Let me think about it";
         }
         catch (error) {
@@ -127,7 +144,6 @@ class OpenAIRealtime extends ProviderAI {
             });
 
             this.ws.on("message", this.onIncoming.bind(this));
-
         });
     }
 

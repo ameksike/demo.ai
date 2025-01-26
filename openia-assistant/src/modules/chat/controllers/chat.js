@@ -26,7 +26,9 @@ export async function onMessage(msg, ws) {
         }
     });
 
-    let content = available && await provider.run(message, profile);
+    let content = available && await provider.run(message, profile, (payload) => {
+        ws.send(payload.content);
+    });
     profile?.save();
     ws.send(content ? content : "I don't have an answer for your question");
 }

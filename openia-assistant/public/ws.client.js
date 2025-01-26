@@ -7,10 +7,12 @@ const addMessage = (text, sender) => {
     const messageBox = document.createElement("span");
     const messageTxt = document.createElement("span");
     const messageDiv = document.createElement("div");
+
     messageTxt.textContent = text;
     messageTxt.className = "msg-txt";
     messageBox.className = "msg-box";
     messageDiv.className = `message ${sender}`;
+    
     //messageDiv.textContent = text;
     messageBox.appendChild(messageTxt);
     messageDiv.appendChild(messageBox);

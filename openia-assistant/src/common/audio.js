@@ -117,7 +117,7 @@ export class AudioTool {
         if (!chunk) {
             return buffer;
         }
-        return Buffer.concat([buffer, tmp]);
+        return Buffer.concat([buffer, chunk]);
     }
 }
 

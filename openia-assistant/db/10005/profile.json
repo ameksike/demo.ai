@@ -1,7 +1,8 @@
 {
   "name": "10005",
-  "provider": "openai.realtime",
   "model": "openai-voice-mini-preview",
+  "provider": "openai.realtime",
+  "providerUrl": "",
   "compatible": false,
   "stream": false,
   "roles": {
@@ -16,7 +17,7 @@
       "content": "input-01"
     }
   ],
-  "persist": true,
+  "persist": false,
   "training": null,
   "defaults": null
 }
