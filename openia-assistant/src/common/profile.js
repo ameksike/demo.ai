@@ -1,5 +1,5 @@
-import * as srvConfig from './config.js';
-import ioc from './locator.js';
+import * as srvConfig from './utils/config.js';
+import ioc from './utils/locator.js';
 import config from "../../cfg/config.js";
 
 /**

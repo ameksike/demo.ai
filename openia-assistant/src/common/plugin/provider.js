@@ -1,25 +1,15 @@
-import * as locator from './locator.js';
+import { Plugin } from './plugin.js';
 import KsCryp from 'kscryp';
 
 /**
- * @typedef  {import('./types.js').TMsg} TMsg
- * @typedef  {import('./types.js').TTask} TTask
- * @typedef  {import('./types.js').TResponse} TResponse 
- * @typedef  {import('./types.js').TAiPayload} TAiPayload 
- * @typedef  {import('./profile.js').Profile} TProfile 
+ * @typedef  {import('../types.js').TMsg} TMsg
+ * @typedef  {import('../types.js').TTask} TTask
+ * @typedef  {import('../types.js').TResponse} TResponse 
+ * @typedef  {import('../types.js').TAiPayload} TAiPayload 
+ * @typedef  {import('../profile.js').Profile} TProfile 
  */
 
-export class ProviderAI {
-
-    /**
-     * @type {typeof locator}
-     */
-    plugin;
-
-    /**
-     * @type {Console}
-     */
-    logger;
+export class Provider extends Plugin {
 
     /**
      * @type {Record<string, string>}
@@ -34,14 +24,15 @@ export class ProviderAI {
     /**
      * @param {TAiPayload} payload 
      */
-    constructor(payload = null) {
+    constructor(options = null) {
+        super(options)
         this.roles = {
             "assistant": "assistant",
             "system": "system",
             "tool": "tool",
             "user": "user",
         };
-        this.configure(payload);
+        this.configure(options);
     }
 
     /**
@@ -63,20 +54,11 @@ export class ProviderAI {
 
     /**
      * @param {TAiPayload} payload 
-     * @returns {ProviderAI} self
+     * @returns {Provider} self
      */
     configure(payload) {
-        const {
-            persist = true,
-            logger = console,
-            plugin = locator,
-            roles,
-        } = payload || {};
-
-        logger && (this.logger = logger);
-        plugin && (this.plugin = plugin?.default || plugin);
+        const { persist = true, roles } = payload || {};
         this.persist = persist ?? true;
-
         this.roles = { ...this.roles, ...roles };
         return this;
     }
@@ -92,13 +74,13 @@ export class ProviderAI {
             let { type, id, function: func } = task;
             let { arguments: args, name } = func;
             let response = { role: this.roles.tool, name, tool_call_id: id };
-            let result = type === "function" && await this.plugin.run({ name, args: [KsCryp.decode(args, "json"), task, profile] });
+            let result = type === "function" && await this.ioc.run({ name, args: [KsCryp.decode(args, "json"), task, profile] });
             if (!result) {
                 response.content = "Bad plugin request, there is no content to share.";
             } else {
                 response.content = KsCryp.encode({ name, output: result }, "json");
             }
-            this.logger?.log({ src: "ProviderAI:retrive", data: { name, id, content: result } });
+            this.logger?.log({ src: "Provider:retrive", data: { name, id, content: result } });
             return response;
         }));
         return res.filter(v => !!v);
@@ -130,7 +112,7 @@ export class ProviderAI {
      */
     checkMessages(messages, profile) {
         return Promise.resolve(profile?.compatible && Array.isArray(messages) ? messages.map(message => {
-            this.logger?.log({ src: "ProviderAI:checkMessages", data: { old: message.role, new: this.roles.tool } });
+            this.logger?.log({ src: "Provider:checkMessages", data: { old: message.role, new: this.roles.tool } });
             message.role = message.role === "function" ? this.roles.tool : message.role;
             return message;
         }) : messages);
@@ -210,7 +192,7 @@ export class ProviderAI {
             return content;
         }
         catch (error) {
-            this.logger?.error({ src: "ProviderAI:run", data: { messages, profile } });
+            this.logger?.error({ src: "Provider:run", data: { messages, profile } });
         }
     }
 }

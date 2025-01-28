@@ -1,6 +1,6 @@
 import decodeAudio from 'audio-decode';
 import fs from 'fs/promises';
-import { getFromMeta, path as _path } from './polyfill.js';
+import { getFromMeta, path as _path } from '../utils/polyfill.js';
 const { __dirname } = getFromMeta(import.meta);
 
 export class AudioTool {
@@ -118,6 +118,31 @@ export class AudioTool {
             return buffer;
         }
         return Buffer.concat([buffer, chunk]);
+    }
+
+
+    writeWavHeader(outputStream, options) {
+        const {
+            sampleRate,
+            numChannels = 1, // Mono
+            bitDepth = 16,
+            dataSize = 48000 // Default MediaRecorder sample rate
+        } = options || {}
+        const header = Buffer.alloc(44);
+        header.write('RIFF', 0, 4, 'ascii'); // Chunk ID
+        header.writeUInt32LE(36 + dataSize, 4); // Chunk size
+        header.write('WAVE', 8, 4, 'ascii'); // Format
+        header.write('fmt ', 12, 4, 'ascii'); // Sub-chunk 1 ID
+        header.writeUInt32LE(16, 16); // Sub-chunk 1 size (16 for PCM)
+        header.writeUInt16LE(1, 20); // Audio format (1 for PCM)
+        header.writeUInt16LE(numChannels, 22); // Number of channels
+        header.writeUInt32LE(sampleRate, 24); // Sample rate
+        header.writeUInt32LE(sampleRate * numChannels * bitDepth / 8, 28); // Byte rate
+        header.writeUInt16LE(numChannels * bitDepth / 8, 32); // Block align
+        header.writeUInt16LE(bitDepth, 34); // Bits per sample
+        header.write('data', 36, 4, 'ascii'); // Sub-chunk 2 ID
+        header.writeUInt32LE(dataSize, 40); // Sub-chunk 2 size
+        outputStream.write(header);
     }
 }
 

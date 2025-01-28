@@ -1,5 +1,5 @@
 import { WebSocketServer } from 'ws';
-import { __dirname } from './polyfill.js';
+import { __dirname } from '../utils/polyfill.js';
 
 const {
     WS_PORT = 8080,

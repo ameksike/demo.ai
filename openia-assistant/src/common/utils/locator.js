@@ -1,3 +1,4 @@
+import fs from 'fs/promises';
 import { getFromMeta, path } from './polyfill.js';
 const { __dirname } = getFromMeta(import.meta);
 
@@ -42,9 +43,18 @@ export class Locator {
                 return this.cache[location][name];
             }
             let meta = this.extract(name);
-            let file = path.resolve(__dirname, "../", location, meta.service, "index.js");
+            let file = path.resolve(__dirname, "../../", location, meta.service, "index.js");
             let mod = await import(new URL("file://" + file));
-            let lib = mod?.default instanceof Function ? new mod.default(...args) : (mod.default || mod);
+            let arg = [
+                {
+                    name,
+                    path: path.resolve(__dirname, "../../", location, meta.service),
+                    logger: this.logger,
+                    ioc: this
+                },
+                ...args
+            ];
+            let lib = mod?.default instanceof Function ? new mod.default(...arg) : (mod.default || mod);
             this.cache[location][name] = { mod, meta, default: mod.default || mod, lib };
             this.logger?.log({ src: "Common:Locator:get", data: { available: !!mod, file } });
             return this.cache[location][name];
@@ -88,6 +98,17 @@ export class Locator {
         return connector?.lib;
     }
 
+    getConnectorPath(name = "") {
+        return path.resolve(__dirname, "../../", "vendor/connectors", name || "");
+    }
+
+    getConnectors() {
+        return this.scan(
+            this.getConnectorPath(),
+            { recursive: false, filter: 'directories', extract: 'name' }
+        );
+    }
+
     /**
      * @description Get provider instance 
      * @param {*} name 
@@ -97,6 +118,50 @@ export class Locator {
     async getProvider(name, args) {
         const provider = await this.get(name, { args, location: "vendor/providers" });
         return provider?.lib;
+    }
+
+    getProviderPath(name = "") {
+        return path.resolve(__dirname, "../../", "vendor/providers", name || "");
+    }
+
+    getProviders() {
+        return this.scan(
+            this.getProviderPath(),
+            { recursive: false, filter: 'directories', extract: 'name' }
+        );
+    }
+
+    /**
+     * @description Scan a directory
+     * @param {String} directoryPath 
+     * @returns {Array<String>}
+     */
+    async scan(directoryPath, options = { recursive: true, filter: 'all', extract: 'path' }) {
+        try {
+            const entries = await fs.readdir(directoryPath, { withFileTypes: true });
+            function get({ extract, fullPath, entry }) {
+                switch (extract) {
+                    case 'name':
+                        return entry.name;
+                    case 'path':
+                        return fullPath;
+                    default:
+                        return entry;
+                }
+            }
+            const files = await Promise.all(entries.map(async (entry) => {
+                const fullPath = path.join(directoryPath, entry.name);
+                if (options.filter === 'directories' && !entry.isDirectory()) return;
+                if (options.filter === 'files' && entry.isDirectory()) return;
+                return entry.isDirectory() && options.recursive
+                    ? this.scan(fullPath, options)
+                    : get({ fullPath, entry, extract: options.extract });
+            }));
+            return files.flat().filter(Boolean);
+        } catch (err) {
+            console.error('Error listing files:', err);
+            return [];
+        }
     }
 }
 

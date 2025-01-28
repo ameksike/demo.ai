@@ -1,10 +1,10 @@
 import express from 'express';
-import { __dirname, join } from './polyfill.js';
+import { __dirname, join } from '../utils/polyfill.js';
 
 const {
     PORT = 3000,
     VIEWS_PATH = '../views',
-    WWW_PATH = '../../public',
+    WWW_PATH = '../../../public',
     WWW_ROUTE = '/public'
 } = process.env;
 
@@ -14,7 +14,6 @@ export function start(options) {
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    app.use(express.static(join(__dirname, VIEWS_PATH)));
     app.use(WWW_ROUTE, express.static(join(__dirname, WWW_PATH)));
 
     if (routes) {
