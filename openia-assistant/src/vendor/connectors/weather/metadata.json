@@ -1,0 +1,44 @@
+{
+    "name": "Weather Connector",
+    "description": "A RAG (Retrieval-Augmented Generation) plugin for an AI agent serves as a tool to obtain weather analyses by retrieving and generating up-to-date weather information and forecasts based on user queries and external data sources.",
+    "tools": [
+        {
+            "type": "function",
+            "function": {
+                "name": "get",
+                "description": "Get current temperature for a given or address.",
+                "strict": true,
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "latitude": {
+                            "type": "number"
+                        },
+                        "longitude": {
+                            "type": "number"
+                        },
+                        "city": {
+                            "type": "string",
+                            "description": "City like: Bogotá, Barcelona"
+                        },
+                        "country": {
+                            "type": "string",
+                            "description": "Country like: Colombia, Spain"
+                        },
+                        "postal": {
+                            "type": "string",
+                            "description": "Postal code, post code or zip code like: 08018, 08020"
+                        }
+                    },
+                    "required": [
+                        "latitude",
+                        "longitude",
+                        "city",
+                        "country"
+                    ],
+                    "additionalProperties": false
+                }
+            }
+        }
+    ]
+}
