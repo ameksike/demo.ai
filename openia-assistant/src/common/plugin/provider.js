@@ -127,6 +127,7 @@ export class Provider extends Plugin {
         return Promise.resolve(profile?.compatible && Array.isArray(messages) ? messages.map(message => {
             this.logger?.log({ src: "Provider:checkMessages", data: { old: message.role, new: this.roles.tool } });
             message.role = message.role === "function" ? this.roles.tool : message.role;
+            delete message["usage"];
             return message;
         }) : messages);
     }
