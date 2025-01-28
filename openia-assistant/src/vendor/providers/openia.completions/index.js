@@ -48,7 +48,7 @@ class OpenAICompletions extends Provider {
         try {
             const stream = await this.driver.chat.completions.create({
                 stream: profile.stream,
-                model: profile.model,
+                model: await this.getModel(profile.model),
                 tools: profile.tools,
                 messages,
             });

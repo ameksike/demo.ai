@@ -1,12 +1,11 @@
-import * as srvConfig from './utils/config.js';
-import ioc from './utils/locator.js';
-import config from "../../cfg/config.js";
+import * as srvConfig from '../../../common/utils/config.js';
+import ioc from '../../../common/utils/locator.js';
 
 /**
- * @typedef  {import('./types.js').TMsg} TMsg
- * @typedef  {import('./types.js').TTask} TTask
- * @typedef  {import('./types.js').TResponse} TResponse 
- * @typedef  {import('./types.js').TConnector} TConnector 
+ * @typedef  {import('../../../common/types.js').TMsg} TMsg
+ * @typedef  {import('../../../common/types.js').TTask} TTask
+ * @typedef  {import('../../../common/types.js').TResponse} TResponse 
+ * @typedef  {import('../../../common/types.js').TConnector} TConnector 
  */
 
 export class Profile {
@@ -15,7 +14,7 @@ export class Profile {
         const { logger = console } = options || {};
         this.logger = logger;
         this.name = "default";
-        this.model = config.models["basic"];
+        this.model = "";
         this.thread = [];
         this.stream = false;
         this.provider = "llama";
@@ -47,13 +46,12 @@ export class Profile {
             this.training = data.training || this.training;
             this.defaults = data.defaults || this.defaults;
             this.roles = { ...this.roles, ...data.roles };
-            this.model = config.models[data.model] || this.model;
-            this.modelKey = data.model;
+            this.model = data.model;
             this.connectors = data.connectors;
             this.tools = await this.getTools(this.connectors);
         }
         catch (error) {
-            this.logger?.log({ src: "Profile:configure", error, data: payload });
+            this.logger?.log({ src: "Service:Profile:configure", error, data: payload });
         }
         return this;
     }
@@ -61,7 +59,7 @@ export class Profile {
     asDto() {
         return {
             name: this.name,
-            model: this.modelKey,
+            model: this.model,
             provider: this.provider,
             providerUrl: this.providerUrl,
             connectors: this.connectors,
@@ -121,11 +119,12 @@ export class Profile {
             }
             // Get definition from Connector 
             let connector = await ioc.getConnector(tool.name);
-            if (!connector?.definition) {
+            let metadata = await connector.metadata;
+            if (!metadata?.tools) {
                 throw new Error("No definition found in Connector: " + tool.name);
             }
             // Supports multiple action definitions
-            let defTools = Array.isArray(connector?.definition) ? connector?.definition : [connector?.definition];
+            let defTools = Array.isArray(metadata?.tools) ? metadata?.tools : [metadata?.tools];
             for (let defTool of defTools) {
                 // Validate tool definition and permissions 
                 if (!defTool?.function?.name || (tool?.allows?.length && !tool?.allows.includes(defTool.function.name))) {
@@ -140,7 +139,7 @@ export class Profile {
             }
         }
         catch (error) {
-            this.logger?.error({ src: "Profile:gatherTool", error, data: tool });
+            this.logger?.error({ src: "Service:Profile:gatherTool", error, data: tool });
         }
     }
 

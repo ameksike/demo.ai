@@ -6,7 +6,7 @@ import KsCryp from 'kscryp';
  * @typedef  {import('../types.js').TTask} TTask
  * @typedef  {import('../types.js').TResponse} TResponse 
  * @typedef  {import('../types.js').TAiPayload} TAiPayload 
- * @typedef  {import('../profile.js').Profile} TProfile 
+ * @typedef  {import('../../modules/profile/services/profile.js').Profile} TProfile 
  */
 
 export class Provider extends Plugin {
@@ -33,6 +33,15 @@ export class Provider extends Plugin {
             "user": "user",
         };
         this.configure(options);
+    }
+
+    async getModel(alias) {
+        try {
+            return (await this.metadata)?.models[alias]
+        }
+        catch (error) {
+            this.logger?.error({ src: "Provider:getModel", error: error?.message, data: { alias } });
+        }
     }
 
     /**

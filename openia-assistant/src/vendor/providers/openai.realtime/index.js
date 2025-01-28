@@ -116,13 +116,15 @@ class OpenAIRealtime extends Provider {
     }
 
     connect(profile) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             if (this.status === this.state.connected) {
                 return resolve(this);
             }
 
             let url = profile.url || "wss://api.openai.com/v1/realtime";
-            url += "?model=" + profile.model;
+            let model = await this.getModel(profile.model);
+
+            url += "?model=" + model;
 
             this.ws = new WebSocket(url, {
                 headers: {

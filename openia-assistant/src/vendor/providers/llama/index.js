@@ -28,8 +28,8 @@ class LlanaAICompletions extends Provider {
             const stream = await this.send({
                 url: profile.url,
                 stream: profile.stream,
-                model: profile.model,
                 tools: profile.tools,
+                model: await this.getModel(profile.model),
                 messages,
             });
             return stream;

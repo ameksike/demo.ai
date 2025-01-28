@@ -72,7 +72,7 @@ class OpenAIAssistant extends OpenAICompletions {
                 : await this.driver.beta.assistants.create({
                     instructions: profile?.training?.instructions,
                     name: profile.training?.name,
-                    model: profile.model,
+                    model: await this.getModel(profile.model),
                     tools: profile.tools,
                 });
 

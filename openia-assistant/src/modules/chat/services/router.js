@@ -1,5 +1,5 @@
-import ioc from '../../../common/locator.js';
-import { Profile } from '../../../common/profile.js';
+import ioc from '../../../common/utils/locator.js';
+import { Profile } from '../../profile/services/profile.js';
 import KsCryp from 'kscryp';
 
 const keyword = ">>>";

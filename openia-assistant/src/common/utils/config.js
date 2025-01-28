@@ -13,7 +13,7 @@ const { __dirname } = getFromMeta(import.meta);
  */
 export async function load(name = "content", path = "", ext = ".json") {
     try {
-        const filePath = _path.resolve(__dirname, "../../", path, name + ext);
+        const filePath = _path.resolve(__dirname, "../../../", path, name + ext);
         const data = await fs.readFile(filePath, 'utf8');
         return KsCryp.decode(data, "json");
     } catch (error) {
@@ -35,7 +35,7 @@ export async function load(name = "content", path = "", ext = ".json") {
  */
 export async function save(data, name = "content", path = "", ext = ".json") {
     try {
-        const filePath = _path.resolve(__dirname, "../../", path, name + ext);
+        const filePath = _path.resolve(__dirname, "../../../", path, name + ext);
         const strData = KsCryp.encode(data, "json", { space: 2 });
         strData && await fs.writeFile(filePath, strData);
         return data;
