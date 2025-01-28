@@ -1,0 +1,11 @@
+{
+    "name": "OpenAI Completions Provider",
+    "description": "A classified provider plugin enables a platform to interact with an artificial intelligence service like OpenAI by implementing its completions solution, facilitating seamless integration and enhanced functionality.",
+    "models": {
+        "openai-basic-2": "gpt-3.5-turbo-0125",
+        "openai-basic-1": "gpt-3.5-turbo",
+        "openai-mini": "gpt-4o-mini",
+        "openai-average": "gpt-4",
+        "openai-advanced": "gpt-4o"
+    }
+}

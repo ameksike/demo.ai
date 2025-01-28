@@ -1,14 +1,12 @@
 import nodemailer from "nodemailer";
-import dotenv from "dotenv";
-import { getFromMeta, path } from '../../../common/polyfill.js';
-import { Connector } from "../../../common/connector.js";
+import { getFromMeta, path } from '../../../common/utils/polyfill.js';
+import { Connector } from "../../../common/plugin/connector.js";
 
 /**
  * @link https://www.nodemailer.com/smtp/oauth2/
  * @link https://console.developers.google.com/
  */
 
-dotenv.config();
 const { __dirname } = getFromMeta(import.meta);
 const {
     EMAIL_IN_HOST,
@@ -32,7 +30,7 @@ const {
     EMAIL_PATH
 } = process.env;
 
-export class Email extends Connector {
+class Email extends Connector {
 
     configure(options = null) {
         return {
@@ -58,76 +56,6 @@ export class Email extends Connector {
                 token: options?.input?.token || EMAIL_IN_TOKEN,
             }
         }
-    }
-
-    /**
-     * Public action definition 
-     */
-    get definition() {
-        return [
-            {
-                "type": "function",
-                "function": {
-                    "name": "send",
-                    "description": "Send an email to a given recipient with a subject and message.",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "to": {
-                                "type": "string",
-                                "description": "The recipient email address."
-                            },
-                            "subject": {
-                                "type": "string",
-                                "description": "Email subject line."
-                            },
-                            "body": {
-                                "type": "string",
-                                "description": "Body of the email message."
-                            }
-                        },
-                        "required": [
-                            "to",
-                            "subject",
-                            "body"
-                        ],
-                        "additionalProperties": false
-                    },
-                    "strict": true
-                }
-            },
-            {
-                "type": "function",
-                "function": {
-                    "name": "read",
-                    "description": "Send an email to a given recipient with a subject and message.",
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            "to": {
-                                "type": "string",
-                                "description": "The recipient email address."
-                            },
-                            "subject": {
-                                "type": "string",
-                                "description": "Email subject line."
-                            },
-                            "body": {
-                                "type": "string",
-                                "description": "Body of the email message."
-                            }
-                        },
-                        "required": [
-                            "to",
-                            "subject",
-                            "body"
-                        ],
-                        "additionalProperties": false
-                    },
-                    "strict": true
-                }
-            }
-        ]
     }
 
     /**

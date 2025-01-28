@@ -1,5 +1,5 @@
 import { OpenAI } from "openai";
-import { ProviderAI } from "../../../common/provider.ai.js";
+import { Provider } from "../../../common/plugin/provider.js";
 
 /**
  * @typedef  {import('../../../common/types.js').TMsg} TMsg
@@ -7,18 +7,12 @@ import { ProviderAI } from "../../../common/provider.ai.js";
  * @typedef  {import('../../../models/profile.js').Profile} TProfile 
  */
 
-class OpenAICompletions extends ProviderAI {
+class OpenAICompletions extends Provider {
 
     constructor(config) {
-        super({
-            logger: config?.logger,
-            plugin: config?.plugin,
-            persist: config?.persist,
-            roles: {
-                "tool": "function",
-                ...config?.roles
-            }
-        });
+        config = config || {};
+        config.roles = { "tool": "function", ...config?.roles }
+        super(config);
 
         // define OpenAI SDK
         this.driver = new OpenAI({

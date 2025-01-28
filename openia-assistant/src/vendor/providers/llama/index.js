@@ -1,5 +1,5 @@
-import fetchApi from '../../../common/fetch.api.js';
-import { ProviderAI } from "../../../common/provider.ai.js";
+import fetchApi from '../../../common/utils/fetch.api.js';
+import { Provider } from "../../../common/plugin/provider.js";
 
 /**
  * @link https://lmstudio.ai/docs/api/rest-api
@@ -15,7 +15,7 @@ const {
     LLAMA_API_URL = "http://127.0.0.1:1234"
 } = process.env;
 
-class LlanaAICompletions extends ProviderAI {
+class LlanaAICompletions extends Provider {
 
     /**
      * @description Overwritable function for prosess a group of messages in a thread

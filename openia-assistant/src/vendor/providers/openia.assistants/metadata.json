@@ -1,0 +1,11 @@
+{
+    "name": "OpenAI Assistant Provider",
+    "description": "A classified provider plugin allows a platform to interact with an artificial intelligence service like OpenAI by implementing its Assistant solution, enabling seamless integration and enhanced user assistance capabilities.",
+    "models": {
+        "openai-basic-2": "gpt-3.5-turbo-0125",
+        "openai-basic-1": "gpt-3.5-turbo",
+        "openai-mini": "gpt-4o-mini",
+        "openai-average": "gpt-4",
+        "openai-advanced": "gpt-4o"
+    }
+}

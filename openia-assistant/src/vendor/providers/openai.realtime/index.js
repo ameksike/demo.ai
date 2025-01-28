@@ -1,11 +1,11 @@
 import WebSocket from "ws";
 import KsCryp from 'kscryp';
 
-import audioTool from "../../../common/audio.js";
-import speackerTool from "../../../common/speacker.js";
-import { ProviderAI } from "../../../common/provider.ai.js";
+import audioTool from "../../../common/driver/audio.js";
+import speackerTool from "../../../common/driver/speacker.js";
+import { Provider } from "../../../common/plugin/provider.js";
 
-class OpenAIRealtime extends ProviderAI {
+class OpenAIRealtime extends Provider {
 
     constructor(config) {
         super(config);
