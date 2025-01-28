@@ -37,7 +37,7 @@ export class Provider extends Plugin {
 
     async getModel(alias) {
         try {
-            return (await this.metadata)?.models[alias]
+            return (await this.metadata).models[alias].name;
         }
         catch (error) {
             this.logger?.error({ src: "Provider:getModel", error: error?.message, data: { alias } });
@@ -113,6 +113,10 @@ export class Provider extends Plugin {
         return (response?.choices?.length && response?.choices[0])?.message.content;
     }
 
+    getUsage(response) {
+        return response?.usage;
+    }
+
     /**
      * @description Check message compatibility between providers, If profile.compatible is active it has a negative impact on performance
      * @param {Array<TMsg>} messages 
@@ -181,9 +185,10 @@ export class Provider extends Plugin {
 
         // Get content result 
         const content = this.getContent(response);
+        const usage = this.getUsage(response);
 
         // Keep messages in the conversation thread if required
-        profile?.process(content);
+        profile?.process({ role: this.roles.assistant, content, usage });
 
         return content;
     }

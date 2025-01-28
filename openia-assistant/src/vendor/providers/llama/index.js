@@ -15,7 +15,7 @@ const {
     LLAMA_API_URL = "http://127.0.0.1:1234"
 } = process.env;
 
-class LlanaAICompletions extends Provider {
+class LlamaAICompletions extends Provider {
 
     /**
      * @description Overwritable function for prosess a group of messages in a thread
@@ -70,7 +70,7 @@ class LlanaAICompletions extends Provider {
             }
             return response.body;
         } catch (error) {
-            this.logger?.error({ src: "Provider:LlanaAI:send", error, data: options });
+            this.logger?.error({ src: "Provider:LlamaAI:send", error, data: options });
             return {
                 choices: [
                     {
@@ -84,4 +84,4 @@ class LlanaAICompletions extends Provider {
     }
 }
 
-export default LlanaAICompletions;
+export default LlamaAICompletions;

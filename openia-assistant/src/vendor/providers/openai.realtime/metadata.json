@@ -2,8 +2,29 @@
     "name": "OpenAI Realtime Provider",
     "description": "A classified provider plugin enables a platform to interact with an artificial intelligence service like OpenAI by implementing its Realtime solution, facilitating instantaneous data processing and dynamic user interactions.",
     "models": {
-        "openai-voice-preview": "gpt-4o-realtime-preview-2024-10-01",
-        "openai-voice-mini-preview": "gpt-4o-mini-realtime-preview-2024-12-17",
-        "openai-voice-mini-4o": "gpt-4o-mini-audio-preview"
+        "openai-voice-preview": {
+            "name": "gpt-4o-realtime-preview-2024-10-01",
+            "price": {
+                "input": 0.003,
+                "output": 0.006,
+                "training": 0.008
+            }
+        },
+        "openai-voice-mini-preview": {
+            "name": "gpt-4o-mini-realtime-preview-2024-12-17",
+            "price": {
+                "input": 0.003,
+                "output": 0.006,
+                "training": 0.008
+            }
+        },
+        "openai-voice-mini-4o": {
+            "name": "gpt-4o-mini-audio-preview",
+            "price": {
+                "input": 0.003,
+                "output": 0.006,
+                "training": 0.008
+            }
+        }
     }
 }

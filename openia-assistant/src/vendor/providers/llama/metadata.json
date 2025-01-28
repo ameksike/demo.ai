@@ -2,7 +2,21 @@
     "name": "Llama Provider",
     "description": "A classified provider plugin enables a platform to interact with an AI provider based on Llama, supported by OpenAI's API, and compatible with servers like LM Studio and oLLAma, facilitating advanced AI integrations and enhanced computational capabilities.",
     "models": {
-        "lmstudio-qwen2.5": "qwen2.5-7b-instruct",
-        "ollama-llama3.1": "llama3.1:latest"
+        "lmstudio-qwen2.5": {
+            "name": "qwen2.5-7b-instruct",
+            "price": {
+                "input": 0,
+                "output": 0,
+                "training": 0
+            }
+        },
+        "ollama-llama3.1": {
+            "name": "llama3.1:latest",
+            "price": {
+                "input": 0,
+                "output": 0,
+                "training": 0
+            }
+        }
     }
 }
