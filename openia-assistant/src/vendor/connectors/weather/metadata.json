@@ -34,7 +34,8 @@
                         "latitude",
                         "longitude",
                         "city",
-                        "country"
+                        "country",
+                        "postal"
                     ],
                     "additionalProperties": false
                 }
