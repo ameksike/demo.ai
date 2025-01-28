@@ -10,7 +10,9 @@ class Weather extends Connector {
      */
     async getCoordinates(address) {
         try {
-            return await axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${address}`);
+            let response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${address}`);
+            let result = await response.json();
+            return result;
         }
         catch (error) {
             console.log({ src: "Connector:Weather:getCoordinates", error, data: address });
@@ -31,7 +33,7 @@ class Weather extends Connector {
             if (!latitude && !longitude) {
                 let inf = Object.values(address).join(",")
                 if (inf.length) {
-                    let res = await getCoordinates(inf);
+                    let res = await this.getCoordinates(inf);
                     options.extra = res.data[0];
                     latitude = options.extra.lat;
                     longitude = options.extra.lon;
