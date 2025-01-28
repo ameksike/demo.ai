@@ -130,12 +130,17 @@ export class Profile {
                 if (!defTool?.function?.name || (tool?.allows?.length && !tool?.allows.includes(defTool.function.name))) {
                     continue;
                 }
-                // Add profile tool name as prefix 
-                defTool.function.name = tool.name + "_" + defTool?.function?.name;
-                // Add custom context from profile tool
-                tool?.description && (defTool.function.description += " " + tool?.description);
                 // Include the function tool in the list
-                list.push(defTool);
+                list.push({
+                    type: defTool?.type,
+                    function: {
+                        ...defTool.function,
+                        // Add profile tool name as prefix 
+                        name: tool.name + "_" + (defTool?.function?.name || "run"),
+                        // Add custom context from profile tool
+                        description: (defTool.function.description || "") + " " + (tool?.description || "")
+                    }
+                });
             }
         }
         catch (error) {

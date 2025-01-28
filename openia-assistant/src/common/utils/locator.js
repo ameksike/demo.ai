@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { getFromMeta, path } from './polyfill.js';
+import { getFromMeta, path as _path } from './polyfill.js';
 const { __dirname } = getFromMeta(import.meta);
 
 export class Locator {
@@ -11,8 +11,15 @@ export class Locator {
 
     constructor(options = null) {
         this.cache = options?.cache || {};
-        this.path = options?.path || "vendor/connectors";
         this.logger = options?.logger || console;
+    }
+
+    get path() {
+        return _path.resolve(__dirname, "../../../");
+    }
+
+    pathTo(...args) {
+        return _path.resolve(this.path, ...args);
     }
 
     /**
@@ -34,7 +41,7 @@ export class Locator {
      * @returns {{mod:Object; meta:{action: string; service: string;}}} service descriptor
      */
     async get(name, options) {
-        const { args = [], location = this.path } = options || null;
+        const { args = [], location = "src/vendor/connectors" } = options || null;
         try {
             if (!this.cache[location]) {
                 this.cache[location] = {};
@@ -43,12 +50,12 @@ export class Locator {
                 return this.cache[location][name];
             }
             let meta = this.extract(name);
-            let file = path.resolve(__dirname, "../../", location, meta.service, "index.js");
+            let file = _path.resolve(this.path, location, meta.service, "index.js");
             let mod = await import(new URL("file://" + file));
             let arg = [
                 {
                     name,
-                    path: path.resolve(__dirname, "../../", location, meta.service),
+                    path: _path.resolve(this.path, location, meta.service),
                     logger: this.logger,
                     ioc: this
                 },
@@ -73,7 +80,7 @@ export class Locator {
      */
     async run(task, scope = null) {
         try {
-            let { lib, meta } = await this.get(task.name, { location: "vendor/connectors" });
+            let { lib, meta } = await this.get(task.name, { location: "src/vendor/connectors" });
             let action = lib && lib[meta.action];
             let args = task.arguments || task.args;
             if (!(action instanceof Function)) {
@@ -94,12 +101,12 @@ export class Locator {
      * @returns {*} connector
      */
     async getConnector(name, args) {
-        const connector = await this.get(name, { args, location: "vendor/connectors" });
+        const connector = await this.get(name, { args, location: "src/vendor/connectors" });
         return connector?.lib;
     }
 
     getConnectorPath(name = "") {
-        return path.resolve(__dirname, "../../", "vendor/connectors", name || "");
+        return _path.resolve(this.path, "src/vendor/connectors", name || "");
     }
 
     getConnectors() {
@@ -116,12 +123,12 @@ export class Locator {
      * @returns {*} connector
      */
     async getProvider(name, args) {
-        const provider = await this.get(name, { args, location: "vendor/providers" });
+        const provider = await this.get(name, { args, location: "src/vendor/providers" });
         return provider?.lib;
     }
 
     getProviderPath(name = "") {
-        return path.resolve(__dirname, "../../", "vendor/providers", name || "");
+        return _path.resolve(this.path, "src/vendor/providers", name || "");
     }
 
     getProviders() {
@@ -150,7 +157,7 @@ export class Locator {
                 }
             }
             const files = await Promise.all(entries.map(async (entry) => {
-                const fullPath = path.join(directoryPath, entry.name);
+                const fullPath = _path.join(directoryPath, entry.name);
                 if (options.filter === 'directories' && !entry.isDirectory()) return;
                 if (options.filter === 'files' && entry.isDirectory()) return;
                 return entry.isDirectory() && options.recursive
