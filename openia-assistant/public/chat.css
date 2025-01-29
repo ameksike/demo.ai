@@ -9,7 +9,7 @@ body {
     height: 100vh;
 }
 
-#chat-container {
+.container {
     width: 400px;
     background: white;
     border-radius: 8px;
@@ -17,6 +17,11 @@ body {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+}
+
+.container textarea {
+    max-width: 98%;
+    min-width: 98%;
 }
 
 .chat-box {
