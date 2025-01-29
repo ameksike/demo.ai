@@ -40,7 +40,6 @@ export class Profile {
             this.providerUrl = data.providerUrl || this.providerUrl;
             this.provider = data.provider || this.provider;
             this.stream = data.stream ?? this.stream;
-            this.thread = data.thread || this.thread;
             this.persist = data.persist ?? this.persist;
             this.compatible = data.compatible ?? this.compatible;
             this.training = data.training || this.training;
@@ -49,6 +48,8 @@ export class Profile {
             this.model = data.model;
             this.connectors = data.connectors;
             this.tools = await this.getTools(this.connectors);
+            this.userId = payload?.userId;
+            this.thread = await this.loadThread(this.userId) || [];
         }
         catch (error) {
             this.logger?.log({ src: "Service:Profile:configure", error, data: payload });
@@ -66,7 +67,6 @@ export class Profile {
             compatible: this.compatible,
             stream: this.stream,
             roles: this.roles,
-            thread: this.thread,
             persist: this.persist,
             training: this.training,
             defaults: this.defaults,
@@ -77,7 +77,16 @@ export class Profile {
         return this.name && await srvConfig.load(this.name + "/profile", "db");
     }
 
+    async loadThread(userId) {
+        return this.name && await srvConfig.load(this.name + "/thread/" + userId + "/history", "db");
+    }
+
+    saveThread(userId) {
+        return srvConfig.save(this.thread, this.name + "/thread/" + userId + "/history", "db");
+    }
+
     save() {
+        this.saveThread(this.userId);
         return srvConfig.save(this.asDto(), this.name + "/profile", "db");
     }
 

@@ -6,7 +6,7 @@ const keyword = ">>>";
 
 export async function extract(user) {
     try {
-        let profile = await (new Profile()).configure(user.profile);
+        let profile = await (new Profile()).configure({ ...user.profile, userId: user.id });
         let provider = await ioc.getProvider(profile?.provider);
         let available = provider.run instanceof Function;
 
