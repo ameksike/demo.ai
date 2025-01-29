@@ -1,5 +1,5 @@
 import express from 'express';
-import { getFromMeta, path } from '../../../common/polyfill.js';
+import { getFromMeta, path } from '../../../common/utils/polyfill.js';
 import * as srvRouter from '../services/router.js';
 
 /**
@@ -7,8 +7,8 @@ import * as srvRouter from '../services/router.js';
  * @param {string} message 
  * @param {import('ws').WebSocket} ws 
  */
-export async function onMessage(msg, ws) {
-    const { available, provider, profile, message, keyword } = await srvRouter.extract(msg)
+export async function onMessage(req, res) {
+    const { available, provider, profile, message = req.body, keyword } = await srvRouter.extract(res.user);
 
     console.log({
         src: "Controller:Chat:onMessage",
@@ -16,21 +16,19 @@ export async function onMessage(msg, ws) {
             profile: profile?.name,
             provider: {
                 available,
-                name: profile?.provider
-            },
-            mode: {
+                isBinary: req.isBinary,
+                name: profile?.provider,
                 name: profile.model,
-                alias: profile.modelKey,
             },
             message, keyword
         }
     });
 
     let content = available && await provider.run(message, profile, (payload) => {
-        ws.send(payload.content);
+        res.send(payload.content);
     });
     profile?.save();
-    ws.send(content ? content : "I don't have an answer for your question");
+    res.send(content ? content : "I don't have an answer for your question");
 }
 
 /**
@@ -44,9 +42,20 @@ export function onGet(req, res) {
 }
 
 /**
+ * Home page chat controller
+ * @param {*} req 
+ * @param {*} res 
+ */
+export function onMicro(req, res) {
+    const { __dirname } = getFromMeta(import.meta);
+    res.sendFile(path.join(__dirname, '../views/audio.html'));
+}
+
+/**
  * Export Router definition  
  */
 const router = express.Router();
 router.get('/', onGet);
+router.get('/micro', onMicro);
 export { router };
 export default router;

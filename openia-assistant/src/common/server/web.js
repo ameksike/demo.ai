@@ -3,7 +3,6 @@ import { __dirname, join } from '../utils/polyfill.js';
 
 const {
     PORT = 3000,
-    VIEWS_PATH = '../views',
     WWW_PATH = '../../../public',
     WWW_ROUTE = '/public'
 } = process.env;

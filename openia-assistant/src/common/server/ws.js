@@ -5,39 +5,83 @@ const {
     WS_PORT = 8080,
 } = process.env;
 
-export function start(options) {
-    const { port = WS_PORT, routes, server } = options || {};
-    const wss = new WebSocketServer(server ? { server } : { port });
+export class SimpleWebSocket {
 
-    wss.on('connection', (ws) => {
+    constructor(options) {
+        this.logger = options?.logger || console;
+    }
 
-        console.log({
-            src: "server:WEB_Socket:Start",
-            data: { url: `http://localhost:${port}`, port }
+    start(options) {
+        const { port = WS_PORT, routes, server } = options || {};
+        const wss = new WebSocketServer(server ? { server } : { port });
+
+        wss.on('connection', (ws, req) => {
+            this.logger?.log({
+                src: "server:WEB_Socket:Start",
+                data: { url: `http://localhost:${port}`, port }
+            });
+
+            this.run({ route: 'connection', routes, req, res: ws });
+
+            ws.on('error', error => this.run({ route: 'error', routes, req: { error }, res: ws }));
+
+            ws.on("close", (code, reason) => this.run({ route: 'close', routes, req: { code, reason }, res: ws }));
+
+            ws.on('message', async (data, isBinary) => {
+                const message = isBinary ? data : data.toString();
+                const inf = this.extract(!isBinary && message);
+                this.run({
+                    route: inf?.route,
+                    routes,
+                    req: { req, body: message, isBinary, data },
+                    res: ws
+                });
+                this.run({
+                    route: "*",
+                    routes,
+                    req: { req, body: message, isBinary, data },
+                    res: ws
+                });
+            });
         });
+    }
 
-        ws.on('message', async (data) => {
-            const message = data.toString();
-            const req = extract(message)
-            try {
-                const router = routes && routes[req.route];
-                const controller = router?.controller;
-                if (controller instanceof Function) {
-                    const response = await controller(message, ws);
-                    response && typeof response === "string" && ws.send(response);
-                }
-            } catch (error) {
-                ws.send("Sorry, something went wrong.");
+    async run(options) {
+        const { route, routes, req, res } = options || {};
+        try {
+            if (!route) {
+                return null;
             }
-        });
-    });
+            const router = routes[route];
+            const action = router?.action || router?.handler || router?.controller;
+            if (action instanceof Function) {
+                const response = await action(req, res);
+                res?.send && response && typeof response === "string" && res.send(response);
+            }
+        } catch (error) {
+            this.logger?.error({ src: "Server:WS:run", error: error?.message });
+        }
+    }
+
+    extract(str) {
+        try {
+            return JSON.parse(str);
+        }
+        catch (_) {
+            return null;
+        }
+    }
+
+    uid(min = 10000, max = 99999) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    info(req) {
+        return {
+            remoteAddress: req?.socket?.remoteAddress,
+            token: req?.headers["sec-websocket-protocol"]
+        }
+    }
 }
 
-function extract(str) {
-    try {
-        return JSON.parse(str);
-    }
-    catch (_) {
-        return { route: "/", body: str }
-    }
-}
+export default new SimpleWebSocket();
