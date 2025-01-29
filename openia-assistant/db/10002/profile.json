@@ -1,6 +1,8 @@
 {
   "name": "10002",
   "model": "openai-basic-2",
+  "provider": "openia.completions",
+  "providerUrl": "",
   "connectors": [
     {
       "name": "weather"
@@ -12,13 +14,14 @@
       "name": "external"
     }
   ],
+  "compatible": false,
+  "stream": false,
   "roles": {
     "system": "system",
     "tool": "function",
     "user": "user",
     "assistant": "assistant"
   },
-  "stream": false,
   "thread": [
     {
       "role": "system",
@@ -43,14 +46,41 @@
     {
       "role": "system",
       "content": "El tiempo actual en Barcelona es de 14.2°C con una velocidad del viento de 8.2 m/s.\n\nSe ha enviado un correo electrónico a la dirección yblezcanos@gmail.com con éxito. El mensaje incluye los datos de temperatura y un \"Feliz cumpleaños\".\n\nAdemás, se ha incluido una tabla en formato HTML en el cuerpo del mensaje que lista los meses del año y el horóscopo asociado por mes."
+    },
+    {
+      "role": "user",
+      "content": "vale busca el valor actualizado del tiempo en Barcelona"
+    },
+    {
+      "role": "function",
+      "name": "weather_get",
+      "tool_call_id": "call_wOWuQY8QjwChl52xE0NWsP0a",
+      "content": "{\"name\":\"weather_get\",\"output\":{\"current\":{\"time\":\"2025-01-28T19:15\",\"interval\":900,\"temperature_2m\":13.4,\"wind_speed_10m\":20.5},\"options\":{\"latitude\":41.3851,\"longitude\":2.1734,\"city\":\"Barcelona\",\"country\":\"Spain\",\"postal\":\"08002\"}}}"
+    },
+    {
+      "role": "assistant",
+      "content": "El tiempo actual en Barcelona es de 13.4°C con una velocidad del viento de 20.5 m/s.",
+      "usage": {
+        "prompt_tokens": 1071,
+        "completion_tokens": 28,
+        "total_tokens": 1099,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      }
     }
   ],
-  "provider": "openia.completions",
   "persist": true,
   "training": {
     "instructions": "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",
     "name": "Math Tutor"
   },
-  "defaults": null,
-  "compatible": false
+  "defaults": null
 }
