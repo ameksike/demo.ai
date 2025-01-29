@@ -34,7 +34,7 @@ class Weather extends Connector {
                 let inf = Object.values(address).join(",")
                 if (inf.length) {
                     let res = await this.getCoordinates(inf);
-                    options.extra = res.data[0];
+                    options.extra = res[0];
                     latitude = options.extra.lat;
                     longitude = options.extra.lon;
                 }
