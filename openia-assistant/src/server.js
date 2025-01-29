@@ -7,40 +7,16 @@ import { onMessage, router as chatRouter } from "./modules/chat/controllers/chat
 import providerRouter from "./modules/provider/routes/index.js";
 import connectorRouter from "./modules/connector/routes/index.js";
 import profileRouter from "./modules/profile/routes/index.js";
-import KsCryp from 'kscryp';
+import authRouter from "./modules/auth/routes/index.js";
+
 
 wsServer.start({
     port: process.env.WP_PORT || 8080,
     routes: {
         "*": { handler: onMessage },
-        "error": {
-            handler: (req, res) => {
-                console.log({
-                    src: "Server:WebSocket:error",
-                    data: res.user
-                })
-            }
-        },
-        "close": {
-            handler: (req, res) => {
-                console.log({
-                    src: "Server:WebSocket:close",
-                    data: res.user
-                })
-            }
-        },
-        "connection": {
-            handler: (req, res) => {
-                let info = wsServer.info(req);
-                res.user = KsCryp.decode(KsCryp.decode(info.token, "base64"), "json");
-                req.user = res.user;
-
-                console.log({
-                    src: "Server:WebSocket:connection",
-                    data: res.user
-                })
-            }
-        }
+        "error": authRouter.error,
+        "disconnection": authRouter.disconnection,
+        "connection": authRouter.connection
     }
 });
 

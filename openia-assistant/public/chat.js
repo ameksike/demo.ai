@@ -34,7 +34,7 @@ ws.configure({
     onMessage: (event) => {
         addMessage(event.data, "assistant", messagesDiv);
     },
-    onToken: (token) => btoa(token).replace("==", "")
+    onToken: (token) => btoa(token).replace(/=/g, "")
 })
 
 // CONNECTION EVENTS 

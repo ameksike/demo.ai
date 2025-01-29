@@ -25,7 +25,7 @@ export class SimpleWebSocket {
 
             ws.on('error', error => this.run({ route: 'error', routes, req: { error }, res: ws }));
 
-            ws.on("close", (code, reason) => this.run({ route: 'close', routes, req: { code, reason }, res: ws }));
+            ws.on("close", (code, reason) => this.run({ route: 'disconnection', routes, req: { code, reason }, res: ws }));
 
             ws.on('message', async (data, isBinary) => {
                 const message = isBinary ? data : data.toString();
