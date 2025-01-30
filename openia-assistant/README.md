@@ -2,11 +2,15 @@
 
 ## Project Structure
 ```
-openia-assistant/
+Project/
 ├── db/
+│   ├── 10000/
 │   ├── 10001/
-│   │   ├── image/
-│   │   ├── audio/
+│   │   │   ├── 5554/
+│   │   │   ├── 5555/
+│   │   │   │   ├── image/
+│   │   │   │   ├── audio/
+│   │   │   │   └── thread.json
 │   │   └── profile.json
 ├── cfg/
 │   │   └── config.js
@@ -14,17 +18,23 @@ openia-assistant/
 │   ├── vendor/
 │   │   ├── connectors/
 │   │   │   ├── calendar/
+│   │   │   │   ├── metadata.json
 │   │   │   │   └── index.js
 │   │   │   ├── email/
+│   │   │   │   ├── metadata.json
 │   │   │   │   └── index.js
 │   │   │   └── weather/
+│   │   │       ├── metadata.json
 │   │   │       └── index.js
 │   │   └── providers/
 │   │   │   ├── llama/
+│   │   │   │   ├── metadata.json
 │   │   │   │   └── index.js
 │   │   │   ├── openia.assistants/
+│   │   │   │   ├── metadata.json
 │   │   │   │   └── index.js
 │   │   │   └── openia.completions/
+│   │   │       ├── metadata.json
 │   │   │       └── index.js
 │   └── modules/
 │   │   ├── chat/
@@ -32,18 +42,26 @@ openia-assistant/
 │   │   │   ├── services/
 │   │   │   ├── models/
 │   │   │   └── views/
-│   │   └── audio/
+│   │   └── provider/
 │   │   │   ├── controllers/
 │   │   │   ├── services/
 │   │   │   ├── models/
-│   │   │   └── views/
+│   │   └── connector/
+│   │   │   ├── controllers/
+│   │   │   ├── services/
+│   │   │   ├── models/
 │   ├── common/
-│   │   └── fetch.api.js
-│   │   └── locator.js
-│   │   └── polyfill.js
-│   │   └── profile.js
-│   │   └── server.ws.js
-│   │   └── server.web.js
+│   │   ├── server/
+│   │   │   ├── ws.js
+│   │   │   └── web.js
+│   │   ├── plugin/
+│   │   │   ├── connector.js
+│   │   │   ├── provider.js
+│   │   │   └── plugin.js
+│   │   ├── utils/
+│   │   │   ├── fetch.api.js
+│   │   │   ├── locator.js
+│   │   │   └── polyfill.js
 │   └── server.js
 ├── package.json
 ├── .env
