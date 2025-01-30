@@ -144,7 +144,7 @@ class Email extends Connector {
      * @returns {{ status: String, message: String, data: Object }}
      */
     async read(options, task, profile) {
-        console.log({ options, task, profile })
+        this.logger?.log({ options, task, profile })
     }
 }
 

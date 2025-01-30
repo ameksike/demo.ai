@@ -18,8 +18,8 @@ export async function load(name = "content", path = "", ext = ".json") {
         return KsCryp.decode(data, "json");
     } catch (error) {
         console.log({
-            src: "Config:save",
-            error,
+            src: "Config:load",
+            error: error?.message || error,
             data: { name, path, ext }
         });
         return null;
@@ -42,7 +42,7 @@ export async function save(data, name = "content", path = "", ext = ".json") {
     } catch (error) {
         console.log({
             src: "Config:save",
-            error,
+            error: error?.message || error,
             data: { name, path, ext }
         });
         return null;

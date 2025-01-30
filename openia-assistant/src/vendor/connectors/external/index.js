@@ -24,13 +24,10 @@ class External extends Connector {
                     100 * 1024  // 100KB/s download limit
                 ]
             });
-            console.log({
-                src: "Connector:External:send",
-                data: response.data
-            });
+            this.logger?.log({ src: "Connector:External:send", data: response?.data });
             return response.data
         } catch (error) {
-            console.log({ src: "Connector:External:send", error });
+            this.logger?.error({ src: "Connector:External:send", error });
             return null;
         }
     };

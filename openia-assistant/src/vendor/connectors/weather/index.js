@@ -15,7 +15,7 @@ class Weather extends Connector {
             return result;
         }
         catch (error) {
-            console.log({ src: "Connector:Weather:getCoordinates", error, data: address });
+            this.logger?.log({ src: "Connector:Weather:getCoordinates", error, data: address });
         }
     }
 
@@ -34,9 +34,9 @@ class Weather extends Connector {
                 let inf = Object.values(address).join(",")
                 if (inf.length) {
                     let res = await this.getCoordinates(inf);
-                    options.extra = res[0];
-                    latitude = options.extra.lat;
-                    longitude = options.extra.lon;
+                    options.extra = res?.length && res[0];
+                    latitude = options.extra?.lat;
+                    longitude = options.extra?.lon;
                 }
             }
 
@@ -47,15 +47,12 @@ class Weather extends Connector {
             let response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m`);
             let data = await response.json();
 
-            console.log({
-                src: "Connector:Weather:send",
-                data: data.current
-            });
+            this.logger?.log({ src: "Connector:Weather:send", data: data.current });
 
             return { current: data.current, options };
         }
         catch (error) {
-            console.log({ src: "Connector:Weather:send", error, data: options });
+            this.logger?.log({ src: "Connector:Weather:send", error, data: options });
             return null;
         }
     }
