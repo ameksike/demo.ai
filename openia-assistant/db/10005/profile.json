@@ -5,7 +5,8 @@
   "providerUrl": "",
   "compatible": false,
   "stream": false,
-  "persist": false,
+  "persist": true,
+  "persistAudio": true,
   "training": null,
   "defaults": null
 }
