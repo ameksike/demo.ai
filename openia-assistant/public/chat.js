@@ -9,7 +9,7 @@ const messagesDiv = document.getElementById("messages");
 const chatForm = document.getElementById("chat-form");
 const chatInput = document.getElementById("chat-input");
 const startBtn = document.getElementById('startBtn');
-const stopBtn = document.getElementById('stopBtn');
+// const stopBtn = document.getElementById('stopBtn');
 const videoBtn = document.getElementById('videoBtn');
 const chatDiv = document.getElementById('chat-container');
 
@@ -32,6 +32,7 @@ ws.configure({
         uiShow(true);
     },
     onMessage: (event) => {
+        console.log("onMessage", event.data);
         addMessage(event.data, "assistant", messagesDiv);
     },
     onToken: (token) => btoa(token).replace(/=/g, "")
@@ -78,28 +79,45 @@ chatForm.addEventListener("submit", (event) => {
     }
 });
 
+const state = {
+    rec: false
+}
 startBtn.addEventListener('click', (event) => {
-    mr.start({
-        onData: (blob) => {
-            // console.log("Audio: ", blob)
-            //blob && ws.readyState === WebSocket.OPEN && ws.send(blob);
-            startBtn.innerHTML = "Recording...";
-        }
-    })
-    startBtn.disabled = true;
-    stopBtn.disabled = false;
+    if (state?.rec) {
+        console.log("REC: Stop recording", state?.rec);
+        mr.stop({
+            onEnd: (chunks) => {
+                messagesDiv.appendChild(mr.createUiAudio(chunks));
+                // ws.send(mr.asBlob(chunks));
+                startBtn.innerHTML = "REC Start";
+                state.rec = false;
+            }
+        });
+    } else {
+        console.log("REC: Start recording", state?.rec);
+        mr.start({
+            onData: (blob) => {
+                ws.send(blob);
+                // console.log("Audio: ", blob)
+                //blob && ws.readyState === WebSocket.OPEN && ws.send(blob);
+                startBtn.innerHTML = "REC Stop";
+                state.rec = true;
+            }
+        })
+    }
 });
-
+/*
 stopBtn.addEventListener('click', () => {
     mr.stop({
         onEnd: (chunks) => {
             messagesDiv.appendChild(mr.createUiAudio(chunks));
             startBtn.innerHTML = "Start Recording";
+            ws.send(this.asBlob(chunks));
         }
     });
     startBtn.disabled = false;
     stopBtn.disabled = true;
-});
+});*/
 
 videoBtn.addEventListener('click', () => {
     console.log("VIIIIIIIIIIII")

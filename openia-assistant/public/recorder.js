@@ -93,12 +93,16 @@ export class WebRec {
         this.chunks = [];
     }
 
+    asBlob(chunks, options) {
+        const { type = "audio/webm; codecs=opus" } = options || {};
+        return new Blob(chunks, { type });
+    }
+
     createUiAudio(chunks, options) {
-        const { type = "audio/ogg; codecs=opus" } = options || {};
         const audio = document.createElement("audio");
-        audio.controls = true;
-        const blob = new Blob(chunks, { type });
+        const blob = this.asBlob(chunks, options);
         audio.src = URL.createObjectURL(blob);
+        audio.controls = true;
         return audio;
     }
 

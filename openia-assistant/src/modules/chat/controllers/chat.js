@@ -2,13 +2,28 @@ import express from 'express';
 import { getFromMeta, path } from '../../../common/utils/polyfill.js';
 import * as srvRouter from '../services/router.js';
 
+const state = {
+    chunks: [],
+    salts: 7
+}
 /**
  * Default controller for WebSocket messages
  * @param {string} message 
  * @param {import('ws').WebSocket} ws 
  */
 export async function onMessage(req, res) {
-    const { available, provider, profile, message = req.body, keyword } = await srvRouter.extract(res.user);
+    let { available, provider, profile, message = req.body, keyword } = await srvRouter.extract(res.user);
+
+    if (req.isBinary) {
+        state.chunks.push(message);
+
+        if (state.chunks.length < state.salts) {
+            return;
+        }
+
+        message = Buffer.concat(state.chunks);
+        state.chunks = [];
+    }
 
     console.log({
         src: "Controller:Chat:onMessage",
@@ -25,7 +40,7 @@ export async function onMessage(req, res) {
     });
 
     let content = available && await provider.run(message, profile, (payload) => {
-        res.send(payload.content);
+        payload?.content && res.send(payload.content || payload.chunk);
     });
     profile?.save();
     res.send(content ? content : "I don't have an answer for your question");

@@ -1,4 +1,7 @@
 import decodeAudio from 'audio-decode';
+import ffmpeg from "fluent-ffmpeg";
+import { PassThrough } from "stream";
+
 import fs from 'fs/promises';
 import { getFromMeta, path as _path } from '../utils/polyfill.js';
 const { __dirname } = getFromMeta(import.meta);
@@ -19,6 +22,46 @@ export class AudioTool {
         const bitDepth = buffer.readUInt16LE(34); // Expect 16 bits
         return format === 'WAVE' && audioFormat === 1 && bitDepth === 16;
     };
+
+    async webMtoPCM16(webmBuffer) {
+        return new Promise((resolve, reject) => {
+            if (!Buffer.isBuffer(webmBuffer) || webmBuffer.length === 0) {
+                return reject(new Error("❌ Invalid input: Buffer is empty"));
+            }
+            
+            console.log("🟢 Buffer recibido con tamaño:", webmBuffer.length);
+            console.log("🔍 Primeros bytes:", webmBuffer.slice(0, 20));
+            console.log("🟢 Recibido buffer válido, procesando...");
+
+            const inputStream = new PassThrough();
+            const outputStream = new PassThrough();
+            const pcmChunks = [];
+
+            // Escribir datos en el inputStream
+            inputStream.end(webmBuffer);
+
+            ffmpeg()
+                .input(inputStream)
+                .inputFormat("webm") // Asegurar que es WebM
+                .audioCodec("pcm_s16le") // Convertir a PCM16
+                .audioChannels(1) // Forzar 1 canal (evita errores)
+                .audioFrequency(16000) // Ajustar a 16kHz para OpenAI
+                .format("wav") // Salida en WAV
+                .on("start", (cmd) => console.log("🚀 FFmpeg iniciado:", cmd))
+                .on("error", (err) => reject(new Error(`❌ FFmpeg error: ${err.message}`)))
+                .on("end", () => {
+                    console.log("✅ FFmpeg terminó con éxito.");
+                    resolve(Buffer.concat(pcmChunks));
+                })
+                .pipe(outputStream, { end: true });
+
+            // Capturar los datos de salida
+            outputStream.on("data", (chunk) => pcmChunks.push(chunk));
+
+            // Manejar cierre del stream correctamente
+            outputStream.on("close", () => console.log("🔄 Stream de salida cerrado"));
+        });
+    }
 
     /**
      * @description Converts Float32Array of audio data to PCM16 ArrayBuffer
@@ -51,7 +94,7 @@ export class AudioTool {
      * @param {*} chunkSize 32KB chunk size
      * @returns 
      */
-    base64Encode(float32Array, chunkSize = 0x8000) {
+    toBase64(float32Array, chunkSize = 0x8000) {
         try {
             let arrayBuffer = this.floatTo16BitPCM(float32Array);
             let binary = '';
@@ -64,12 +107,23 @@ export class AudioTool {
             return btoa(binary);
         }
         catch (error) {
-            this.logger?.error({ src: "Common:AudioTool:base64Encode", error });
+            this.logger?.error({ src: "Common:AudioTool:toBase64", error });
             return null;
         }
     }
 
-    async toBase64(input) {
+    async webmToBase64(input) {
+        try {
+            const channelData = await this.webMtoPCM16(input);
+            return this.toBase64(channelData);
+        }
+        catch (error) {
+            this.logger?.error({ src: "Common:AudioTool:webmToBase64", error });
+            return null;
+        }
+    }
+
+    async wavToBase64(input) {
         try {
             this.logger?.log({
                 src: "Common:AudioTool:toBase64", data: {
@@ -78,10 +132,10 @@ export class AudioTool {
             });
             const audioBuffer = await decodeAudio(input);
             const channelData = audioBuffer.getChannelData(0);
-            return this.base64Encode(channelData);
+            return this.toBase64(channelData);
         }
         catch (error) {
-            this.logger?.error({ src: "Common:AudioTool:base64Encode", error });
+            this.logger?.error({ src: "Common:AudioTool:wavToBase64", error });
             return null;
         }
     }
@@ -119,7 +173,6 @@ export class AudioTool {
         }
         return Buffer.concat([buffer, chunk]);
     }
-
 
     writeWavHeader(outputStream, options) {
         const {

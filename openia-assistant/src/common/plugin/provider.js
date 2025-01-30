@@ -191,6 +191,9 @@ export class Provider extends Plugin {
         // Keep messages in the conversation thread if required
         profile?.process({ role: this.roles.assistant, content, usage });
 
+        // trigger the message into the onMessage evnt
+        this.trigger("onMessage", [{ role: this.roles.assistant, content, usage }, profile]);
+
         return content;
     }
 
@@ -205,6 +208,19 @@ export class Provider extends Plugin {
             messages = typeof messages === "string" ? [{ "role": this.roles.user, "content": messages }] : messages;
             let content = await this.process(messages, profile);
             return content;
+        }
+        catch (error) {
+            this.logger?.error({ src: "Provider:run", data: { messages, profile } });
+        }
+    }
+
+    trigger(event, params) {
+        try {
+            if (!(this[event] instanceof Function)) {
+                return null;
+            }
+            params = Array.isArray(params) ? params : [params];
+            return this[event].apply(this, params)
         }
         catch (error) {
             this.logger?.error({ src: "Provider:run", data: { messages, profile } });

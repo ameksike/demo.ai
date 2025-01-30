@@ -92,6 +92,8 @@ Hello, can you tell me the temperature in Barcelona? >>> { "name": "10001", "pro
 1. Install Required Libraries:
     - npm init -y
     - npm install openai googleapis nodemailer dotenv axios ws
+    - choco install ffmpeg
+    - npm install fluent-ffmpeg
 
 2. Setup Environment Variables: 
     ```

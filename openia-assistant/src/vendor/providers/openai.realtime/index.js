@@ -58,7 +58,11 @@ class OpenAIRealtime extends Provider {
             this.logger?.log({ src: "Provider:OpenAIRealtime:Send", data: { content: base64AudioData?.length } });
         }
         catch (error) {
-            this.logger?.log({ src: "Provider:OpenAIRealtime:Send", error, data: { content: base64AudioData?.length } });
+            this.logger?.error({
+                src: "Provider:OpenAIRealtime:Send",
+                error: error?.message,
+                data: { content: base64AudioData?.length }
+            });
         }
     }
 
@@ -98,8 +102,10 @@ class OpenAIRealtime extends Provider {
     }
 
     async process(message = "input-01", profile) {
-        const tmp = await audioTool.load(message, "db/" + profile.name + "/audio/");
-        const base64AudioData = await audioTool.toBase64(tmp)
+        const tmp = message instanceof Buffer
+            ? message
+            : await audioTool.load(message, `db/${profile.name}/${profile.userId}/audio/`);
+        const base64AudioData = await audioTool.webmToBase64(tmp)
         this.send(base64AudioData)
     }
 
