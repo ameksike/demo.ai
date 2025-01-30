@@ -6,11 +6,11 @@ Project/
 ├── db/
 │   ├── 10000/
 │   ├── 10001/
-│   │   │   ├── 5554/
-│   │   │   ├── 5555/
-│   │   │   │   ├── image/
-│   │   │   │   ├── audio/
-│   │   │   │   └── thread.json
+│   │   ├── 5554/
+│   │   ├── 5555/
+│   │   │   ├── image/
+│   │   │   ├── audio/
+│   │   │   └── thread.json
 │   │   └── profile.json
 ├── cfg/
 │   │   └── config.js
