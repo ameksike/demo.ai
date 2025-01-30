@@ -10,9 +10,7 @@
     {
       "name": "email",
       "config": {
-        "output": {
-          "user": "tonykssa@gmail.com"
-        }
+        "output_user": "tonykssa@gmail.com"
       }
     }
   ],

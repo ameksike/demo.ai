@@ -117,5 +117,6 @@ function uiShow(isConnected) {
     } else {
         chatDiv.style.display = "none";
         connDiv.style.display = "block";
+        messagesDiv.innerHTML = "";
     }
 }

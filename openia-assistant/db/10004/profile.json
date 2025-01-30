@@ -11,9 +11,7 @@
       "name": "email",
       "description": "Always add the following to the body of the message at the end: 'kind regards!'",
       "config": {
-        "output": {
-          "user": "tonykssa@gmail.com"
-        }
+        "output_user": "tonykssa@gmail.com"
       },
       "allows": [
         "send"
