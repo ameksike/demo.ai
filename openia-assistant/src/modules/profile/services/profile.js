@@ -23,11 +23,6 @@ export class Profile {
         this.defaults = null;
         this.training = null;
         this.compatible = false;
-        this.roles = {
-            "system": "system",
-            "tool": "tool",
-            "user": "user",
-        };
     }
 
     async configure(payload = "default") {
@@ -44,7 +39,6 @@ export class Profile {
             this.compatible = data.compatible ?? this.compatible;
             this.training = data.training || this.training;
             this.defaults = data.defaults || this.defaults;
-            this.roles = { ...this.roles, ...data.roles };
             this.model = data.model;
             this.connectors = data.connectors;
             this.tools = await this.getTools(this.connectors);
@@ -66,7 +60,6 @@ export class Profile {
             connectors: this.connectors,
             compatible: this.compatible,
             stream: this.stream,
-            roles: this.roles,
             persist: this.persist,
             training: this.training,
             defaults: this.defaults,
@@ -78,11 +71,11 @@ export class Profile {
     }
 
     async loadThread(userId) {
-        return this.name && await srvConfig.load(this.name + "/thread/" + userId + "/history", "db");
+        return this.name && await srvConfig.load(this.name + "/" + userId + "/thread", "db");
     }
 
     saveThread(userId) {
-        return srvConfig.save(this.thread, this.name + "/thread/" + userId + "/history", "db");
+        return srvConfig.save(this.thread, this.name + "/" + userId + "/thread", "db");
     }
 
     save() {
@@ -91,12 +84,12 @@ export class Profile {
     }
 
     train(options = null) {
-        const { training = this?.training, thread = this.thread, roles = this.roles } = options || {};
+        const { training = this?.training, thread = this.thread, role = "system" } = options || {};
         if ((!training?.name && !training?.instructions) || !Array.isArray(thread)) {
             return this;
         }
         thread.length === 0 && thread.push({
-            "role": roles?.system,
+            "role": role,
             "content": `
                 You are an AI assistant named "${training.name}". 
                 Your primary role is defined as follows:
@@ -180,7 +173,7 @@ export class Profile {
      * @returns {Profile} self
      */
     process(content, options) {
-        const { role = this.roles.system, persist = this.persist } = options || {};
+        const { role = "system", persist = this.persist } = options || {};
         const thread = persist ? this.thread : [];
         persist && this.train({ ...options, thread });
         if (!content) {
