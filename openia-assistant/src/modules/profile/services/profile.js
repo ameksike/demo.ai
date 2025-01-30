@@ -71,11 +71,11 @@ export class Profile {
     }
 
     async loadThread(userId) {
-        return this.name && await srvConfig.load(this.name + "/" + userId + "/thread", "db");
+        return userId && this.name && await srvConfig.load(this.name + "/" + userId + "/thread", "db");
     }
 
     saveThread(userId) {
-        return srvConfig.save(this.thread, this.name + "/" + userId + "/thread", "db");
+        return userId && srvConfig.save(this.thread, this.name + "/" + userId + "/thread", "db");
     }
 
     save() {
