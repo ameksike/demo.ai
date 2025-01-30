@@ -25,12 +25,6 @@
   ],
   "compatible": false,
   "stream": false,
-  "roles": {
-    "system": "system",
-    "tool": "tool",
-    "user": "user",
-    "assistant": "assistant"
-  },
   "persist": true,
   "training": {
     "instructions": "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",

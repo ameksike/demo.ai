@@ -5,18 +5,6 @@
   "providerUrl": "",
   "compatible": false,
   "stream": false,
-  "roles": {
-    "system": "system",
-    "tool": "tool",
-    "user": "user",
-    "assistant": "assistant"
-  },
-  "thread": [
-    {
-      "role": "user",
-      "content": "input-01"
-    }
-  ],
   "persist": false,
   "training": null,
   "defaults": null
