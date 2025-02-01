@@ -8,7 +8,9 @@
                 "input": 0.003,
                 "output": 0.006,
                 "training": 0.008
-            }
+            },
+            "inputs": ["text", "audio"],
+            "outputs": ["text", "audio"]
         },
         "openai-voice-mini-preview": {
             "name": "gpt-4o-mini-realtime-preview-2024-12-17",
@@ -16,7 +18,9 @@
                 "input": 0.003,
                 "output": 0.006,
                 "training": 0.008
-            }
+            },
+            "inputs": ["text", "audio"],
+            "outputs": ["text", "audio"]
         },
         "openai-voice-mini-4o": {
             "name": "gpt-4o-mini-audio-preview",
@@ -24,7 +28,9 @@
                 "input": 0.003,
                 "output": 0.006,
                 "training": 0.008
-            }
+            },
+            "inputs": ["text", "audio"],
+            "outputs": ["text", "audio"]
         }
     }
 }
