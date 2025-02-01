@@ -144,3 +144,6 @@ Hello, can you tell me the temperature in Barcelona? >>> { "name": "10001", "pro
     - [Build a Voice-to-Voice AI App with OpenAI API & Twilio in Real Time](https://www.youtube.com/watch?v=GzIXNeaczoc)
     - [19. Use OpenAI Realtime API With Audio Files | Generative AI](https://www.youtube.com/watch?v=AcRoCHPBlgE)
         - [OpenAI Realtime API Exploration](https://github.com/AwaisKamran/openai-realtime-api)
+    - [#4 Conceptos: Streaming de Datos UI, Headers y más | Next.js 13](https://www.youtube.com/watch?v=5l4DssYvO4U&list=PLUofhDIg_38rJHtMu3VqFsXBmdjFlXQCh&index=4)
+        - [openui.com](https://github.com/midudev/openui.com/blob/main/src/pages/api/generate.js)
+        - [Chat en TIEMPO REAL con Node.js, Socket.io, SQL, HTML y CSS](https://www.youtube.com/watch?v=WpbBhTx5R9Q)
