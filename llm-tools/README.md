@@ -24,6 +24,8 @@
 - [N8N](https://n8n.io/pricing/): price €20 per month, The world's most popular workflow automation platform for technical teams
 - [Make](https://www.make.com/en): From tasks and workflows to apps and systems, build and automate anything in one powerful visual platform.
 - [Twilio](https://www.twilio.com/en-us): Virtual phone numbers (including Europe)
+- [Big-Agi](https://big-agi.com/)
+    - [Big-Agi Github Project](https://github.com/enricoros/big-AGI/blob/v2-dev/docs/pixels/big-AGI-compo-20240201_small.png)
 
 ## References
 - Hardware

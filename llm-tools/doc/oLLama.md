@@ -13,6 +13,15 @@ chmod +x install.sh
 
 ## check the service
 systemctl status ollama
+
+```
+
+```shell
+cat /etc/systemd/system/ollama.service.d/override.conf 
+```
+```
+[Service]
+Environment="OLLAMA_HOST=0.0.0.0"
 ```
 
 ## Common options 
