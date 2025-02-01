@@ -59,5 +59,28 @@
       "completion_tokens": 102,
       "total_tokens": 715
     }
+  },
+  {
+    "role": "assistant",
+    "content": "ERROR: Create action failed"
+  },
+  {
+    "role": "user",
+    "content": "hola soy Juan y quiero que me digas el tiempo de Barcelona, esos datos envialos por correo/email a kevinpb.py@gmail.com, en el subject pon \"hello kevincin\""
+  },
+  {
+    "role": "tool",
+    "name": "email_send",
+    "tool_call_id": "call_ysw9hq32",
+    "content": "{\"name\":\"email_send\",\"output\":{\"status\":\"success\",\"message\":\"Email sent successfully!\",\"data\":{\"to\":\"kevinpb.py@gmail.com\",\"from\":\"tonykssa@gmail.com\",\"subject\":\"hello kevincin\",\"messageSize\":408,\"messageTime\":437,\"accepted\":[\"kevinpb.py@gmail.com\"],\"rejected\":[]}}}"
+  },
+  {
+    "role": "assistant",
+    "content": "¡Hola Juan!\n\nEl tiempo actual en Barcelona es de 12.1°C y el viento está a una velocidad de 3.2 metros por segundo.\n\nTe he enviado los datos por correo electrónico al destinatario kevinpb.py@gmail.com con el asunto \"hello kevincin\". Si necesitas algo más, no dudes en preguntar.\n\nRecordatorio: He utilizado la información proporcionada anteriormente para enviar el correo electrónico.",
+    "usage": {
+      "prompt_tokens": 844,
+      "completion_tokens": 92,
+      "total_tokens": 936
+    }
   }
 ]
