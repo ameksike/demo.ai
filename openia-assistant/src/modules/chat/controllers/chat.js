@@ -2,27 +2,16 @@ import express from 'express';
 import { getFromMeta, path } from '../../../common/utils/polyfill.js';
 import * as srvRouter from '../services/router.js';
 
-const state = {
-    chunks: [],
-    salts: 7
-}
+
 /**
  * Default controller for WebSocket messages
  * @param {string} message 
  * @param {import('ws').WebSocket} ws 
  */
 export async function onMessage(req, res) {
-    let { available, provider, profile, message = req.body, keyword } = await srvRouter.extract(res.user);
-
-    if (req.isBinary) {
-        state.chunks.push(message);
-
-        if (state.chunks.length < state.salts) {
-            return;
-        }
-
-        message = Buffer.concat(state.chunks);
-        state.chunks = [];
+    let { available, provider, profile, message = req.body } = await srvRouter.extract(res.user);
+    if (req.isBinary || message === 'REC-STOP') {
+        message = srvRouter.gatherAudio(req);
     }
 
     console.log({
@@ -31,15 +20,19 @@ export async function onMessage(req, res) {
             profile: profile?.name,
             provider: {
                 available,
+                message: !!message,
                 isBinary: req.isBinary,
                 name: profile?.provider,
                 name: profile.model,
-            },
-            message, keyword
+            }
         }
     });
 
-    let content = available && await provider.run(message, profile, (payload) => {
+    if (!message || !available) {
+        return null;
+    }
+
+    let content = await provider.run(message, profile, (payload) => {
         payload?.content && res.send(payload.content || payload.chunk);
     });
     profile?.save();

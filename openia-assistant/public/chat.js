@@ -89,6 +89,7 @@ startBtn.addEventListener('click', (event) => {
             onEnd: (chunks) => {
                 messagesDiv.appendChild(mr.createUiAudio(chunks));
                 // ws.send(mr.asBlob(chunks));
+                ws.send("REC-STOP");
                 startBtn.innerHTML = "REC Start";
                 state.rec = false;
             }
@@ -106,18 +107,6 @@ startBtn.addEventListener('click', (event) => {
         })
     }
 });
-/*
-stopBtn.addEventListener('click', () => {
-    mr.stop({
-        onEnd: (chunks) => {
-            messagesDiv.appendChild(mr.createUiAudio(chunks));
-            startBtn.innerHTML = "Start Recording";
-            ws.send(this.asBlob(chunks));
-        }
-    });
-    startBtn.disabled = false;
-    stopBtn.disabled = true;
-});*/
 
 videoBtn.addEventListener('click', () => {
     console.log("VIIIIIIIIIIII")

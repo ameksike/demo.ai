@@ -5,6 +5,24 @@ export class WebRec {
         this.chunks = [];
     }
 
+    run(action, params = [], scope = {}) {
+        try {
+            if (!(action instanceof Function)) {
+                return null;
+            }
+            params = !params || Array.isArray(params) ? params : [params];
+            return action.apply(scope, params);
+        }
+        catch (error) {
+            return null;
+        }
+    }
+
+    asBlob(chunks, options) {
+        const { type = "audio/webm; codecs=opus" } = options || {};
+        return new Blob(chunks, { type });
+    }
+
     mergeAudioStreams(desktopStream, voiceStream) {
         const context = new AudioContext();
         const destination = context.createMediaStreamDestination();
@@ -47,7 +65,8 @@ export class WebRec {
         rec.onstop = async () => {
             let blob = new Blob(blobs, { type: 'video/webm' });
             let url = window.URL.createObjectURL(blob);
-            onEnd instanceof Function && onEnd(blobs, url)
+            this.run(onEnd, [blobs, url]);
+            // onEnd instanceof Function && onEnd(blobs, url)
         };
     }
 
@@ -66,7 +85,8 @@ export class WebRec {
             rec.stop()
         });
         rec.addEventListener("dataavailable", (e) => {
-            onEnd instanceof Function && onEnd(e.data);
+            this.run(onEnd, [e.data]);
+            // onEnd instanceof Function && onEnd(e.data);
         })
     }
 
@@ -79,8 +99,11 @@ export class WebRec {
             if (event.data.size > 0) {
                 // Send audio Blob
                 this.chunks.push(event.data);
-                onData instanceof Function && onData(event.data)
+                this.run(onData, event.data)
             }
+        };
+        rec.onstop = async () => {
+
         };
         // Start recording in chunks
         this.rec.start(timeslice);
@@ -89,13 +112,9 @@ export class WebRec {
     stop(options) {
         const { onEnd, timeslice = 500 } = options || {};
         this.rec?.stop(timeslice);
-        onEnd instanceof Function && onEnd(this.chunks);
+        this.run(onEnd, this.chunks);
+        //onEnd instanceof Function && onEnd(this.chunks);
         this.chunks = [];
-    }
-
-    asBlob(chunks, options) {
-        const { type = "audio/webm; codecs=opus" } = options || {};
-        return new Blob(chunks, { type });
     }
 
     createUiAudio(chunks, options) {

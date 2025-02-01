@@ -1,8 +1,29 @@
 import ioc from '../../../common/utils/locator.js';
 import { Profile } from '../../profile/services/profile.js';
-import KsCryp from 'kscryp';
+import speackerTool from "../../../common/driver/speacker.js";
 
-const keyword = ">>>";
+const state = {
+    chunks: [],
+    salts: 7
+}
+
+export function gatherAudio(req) {
+    if (!req.isBinary && req.body !== "REC-STOP") {
+        return null;
+    }
+
+    req.isBinary && state.chunks.push(req.body);
+
+    if (state.salts && state.chunks.length < state.salts && req.body !== "REC-STOP") {
+        return null;
+    }
+
+    let tmp = state.salts ? Buffer.concat(state.chunks) : req.body;
+    state.chunks = [];
+
+    speackerTool.talk(tmp).stop();
+    return tmp;
+}
 
 export async function extract(user) {
     try {
@@ -11,7 +32,6 @@ export async function extract(user) {
         let available = provider.run instanceof Function;
 
         return {
-            keyword,
             available,
             provider,
             profile
