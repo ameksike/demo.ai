@@ -91,7 +91,7 @@ export class WebRec {
     }
 
     async start(options) {
-        const { onData, timeslice = 500 } = options || {};
+        const { onData, onEnd, timeslice = 100 } = options || {};
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         this.rec = new MediaRecorder(stream);
         // Send audio data as chunks via WebSocket
@@ -99,22 +99,24 @@ export class WebRec {
             if (event.data.size > 0) {
                 // Send audio Blob
                 this.chunks.push(event.data);
-                this.run(onData, event.data)
+                this.run(onData, event.data);
             }
         };
-        rec.onstop = async () => {
-
+        this.rec.onstop = async () => {
+            console.log("ONNNN STOP")
+            this.run(onEnd, [this.chunks]);
+            this.chunks = [];
         };
         // Start recording in chunks
         this.rec.start(timeslice);
+        return this;
     }
 
-    stop(options) {
-        const { onEnd, timeslice = 500 } = options || {};
-        this.rec?.stop(timeslice);
-        this.run(onEnd, this.chunks);
+    stop() {
+        console.log("STOPING")
+        this.rec?.stop();
         //onEnd instanceof Function && onEnd(this.chunks);
-        this.chunks = [];
+        return this;
     }
 
     createUiAudio(chunks, options) {
@@ -131,5 +133,41 @@ export class WebRec {
         link.href = URL.createObjectURL(chunk);
         link.download = fileName;
         auto && link.click();
+    }
+
+
+    async streams(e) {
+        // Create a peer connection
+        const pc = new RTCPeerConnection();
+
+        // Set up to play remote audio from the model
+        const audioEl = document.createElement("audio");
+        audioEl.autoplay = true;
+        pc.ontrack = e => audioEl.srcObject = e.streams[0];
+
+        // Add local audio track for microphone input in the browser
+        const ms = await navigator.mediaDevices.getUserMedia({
+            audio: true
+        });
+        pc.addTrack(ms.getTracks()[0]);
+        return audioEl;
+    }
+
+    async blobToBase64(blob) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = () => resolve(reader.result.split(",")[1]);
+        });
+    }
+
+    async playAudio(base64Audio) {
+        const audioBuffer = await this.audioContext.decodeAudioData(
+            await (await fetch(`data:audio/wav;base64,${base64Audio}`)).arrayBuffer()
+        );
+        const source = this.audioContext.createBufferSource();
+        source.buffer = audioBuffer;
+        source.connect(this.audioContext.destination);
+        source.start();
     }
 }

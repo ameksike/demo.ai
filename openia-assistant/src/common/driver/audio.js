@@ -15,6 +15,21 @@ export class AudioTool {
         this.logger = logger;
     }
 
+    getUiD(min = 100, max = 999) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+
+    save(options) {
+        let { file = "tmp", path = __dirname, format = "webm", data } = options || {};
+        if (!Buffer.isBuffer(data) || data.length === 0) {
+            this.logger?.error("❌ Invalid buffer: Cannot save empty data.");
+            return;
+        }
+        return fs.writeFile(_path.resolve(path, `${file}-${this.getUiD()}.${format}`), data);
+    }
+
     isPCM16WAV(buffer) {
         // WAV header format specs
         const format = buffer.toString('ascii', 8, 12); // Expect "WAVE"
@@ -28,7 +43,7 @@ export class AudioTool {
             if (!Buffer.isBuffer(webmBuffer) || webmBuffer.length === 0) {
                 return reject(new Error("❌ Invalid input: Buffer is empty"));
             }
-            
+
             console.log("🟢 Buffer recibido con tamaño:", webmBuffer.length);
             console.log("🔍 Primeros bytes:", webmBuffer.slice(0, 20));
             console.log("🟢 Recibido buffer válido, procesando...");
@@ -46,7 +61,9 @@ export class AudioTool {
                 .audioCodec("pcm_s16le") // Convertir a PCM16
                 .audioChannels(1) // Forzar 1 canal (evita errores)
                 .audioFrequency(16000) // Ajustar a 16kHz para OpenAI
-                .format("wav") // Salida en WAV
+                // .format("wav") // Salida en WAV
+                .outputOptions(["-f wav"]) // Forzar WAV sin compresión
+
                 .on("start", (cmd) => console.log("🚀 FFmpeg iniciado:", cmd))
                 .on("error", (err) => reject(new Error(`❌ FFmpeg error: ${err.message}`)))
                 .on("end", () => {
@@ -57,7 +74,6 @@ export class AudioTool {
 
             // Capturar los datos de salida
             outputStream.on("data", (chunk) => pcmChunks.push(chunk));
-
             // Manejar cierre del stream correctamente
             outputStream.on("close", () => console.log("🔄 Stream de salida cerrado"));
         });
@@ -196,6 +212,24 @@ export class AudioTool {
         header.write('data', 36, 4, 'ascii'); // Sub-chunk 2 ID
         header.writeUInt32LE(dataSize, 40); // Sub-chunk 2 size
         outputStream.write(header);
+    }
+
+    /**
+     * Convert ArrayBuffer → Buffer
+     * @param {ArrayBuffer} arrayBuffer 
+     * @returns {Buffer}
+     */
+    arrayBufferToBuffer(arrayBuffer) {
+        return Buffer.from(arrayBuffer);
+    }
+
+    /**
+     * Convert Buffer → ArrayBuffer
+     * @param {Buffer} buffer 
+     * @returns {ArrayBuffer} 
+     */
+    bufferToArrayBuffer(buffer) {
+        return buffer.buffer;
     }
 }
 
