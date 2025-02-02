@@ -1,6 +1,9 @@
 {
     "name": "OpenAI Completions Provider",
     "description": "A classified provider plugin enables a platform to interact with an artificial intelligence service like OpenAI by implementing its completions solution, facilitating seamless integration and enhanced functionality.",
+    "config": {
+        "temperature": 0.8
+    },
     "models": {
         "openai-basic-2": {
             "name": "gpt-3.5-turbo-0125",
@@ -9,8 +12,12 @@
                 "output": 0.006,
                 "training": 0.008
             },
-            "inputs": ["text"],
-            "outputs": ["text"]
+            "inputs": [
+                "text"
+            ],
+            "outputs": [
+                "text"
+            ]
         },
         "openai-basic-1": {
             "name": "gpt-3.5-turbo",
@@ -19,8 +26,12 @@
                 "output": 0.006,
                 "training": 0.008
             },
-            "inputs": ["text"],
-            "outputs": ["text"]
+            "inputs": [
+                "text"
+            ],
+            "outputs": [
+                "text"
+            ]
         },
         "openai-mini": {
             "name": "gpt-4o-mini",
@@ -29,8 +40,12 @@
                 "output": 0.006,
                 "training": 0.008
             },
-            "inputs": ["text"],
-            "outputs": ["text"]
+            "inputs": [
+                "text"
+            ],
+            "outputs": [
+                "text"
+            ]
         },
         "openai-average": {
             "name": "gpt-4",
@@ -39,8 +54,12 @@
                 "output": 0.006,
                 "training": 0.008
             },
-            "inputs": ["text"],
-            "outputs": ["text"]
+            "inputs": [
+                "text"
+            ],
+            "outputs": [
+                "text"
+            ]
         },
         "openai-advanced": {
             "name": "gpt-4o",
@@ -49,8 +68,12 @@
                 "output": 0.006,
                 "training": 0.008
             },
-            "inputs": ["text"],
-            "outputs": ["text"]
+            "inputs": [
+                "text"
+            ],
+            "outputs": [
+                "text"
+            ]
         }
     }
 }
