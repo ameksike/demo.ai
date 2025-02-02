@@ -21,6 +21,7 @@ class OpenAIRealtime extends Provider {
             buffer: audioTool.gather(),
             text: ""
         };
+        this.speacker = false;
     }
 
     clean() {
@@ -30,38 +31,46 @@ class OpenAIRealtime extends Provider {
         };
     }
 
-    send(base64AudioData) {
+    send(options) {
         try {
-            if (!base64AudioData?.length) {
+            let { modalities, data, type = 'audio', msg } = options;
+
+            if (!data?.length) {
                 throw new Error("Empty data");
             }
+
+            if (type === 'audio') {
+                msg = { type: 'input_audio', audio: data };
+                modalities = modalities || ["audio", "text"]
+            } else {
+                msg = { type: "input_text", text: data };
+                modalities = modalities || ["text"];
+            }
+
             this.ws.send(JSON.stringify({
                 type: "conversation.item.create",
                 item: {
                     type: 'message',
                     role: 'user',
-                    content: [
-                        {
-                            type: 'input_audio',
-                            audio: base64AudioData
-                        }
-                    ]
+                    content: [msg]
                 }
             }));
+
             this.ws.send(KsCryp.encode({
                 type: 'response.create',
                 response: {
-                    modalities: ["audio", "text"],
+                    modalities
                     // instructions: "Give me a haiku about code.",
                 }
             }, "json"));
-            this.logger?.log({ src: "Provider:OpenAIRealtime:Send", data: { content: base64AudioData?.length } });
+
+            this.logger?.log({ src: "Provider:OpenAIRealtime:Send", data: { type, content: data?.length } });
         }
         catch (error) {
             this.logger?.error({
                 src: "Provider:OpenAIRealtime:Send",
                 error: error?.message,
-                data: { content: base64AudioData?.length }
+                data: options
             });
         }
     }
@@ -70,28 +79,39 @@ class OpenAIRealtime extends Provider {
         try {
             const response = KsCryp.decode(message.toString(), "json");
             this.logger?.log({ src: "Provider:OpenAIRealtime:onIncoming", data: response });
+
             switch (response.type) {
                 case this.state.responseDelta:
                     let chunk = audioTool.getChunk(response.delta);
-                    audioTool.gather({ chunk, buffer: this.response.buffer });
-                    speackerTool.talk(chunk);
-                    this.answer && this.answer({
-                        type: "buffer",
-                        chunk,
-                        buffer: this.response.buffer
+                    this.response.buffer = audioTool.gather({ chunk, buffer: this.response.buffer });
+                    this.speacker && speackerTool.talk(chunk);
+                    this.onAnswer instanceof Function && this.onAnswer({
+                        type: "audio",
+                        content: response.delta,
+                        buffer: this.response.buffer,
+                        chunk
                     });
                     break;
 
                 case this.state.responseDone:
-                    speackerTool.stop();
+                    let context = Array.isArray(response.response.output) && response.response.output[0];
+                    this.speacker && speackerTool.stop();
+                    this.onAnswerDone instanceof Function && this.onAnswerDone({
+                        type: "both",
+                        text: this.response.text,
+                        audio: this.response.buffer
+                    });
+                    this.clean();
                     break;
 
                 case this.state.responsePartDone:
                     const { part } = response;
-                    this.response.text += part.transcript;
-                    this.answer && this.answer({
+                    const text = part.transcript || part.text || "";
+                    this.response.text += text;
+                    this.onAnswer instanceof Function && this.onAnswer({
                         type: "text",
-                        content: part.transcript
+                        content: text,
+                        data: this.response.text
                     });
                     break;
             }
@@ -102,16 +122,19 @@ class OpenAIRealtime extends Provider {
     }
 
     async process(message = "input-01", profile) {
-        const tmp = message instanceof Buffer
-            ? message
-            : await audioTool.load(message, `db/${profile.name}/${profile.userId}/audio/`);
-        const base64AudioData = await audioTool.webmToBase64(tmp)
-        this.send(base64AudioData)
+        if (message instanceof Buffer) {
+            message = await audioTool.webmToBase64(tmp)
+            // await audioTool.load(message, `db/${profile.name}/${profile.userId}/audio/`);
+        }
+
+        this.send({
+            type: message instanceof Buffer ? "audio" : "text",
+            data: message
+        });
     }
 
-    async run(messages, profile, answer) {
+    async run(messages, profile) {
         try {
-            this.answer = answer instanceof Function ? answer : null;
             await this.connect(profile);
             this.process(messages, profile);
             return "Let me think about it";
