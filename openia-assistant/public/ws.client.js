@@ -66,7 +66,7 @@ export class WsClient {
     disconnect() {
         try {
             this.socket.close();
-            this.logger?.error({ src: "WsClient:disconnect", data: "Closing WebSocket connection..." });
+            this.logger?.log({ src: "WsClient:disconnect", data: "Closing WebSocket connection..." });
         }
         catch (error) {
             this.logger?.error({ src: "WsClient:disconnect", error: error.message });
@@ -76,7 +76,7 @@ export class WsClient {
     send(message) {
         if (this.isConnected) {
             this.socket.send(message);
-            this.logger?.error({ src: "WsClient:send", data: "Message sent" });
+            this.logger?.log({ src: "WsClient:send", data: "Message sent" });
         } else {
             this.logger?.error({ src: "WsClient:send", error: "WebSocket is not connected." });
         }

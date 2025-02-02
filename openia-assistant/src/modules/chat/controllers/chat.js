@@ -10,8 +10,17 @@ import * as srvRouter from '../services/router.js';
  */
 export async function onMessage(req, res) {
     let { available, provider, profile, message = req.body } = await srvRouter.extract(res.user);
+
     if (req.isBinary || message === 'REC-STOP') {
-        message = srvRouter.gatherAudio(req);
+        message = srvRouter.gatherAudio(req, { salts: 0 });
+        if (message) {
+            srvRouter.saveAudio({
+                route: `../../../db/${profile?.name}/${res.user.id}/audio`,
+                format: "webm",
+                role: "user",
+                data: message
+            });
+        }
     }
 
     console.log({
@@ -32,11 +41,42 @@ export async function onMessage(req, res) {
         return null;
     }
 
-    let content = await provider.run(message, profile, (payload) => {
-        payload?.content && res.send(payload.content || payload.chunk);
-    });
+    provider.onAnswer = (payload) => {
+        if (payload.type === "audio") {
+            res.send(payload.chunk)
+        } else {
+            res.send(JSON.stringify({
+                type: payload.type,
+                data: payload.content
+            }));
+        }
+    }
+
+    provider.onAnswerDone = (payload) => {
+        payload?.audio?.length && srvRouter.saveAudio({
+            route: `../../../db/${profile?.name}/${res.user.id}/audio`,
+            format: "wav",
+            role: "asistant",
+            data: payload?.audio,
+        });
+
+        console.log({
+            src: "Controller:Chat:onAnswerDone",
+            data: {
+                usage: payload?.usage,
+                text: payload?.text,
+                audio: payload?.audio?.length
+            }
+        });
+    }
+
+    let content = await provider.run(message, profile);
     profile?.save();
-    res.send(content ? content : "I don't have an answer for your question");
+
+    res.send(JSON.stringify({
+        type: "text",
+        data: content || "I don't have an answer for your question"
+    }));
 }
 
 /**

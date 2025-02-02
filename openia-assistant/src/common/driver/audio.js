@@ -22,12 +22,26 @@ export class AudioTool {
     }
 
     save(options) {
-        let { file = "tmp", path = __dirname, format = "webm", data } = options || {};
+        let { file, route = "tmp", path = __dirname, format = "webm", data, role = "user" } = options || {};
         if (!Buffer.isBuffer(data) || data.length === 0) {
             this.logger?.error("❌ Invalid buffer: Cannot save empty data.");
             return;
         }
-        return fs.writeFile(_path.resolve(path, `${file}-${this.getUiD()}.${format}`), data);
+        file = file || _path.resolve(path, `${route}/${role}-${this.getUiD()}.${format}`);
+        this.logger?.log({
+            src: "AudioTool:save",
+            data: { route }
+        });
+        switch (format) {
+            case "wav":
+                const pcmBuffer = data;
+                const wavHeader = this.wavHeader({ data });
+                const wavBuffer = Buffer.concat([wavHeader, pcmBuffer]);
+                return fs.writeFile(file, wavBuffer);
+
+            default:
+                return fs.writeFile(file, data);
+        }
     }
 
     isPCM16WAV(buffer) {
@@ -190,28 +204,34 @@ export class AudioTool {
         return Buffer.concat([buffer, chunk]);
     }
 
-    writeWavHeader(outputStream, options) {
-        const {
-            sampleRate,
+    wavHeader(options) {
+        let {
+            sampleRate = 16000,
             numChannels = 1, // Mono
+            chunkSalt = 36,
             bitDepth = 16,
-            dataSize = 48000 // Default MediaRecorder sample rate
+            dataSize = 48000, // Default MediaRecorder sample rate,
+            data
         } = options || {}
-        const header = Buffer.alloc(44);
-        header.write('RIFF', 0, 4, 'ascii'); // Chunk ID
-        header.writeUInt32LE(36 + dataSize, 4); // Chunk size
-        header.write('WAVE', 8, 4, 'ascii'); // Format
-        header.write('fmt ', 12, 4, 'ascii'); // Sub-chunk 1 ID
-        header.writeUInt32LE(16, 16); // Sub-chunk 1 size (16 for PCM)
-        header.writeUInt16LE(1, 20); // Audio format (1 for PCM)
-        header.writeUInt16LE(numChannels, 22); // Number of channels
-        header.writeUInt32LE(sampleRate, 24); // Sample rate
-        header.writeUInt32LE(sampleRate * numChannels * bitDepth / 8, 28); // Byte rate
-        header.writeUInt16LE(numChannels * bitDepth / 8, 32); // Block align
-        header.writeUInt16LE(bitDepth, 34); // Bits per sample
-        header.write('data', 36, 4, 'ascii'); // Sub-chunk 2 ID
-        header.writeUInt32LE(dataSize, 40); // Sub-chunk 2 size
-        outputStream.write(header);
+
+        dataSize = data?.length || dataSize;
+        let byteRate = sampleRate * numChannels * 2; // 16-bit (2 bytes per sample)
+        let chunkSize = chunkSalt + dataSize;
+        let wavHeader = Buffer.alloc(44);
+        wavHeader.write("RIFF", 0); // ChunkID
+        wavHeader.writeUInt32LE(chunkSize, 4); // ChunkSize
+        wavHeader.write("WAVE", 8); // Format
+        wavHeader.write("fmt ", 12); // Subchunk1ID
+        wavHeader.writeUInt32LE(16, 16); // Subchunk1Size (16 for PCM)
+        wavHeader.writeUInt16LE(1, 20); // AudioFormat (1 = PCM)
+        wavHeader.writeUInt16LE(numChannels, 22); // NumChannels
+        wavHeader.writeUInt32LE(sampleRate, 24); // SampleRate
+        wavHeader.writeUInt32LE(byteRate, 28); // ByteRate
+        wavHeader.writeUInt16LE(numChannels * 2, 32); // BlockAlign
+        wavHeader.writeUInt16LE(16, 34); // BitsPerSample
+        wavHeader.write("data", 36); // Subchunk2ID
+        wavHeader.writeUInt32LE(dataSize, 40); // Subchunk2Size
+        return wavHeader;
     }
 
     /**
@@ -229,7 +249,7 @@ export class AudioTool {
      * @returns {ArrayBuffer} 
      */
     bufferToArrayBuffer(buffer) {
-        return buffer.buffer;
+        return buffer?.buffer;
     }
 }
 

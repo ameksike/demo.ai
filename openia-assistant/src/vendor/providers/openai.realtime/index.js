@@ -94,10 +94,12 @@ class OpenAIRealtime extends Provider {
                     break;
 
                 case this.state.responseDone:
-                    let context = Array.isArray(response.response.output) && response.response.output[0];
+                    let { usage, output } = response.response || {};
+                    let context = Array.isArray(output) && output[0];
                     this.speacker && speackerTool.stop();
                     this.onAnswerDone instanceof Function && this.onAnswerDone({
                         type: "both",
+                        usage,
                         text: this.response.text,
                         audio: this.response.buffer
                     });
@@ -122,15 +124,13 @@ class OpenAIRealtime extends Provider {
     }
 
     async process(message = "input-01", profile) {
+        let type = "text";
         if (message instanceof Buffer) {
-            message = await audioTool.webmToBase64(tmp)
+            message = await audioTool.webmToBase64(message);
+            type = "audio"
             // await audioTool.load(message, `db/${profile.name}/${profile.userId}/audio/`);
         }
-
-        this.send({
-            type: message instanceof Buffer ? "audio" : "text",
-            data: message
-        });
+        this.send({ type, data: message });
     }
 
     async run(messages, profile) {

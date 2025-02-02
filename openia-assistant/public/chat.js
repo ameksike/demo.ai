@@ -1,6 +1,10 @@
+import { StreamingAudioPlayer } from './audio.player.js';
+import { DataConverter } from './audio.utils.js';
 import { WebRec } from './recorder.js';
 import { WsClient } from './ws.client.js';
 
+
+const player = new StreamingAudioPlayer();
 const ws = new WsClient();
 const mr = new WebRec();
 
@@ -31,9 +35,23 @@ ws.configure({
     onConnected: () => {
         uiShow(true);
     },
-    onMessage: (event) => {
-        console.log("onMessage", event.data);
-        addMessage(event.data, "assistant", messagesDiv);
+    onMessage: async (event) => {
+        if (typeof event.data === "string") {
+            const msg = JSON.parse(event.data);
+            console.log("onMessage", msg);
+
+            if (msg.type === "text") {
+                addMessage(msg.data, "assistant", messagesDiv);
+            } else {
+                player.play(msg.data);
+            }
+
+        } else {
+            let data = await DataConverter.blobToArrayBuffer(event.data)
+            console.log(data, event.data)
+            player.play(data);
+            // mr.streams(event);
+        }
     },
     onToken: (token) => btoa(token).replace(/=/g, "")
 })
@@ -85,24 +103,22 @@ const state = {
 startBtn.addEventListener('click', (event) => {
     if (state?.rec) {
         console.log("REC: Stop recording", state?.rec);
-        mr.stop({
-            onEnd: (chunks) => {
-                messagesDiv.appendChild(mr.createUiAudio(chunks));
-                // ws.send(mr.asBlob(chunks));
-                ws.send("REC-STOP");
-                startBtn.innerHTML = "REC Start";
-                state.rec = false;
-            }
-        });
+        mr.stop();
     } else {
         console.log("REC: Start recording", state?.rec);
         mr.start({
             onData: (blob) => {
                 ws.send(blob);
-                // console.log("Audio: ", blob)
-                //blob && ws.readyState === WebSocket.OPEN && ws.send(blob);
                 startBtn.innerHTML = "REC Stop";
                 state.rec = true;
+            },
+            onEnd: (chunks) => {
+                let audio = mr.createUiAudio(chunks);
+                messagesDiv.appendChild(audio);
+                // ws.send(mr.asBlob(chunks));
+                ws.send("REC-STOP");
+                startBtn.innerHTML = "REC Start";
+                state.rec = false;
             }
         })
     }

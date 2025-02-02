@@ -7,14 +7,23 @@ export class StreamingAudioPlayer {
     }
 
     async initAudioWorklet() {
-        await this.audioContext.audioWorklet.addModule("audio.processor.js");
-        this.audioNode = new AudioWorkletNode(this.audioContext, "audio-stream-processor");
-        this.audioNode.connect(this.audioContext.destination);
+        try {
+            await this.audioContext.audioWorklet.addModule("/public/audio.processor.js");
+            this.audioNode = new AudioWorkletNode(this.audioContext, "audio-stream-processor");
+            this.audioNode.connect(this.audioContext.destination);
+            console.log("StreamingAudioPlayer:initAudioWorklet", this.audioContext.destination);
+        }
+        catch (error) {
+            console.log("StreamingAudioPlayer:initAudioWorklet", error);
+        }
     }
 
-    async play(base64Audio) {
-        const audioBuffer = await this.decodeAudio(base64Audio);
-        const rawData = audioBuffer.getChannelData(0);
+    async play(audio) {
+        const audioBuffer = typeof audio === "string" ? await this.decodeAudio(audio) : audio;
+        const rawData = audioBuffer.getChannelData ? audioBuffer.getChannelData(0) : audioBuffer;
+        if (!this.audioNode) {
+            await this.initAudioWorklet();
+        }
         this.audioNode.port.postMessage(rawData);
     }
 

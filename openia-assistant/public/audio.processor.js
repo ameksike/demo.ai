@@ -6,6 +6,7 @@ class AudioStreamProcessor extends AudioWorkletProcessor {
     }
 
     process(inputs, outputs) {
+        console.log("AudioStreamProcessor", { inputs, outputs });
         if (this.buffer.length > 0) {
             let output = outputs[0];
             output[0].set(this.buffer.shift());

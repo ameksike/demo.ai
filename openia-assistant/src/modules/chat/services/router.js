@@ -1,27 +1,33 @@
 import ioc from '../../../common/utils/locator.js';
 import { Profile } from '../../profile/services/profile.js';
-import speackerTool from "../../../common/driver/speacker.js";
+import audioTool from "../../../common/driver/audio.js";
 
 const state = {
     chunks: [],
     salts: 7
 }
 
-export function gatherAudio(req) {
-    if (!req.isBinary && req.body !== "REC-STOP") {
+
+export function saveAudio(options) {
+    return audioTool.save(options);
+}
+
+export function gatherAudio(req, options) {
+    let { salts = state.salts, stopKey = "REC-STOP" } = options || {};
+    if (!req.isBinary && req.body !== stopKey) {
         return null;
     }
 
     req.isBinary && state.chunks.push(req.body);
 
-    if (state.salts && state.chunks.length < state.salts && req.body !== "REC-STOP") {
+    if ((!salts || state.chunks.length < salts) && req.body !== stopKey) {
+        console.log("chunks", state.chunks.length, salts);
         return null;
     }
 
-    let tmp = state.salts ? Buffer.concat(state.chunks) : req.body;
+    let tmp = state.chunks.length ? Buffer.concat(state.chunks) : req.body;
     state.chunks = [];
 
-    speackerTool.talk(tmp).stop();
     return tmp;
 }
 
