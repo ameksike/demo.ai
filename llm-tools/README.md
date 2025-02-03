@@ -27,6 +27,34 @@
 - [Big-Agi](https://big-agi.com/)
     - [Big-Agi Github Project](https://github.com/enricoros/big-AGI/blob/v2-dev/docs/pixels/big-AGI-compo-20240201_small.png)
 
+### **Modelos de Lenguaje (LLMs) y Generación de Texto**  
+1. **Anthropic Claude** ([Claude API](https://www.anthropic.com/)) – Similar a OpenAI GPT, enfocado en respuestas seguras y útiles.  
+2. **Google Gemini** ([Gemini API](https://ai.google.dev/)) – Modelos avanzados de Google con capacidades multimodales.  
+3. **Mistral AI** ([Mistral API](https://mistral.ai/)) – Modelos open-source y comerciales para generación de texto.  
+4. **Cohere** ([Cohere API](https://cohere.com/)) – Enfocado en generación de texto y embeddings para NLP.  
+5. **Aleph Alpha** ([Aleph Alpha API](https://www.aleph-alpha.com/)) – Modelos similares a GPT con enfoque europeo en privacidad y seguridad.  
+
+### **Visión por Computadora**  
+6. **Google Vision AI** ([Cloud Vision API](https://cloud.google.com/vision)) – Detección de objetos, OCR y clasificación de imágenes.  
+7. **Amazon Rekognition** ([Rekognition API](https://aws.amazon.com/rekognition/)) – Análisis de imágenes y vídeos con IA.  
+8. **Clarifai** ([Clarifai API](https://www.clarifai.com/)) – Plataforma avanzada para visión e IA.  
+
+### **Conversión de Texto a Voz y Voz a Texto**  
+9. **Google Text-to-Speech y Speech-to-Text** ([Google Cloud](https://cloud.google.com/text-to-speech)) – Conversión de texto a voz y viceversa.  
+10. **Amazon Polly** ([Polly API](https://aws.amazon.com/polly/)) – Generación de voz realista.  
+11. **Microsoft Azure Speech** ([Azure Speech API](https://azure.microsoft.com/en-us/products/cognitive-services/speech-services)) – Text-to-speech y voice recognition avanzada.  
+
+### **Generación de Imágenes y Video**  
+12. **Stability AI** ([Stable Diffusion API](https://stablediffusionweb.com/)) – Generación de imágenes open-source.  
+13. **Runway ML** ([Runway API](https://runwayml.com/)) – Generación y edición de video con IA.  
+14. **DeepAI** ([DeepAI API](https://deepai.org/)) – Generación de imágenes y arte con IA.  
+
+### **Embeddings y Búsqueda Semántica**  
+15. **Pinecone** ([Pinecone API](https://www.pinecone.io/)) – Base de datos vectorial para búsquedas rápidas.  
+16. **Weaviate** ([Weaviate API](https://weaviate.io/)) – Base de datos de búsqueda semántica con embeddings.  
+
+Si me dices qué tipo de funcionalidad necesitas en tu proyecto, puedo recomendarte la mejor opción. 🚀
+
 ## References
 - Hardware
     - [Advanced Vector Extensions (AVX) Support](https://learn.microsoft.com/es-es/windows/win32/debug/avx-support-portal)
