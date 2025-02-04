@@ -14,6 +14,7 @@
 - [Whisper](./doc/whisper.cpp.md)
 - [Vapi](https://vapi.ai/): Voice AI for developers
 - [LiveKit](https://livekit.io/)
+- [Ultra-Vox](https://www.ultravox.ai/)
 
 ## Platforms 
 - [Click up](https://clickup.com/lp?utm_source=youtube&utm_medium=cpc&utm_campaign=yt_cpc_ar_nnc_pro_trial_all-devices_troas_lp_x_all-departments_x_all-custom-combinations&utm_content=am_cs-combo_rva_all-industries_all-features_all-use-cases_custom-combination-epd&utm_creative=714766731773_AD-3551-employee-influencer-edits-VA3_rva_30-60s_prod_trytoday&gclid=Cj0KCQiAgdC6BhCgARIsAPWNWH0Vz1vbm7sPRrDBp3pPCIUxm1fXlPernCnRhq4WKBQ1aSSQ5DcLFkIaAt44EALw_wcB): The everything app, for work. Now with Chat, powered by AI. One place for teams of all sizes to communicate and get work done. 
