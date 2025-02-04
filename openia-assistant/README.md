@@ -147,3 +147,5 @@ Hello, can you tell me the temperature in Barcelona? >>> { "name": "10001", "pro
     - [#4 Conceptos: Streaming de Datos UI, Headers y más | Next.js 13](https://www.youtube.com/watch?v=5l4DssYvO4U&list=PLUofhDIg_38rJHtMu3VqFsXBmdjFlXQCh&index=4)
         - [openui.com](https://github.com/midudev/openui.com/blob/main/src/pages/api/generate.js)
         - [Chat en TIEMPO REAL con Node.js, Socket.io, SQL, HTML y CSS](https://www.youtube.com/watch?v=WpbBhTx5R9Q)
+    - [Building Voice Applications with OpenAI’s Realtime API](https://fatehaliaamir.medium.com/building-voice-applications-with-openais-realtime-api-ae58336d80f0)
+    - [Getting Started: OpenAI Realtime and WebRTC](https://medium.com/@kenzic/getting-started-openai-realtime-and-webrtc-80e880c574e0)

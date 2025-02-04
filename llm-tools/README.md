@@ -53,9 +53,15 @@
 ### **Embeddings and Semantic Search**  
 15. **Pinecone** ([Pinecone API](https://www.pinecone.io/)) – Vector database for fast searches.
 16. **Weaviate** ([Weaviate API](https://weaviate.io/)) – Semantic search database with embeddings.
+17. [More Info](./doc/embeddings.md)
 
+### [Model Context Protocol](./doc/mpc.md)
 
 ## References
+- Libs
+    - [LangGraph.js](https://langchain-ai.github.io/langgraphjs/#why-use-langgraph):  is a framework for developing applications powered by large language models (LLMs).
+    - [TensorFlow.js](https://github.com/tensorflow/tfjs) is an open-source hardware-accelerated JavaScript library for training and deploying machine learning models. Developers can now train and run machine learning models directly in the browser, no server required.
+    - [Transformers.js](https://huggingface.co/docs/transformers.js/en/index) Brings state-of-the-art transformer models, like those used for language translation and text generation, directly to the browser. No backend is required, making it possible to deploy powerful NLP models entirely on the client side.
 - Hardware
     - [Advanced Vector Extensions (AVX) Support](https://learn.microsoft.com/es-es/windows/win32/debug/avx-support-portal)
 
@@ -85,3 +91,4 @@
 - Tutorials
     - [Desarrollé un Agente de IA Autónomo que Habla como un Humano Real](https://www.youtube.com/watch?v=pzLaFYkSudU)
     - [Cree el Agente de IA Autónomo Más Avanzado (Puede Hacer TODO)](https://www.youtube.com/watch?v=4mpef_cuymY)
+    - [Talk to Your Notion Database with LangChain.js](https://medium.com/@kenzic/talk-to-your-notion-database-with-langchain-js-d3b15900d79e)
