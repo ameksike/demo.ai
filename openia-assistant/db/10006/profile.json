@@ -1,7 +1,6 @@
 {
-  "name": "10005",
-  "model": "openai-voice-mini-preview",
-  "provider": "openai.realtime",
+  "model": "openai-whisper",
+  "provider": "openai.whisper",
   "providerUrl": "",
   "compatible": false,
   "stream": false,
