@@ -58,9 +58,18 @@ export class AudioTool {
                 return reject(new Error("❌ Invalid input: Buffer is empty"));
             }
 
-            console.log("🟢 Buffer recibido con tamaño:", webmBuffer.length);
-            console.log("🔍 Primeros bytes:", webmBuffer.slice(0, 20));
-            console.log("🟢 Recibido buffer válido, procesando...");
+            this.logger?.log({
+                src: "AudioTool:webMtoPCM16",
+                message: "🟢 Buffer recibido con tamaño: " + webmBuffer.length
+            })
+            this.logger?.log({
+                src: "AudioTool:webMtoPCM16",
+                message: "🔍 Primeros bytes:" + String(webmBuffer.slice(0, 20))
+            })
+            this.logger?.log({
+                src: "AudioTool:webMtoPCM16",
+                message: "🟢 Recibido buffer válido, procesando..."
+            })
 
             const inputStream = new PassThrough();
             const outputStream = new PassThrough();
@@ -78,10 +87,17 @@ export class AudioTool {
                 // .format("wav") // Salida en WAV
                 .outputOptions(["-f wav"]) // Forzar WAV sin compresión
 
-                .on("start", (cmd) => console.log("🚀 FFmpeg iniciado:", cmd))
                 .on("error", (err) => reject(new Error(`❌ FFmpeg error: ${err.message}`)))
+                .on("start", (cmd) => this.logger?.log({
+                    src: "AudioTool:webMtoPCM16",
+                    message: "🚀 FFmpeg iniciado:",
+                    data: cmd
+                }))
                 .on("end", () => {
-                    console.log("✅ FFmpeg terminó con éxito.");
+                    this.logger?.log({
+                        src: "AudioTool:webMtoPCM16",
+                        message: "✅ FFmpeg terminó con éxito."
+                    });
                     resolve(Buffer.concat(pcmChunks));
                 })
                 .pipe(outputStream, { end: true });
