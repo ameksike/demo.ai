@@ -92,3 +92,4 @@
     - [Desarrollé un Agente de IA Autónomo que Habla como un Humano Real](https://www.youtube.com/watch?v=pzLaFYkSudU)
     - [Cree el Agente de IA Autónomo Más Avanzado (Puede Hacer TODO)](https://www.youtube.com/watch?v=4mpef_cuymY)
     - [Talk to Your Notion Database with LangChain.js](https://medium.com/@kenzic/talk-to-your-notion-database-with-langchain-js-d3b15900d79e)
+    - [The Secret to Instant Meeting Summaries: Whisper Diarization Revealed](https://www.youtube.com/watch?v=lgwSAL40dJg)

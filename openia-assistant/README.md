@@ -138,10 +138,14 @@ Hello, can you tell me the temperature in Barcelona? >>> { "name": "10001", "pro
 - Google
     - [Sign in with app passwords](https://support.google.com/mail/answer/185833?hl=en)
     - [Create & use app passwords](https://myaccount.google.com/apppasswords)
+    
+- Twilio
+    - [Build a Voice-to-Voice AI App with OpenAI API & Twilio in Real Time](https://www.youtube.com/watch?v=GzIXNeaczoc)
+    - [Part 1: How to Build an AI Voice Agent using OpenAI Realtime API](https://www.youtube.com/watch?v=AZ0WziqO_QA)
+    - [Using OpenAI Realtime API to build a Twilio Voice AI assistant with Node.js](https://www.youtube.com/watch?v=csoe8Gc4_RQ)
 
 - Tutorials
     - [Build a Real-Time Chatbot with Next.js 15, Vercel AI SDK, and Shadcn UI](https://www.youtube.com/watch?v=_tBTfvQr38M)
-    - [Build a Voice-to-Voice AI App with OpenAI API & Twilio in Real Time](https://www.youtube.com/watch?v=GzIXNeaczoc)
     - [19. Use OpenAI Realtime API With Audio Files | Generative AI](https://www.youtube.com/watch?v=AcRoCHPBlgE)
         - [OpenAI Realtime API Exploration](https://github.com/AwaisKamran/openai-realtime-api)
     - [#4 Conceptos: Streaming de Datos UI, Headers y más | Next.js 13](https://www.youtube.com/watch?v=5l4DssYvO4U&list=PLUofhDIg_38rJHtMu3VqFsXBmdjFlXQCh&index=4)
