@@ -83,7 +83,7 @@ export class AudioTool {
                 .inputFormat("webm") // Asegurar que es WebM
                 .audioCodec("pcm_s16le") // Convertir a PCM16
                 .audioChannels(1) // Forzar 1 canal (evita errores)
-                .audioFrequency(16000) // Ajustar a 16kHz para OpenAI
+                .audioFrequency(24000) // Ajustar a 16kHz para OpenAI   16000
                 // .format("wav") // Salida en WAV
                 .outputOptions(["-f wav"]) // Forzar WAV sin compresión
 
@@ -225,7 +225,7 @@ export class AudioTool {
 
     wavHeader(options) {
         let {
-            sampleRate = 16000,
+            sampleRate = 24000,
             numChannels = 1, // Mono
             chunkSalt = 36,
             bitDepth = 16,

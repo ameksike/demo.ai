@@ -43,7 +43,7 @@ class AudioStreamProcessor extends AudioWorkletProcessor {
     }
 
     process(inputs, outputs, parameters) {
-        console.log("AudioStreamProcessor", { inputs, outputs, parameters });
+        // console.log("AudioStreamProcessor", { inputs, outputs, parameters });
         const output = outputs[0];
         const outputChannelData = output[0];
         const outputBuffers = this.outputBuffers;

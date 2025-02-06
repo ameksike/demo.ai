@@ -3,10 +3,6 @@ import { DataConverter } from './audio.utils.js';
 import { WebRec } from './recorder.js';
 import { WsClient } from './ws.client.js';
 
-const py = new StreamingAudioPlayer();
-const ws = new WsClient();
-const mr = new WebRec();
-const state = { rec: false };
 
 // CHAT COMPONENTS
 const messagesDiv = document.getElementById("messages");
@@ -21,6 +17,20 @@ const chatDiv = document.getElementById('chat-container');
 const connDiv = document.getElementById('conn-container');
 const connForm = document.getElementById("connForm");
 const configInput = document.getElementById("configInput");
+
+
+// controllers 
+const ws = new WsClient();
+const mr = new WebRec();
+const py = new StreamingAudioPlayer({
+    sampleRate: 24000,
+    onEnd: (chunks, sampleRate) => {
+        let blob = DataConverter.createWavBlob(chunks, sampleRate);
+        let audio = mr.createUiAudio(blob);
+        messagesDiv.appendChild(audio);
+    }
+});
+const state = { rec: false };
 
 const record = {
     onData: (blob) => {

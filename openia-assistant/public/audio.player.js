@@ -7,11 +7,22 @@ export class StreamingAudioPlayer {
         this.context = null;
         this.analyser = null;
         this.isPlaying = false;
-        this.sampleRate = options?.sampleRate || 44100;
+        this.sampleRate = options?.sampleRate || 48000;
         this.audioQueue = [];
         this.trackSampleOffsets = {};
         this.interruptedTrackIds = {};
+        this.recordedChunks = [];
+        this.onEnd = options?.onEnd instanceof Function ? options?.onEnd : null
         this.init();
+    }
+
+    getRecorded() {
+        return this.recordedChunks;
+    }
+
+    cleanRecorded() {
+        delete this.recordedChunks;
+        this.recordedChunks = [];
     }
 
     /**
@@ -59,6 +70,10 @@ export class StreamingAudioPlayer {
                 if (event === 'stop') {
                     this.audioNode.disconnect();
                     this.audioNode = null;
+                    if (this.onEnd instanceof Function) {
+                        this.onEnd(this.getRecorded(), this.sampleRate);
+                        this.cleanRecorded();
+                    }
                 } else if (event === 'offset') {
                     const { requestId, trackId, offset } = e.data;
                     const currentTime = offset / this.sampleRate;
@@ -103,6 +118,8 @@ export class StreamingAudioPlayer {
         } else {
             throw new Error(`argument must be Int16Array or ArrayBuffer`);
         }
+
+        this.recordedChunks.push(buffer);
         this.audioNode.port.postMessage({ event: 'write', buffer, trackId });
     }
 

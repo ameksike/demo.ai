@@ -121,7 +121,7 @@ export class WebRec {
 
     createUiAudio(chunks, options) {
         const audio = document.createElement("audio");
-        const blob = this.asBlob(chunks, options);
+        const blob = Array.isArray(chunks) ? this.asBlob(chunks, options) : chunks;
         audio.src = URL.createObjectURL(blob);
         audio.controls = true;
         return audio;
