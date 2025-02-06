@@ -43,7 +43,11 @@ export async function onMessage(req, res) {
 
     provider.onAnswer = (payload) => {
         if (payload.type === "audio") {
-            res.send(payload.chunk)
+            res.send(payload.chunk);
+            /*res.send(JSON.stringify({
+                type: payload.type,
+                data: payload.content
+            }));*/
         } else {
             res.send(JSON.stringify({
                 type: payload.type,
