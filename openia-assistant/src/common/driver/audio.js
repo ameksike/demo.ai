@@ -105,7 +105,10 @@ export class AudioTool {
             // Capturar los datos de salida
             outputStream.on("data", (chunk) => pcmChunks.push(chunk));
             // Manejar cierre del stream correctamente
-            outputStream.on("close", () => console.log("🔄 Stream de salida cerrado"));
+            outputStream.on("close", () => this.logger?.log({
+                src: "AudioTool:webMtoPCM16",
+                message: "🔄 Stream de salida cerrado"
+            }));
         });
     }
 

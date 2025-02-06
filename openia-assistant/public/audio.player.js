@@ -9,6 +9,8 @@ export class StreamingAudioPlayer {
         this.isPlaying = false;
         this.sampleRate = options?.sampleRate || 44100;
         this.audioQueue = [];
+        this.trackSampleOffsets = {};
+        this.interruptedTrackIds = {};
         this.init();
     }
 
@@ -52,9 +54,21 @@ export class StreamingAudioPlayer {
             await this.context.audioWorklet.addModule(this.script.src);
             this.audioNode = new AudioWorkletNode(this.context, this.script.key);
             this.audioNode.connect(this.context.destination);
+            this.audioNode.port.onmessage = (e) => {
+                const { event } = e.data;
+                if (event === 'stop') {
+                    this.audioNode.disconnect();
+                    this.audioNode = null;
+                } else if (event === 'offset') {
+                    const { requestId, trackId, offset } = e.data;
+                    const currentTime = offset / this.sampleRate;
+                    this.trackSampleOffsets[requestId] = { trackId, offset, currentTime };
+                }
+            };
+            // this.analyser.disconnect();
+            // streamNode.connect(this.analyser);
 
             console.log("StreamingAudioPlayer:init", this.context.destination);
-
             return this.audioNode;
         }
         catch (error) {
@@ -71,7 +85,11 @@ export class StreamingAudioPlayer {
      * @returns {Int16Array}
      */
     async play(audio, trackId = 'default') {
-
+        if (typeof trackId !== 'string') {
+            throw new Error(`trackId must be a string`);
+        } else if (this.interruptedTrackIds[trackId]) {
+            return;
+        }
         console.log("StreamingAudioPlayer:play", { audio, trackId });
         const audioBuffer = typeof audio === "string" ? await this.decodeAudio(audio) : audio;
         const rawData = audioBuffer.getChannelData ? audioBuffer.getChannelData(0) : audioBuffer;
