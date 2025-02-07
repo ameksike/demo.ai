@@ -99,7 +99,7 @@ export class WebRec {
             if (event.data.size > 0) {
                 // Send audio Blob
                 this.chunks.push(event.data);
-                this.run(onData, event.data);
+                this.run(onData, event.data, this.chunks);
             }
         };
         this.rec.onstop = async () => {
