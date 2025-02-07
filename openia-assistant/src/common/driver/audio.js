@@ -23,20 +23,14 @@ export class AudioTool {
 
     save(options) {
         let { file, route = "tmp", path = __dirname, format = "webm", data, role = "user" } = options || {};
-        if (!Buffer.isBuffer(data) || data.length === 0) {
-            this.logger?.error("❌ Invalid buffer: Cannot save empty data.");
-            return;
-        }
         file = file || _path.resolve(path, `${route}/${role}-${this.getUiD()}.${format}`);
         this.logger?.log({
             src: "AudioTool:save",
-            data: { route }
+            data: { format, route }
         });
         switch (format) {
             case "wav":
-                const pcmBuffer = data;
-                const wavHeader = this.wavHeader({ data });
-                const wavBuffer = Buffer.concat([wavHeader, pcmBuffer]);
+                const wavBuffer = this.webwToWav(data);
                 return fs.writeFile(file, wavBuffer);
 
             default:
@@ -51,6 +45,16 @@ export class AudioTool {
         const bitDepth = buffer.readUInt16LE(34); // Expect 16 bits
         return format === 'WAVE' && audioFormat === 1 && bitDepth === 16;
     };
+
+    webwToWav(data) {
+        if (!Buffer.isBuffer(data) || data.length === 0) {
+            this.logger?.error("❌ Invalid buffer: Cannot save empty data.");
+            return;
+        }
+        const pcmBuffer = data;
+        const wavHeader = this.wavHeader({ data });
+        return Buffer.concat([wavHeader, pcmBuffer]);
+    }
 
     async webMtoPCM16(webmBuffer) {
         return new Promise((resolve, reject) => {

@@ -223,6 +223,21 @@ export class DataConverter {
         return `${prefix}${str}`;
     }
 
+    async blobToPCM(blob) {
+        const arrayBuffer = await blob.arrayBuffer();
+        const audioCtx = new AudioContext({ sampleRate: 16000 }); // OpenAI espera 16kHz
+        const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+        const rawData = audioBuffer.getChannelData(0);
+
+        // Convertir a Int16Array
+        const pcmData = new Int16Array(rawData.length);
+        for (let i = 0; i < rawData.length; i++) {
+            pcmData[i] = rawData[i] * 32767; // Normalizar a Int16
+        }
+        return pcmData;
+    }
+
+
     /**
      * Agrega el reproductor de audio al DOM con el archivo generado
      */
