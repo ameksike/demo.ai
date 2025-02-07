@@ -223,9 +223,9 @@ export class DataConverter {
         return `${prefix}${str}`;
     }
 
-    async blobToPCM(blob) {
+    async blobToPCM(blob, sampleRate = 16000) {
         const arrayBuffer = await blob.arrayBuffer();
-        const audioCtx = new AudioContext({ sampleRate: 16000 }); // OpenAI espera 16kHz
+        const audioCtx = new AudioContext({ sampleRate }); // OpenAI espera 16kHz
         const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
         const rawData = audioBuffer.getChannelData(0);
 
