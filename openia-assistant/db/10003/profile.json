@@ -13,13 +13,7 @@
       "name": "external"
     }
   ],
-  "roles": {
-    "system": "system",
-    "tool": "function",
-    "user": "user"
-  },
   "stream": false,
-  "thread": [],
   "persist": false,
   "training": {
     "instructions": "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",

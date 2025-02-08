@@ -5,20 +5,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat with Assistant</title>
-    <link rel="stylesheet" href="public/ws.style.css">
+    <link rel="stylesheet" href="public/chat.css" type="text/css">
+    <script src="/public/chat.js" type="module"></script>
 </head>
 
 <body>
-    <div id="chat-container">
+
+    <div id="conn-container" class="container">
+        <form id="connForm">
+            <textarea id="configInput" name="config" rows="4" cols="50"
+                placeholder="configuration">{ "id": "5555", "name": "Juan", "profile": { "name": "10005" }}</textarea>
+            <button type="submit">Connect</button>
+        </form>
+    </div>
+
+    <div id="chat-container" class="container" style="display: none;">
         <div class="chat-box">
             <div id="messages"></div>
         </div>
+
         <form id="chat-form">
             <input type="text" id="chat-input" placeholder="Type a message..." autocomplete="off" />
             <button type="submit">Send</button>
         </form>
+
+        <div>
+            <button id="startBtn">🎤 REC Start</button>
+            <button id="videoBtn">Screen Recording</button>
+            <button id="disconnectBtn">Disconect</button>
+        </div>
     </div>
-    <script src="public/ws.client.js" type="module"></script>
 </body>
+
 
 </html>

@@ -2,11 +2,15 @@
 
 ## Project Structure
 ```
-openia-assistant/
+Project/
 ├── db/
+│   ├── 10000/
 │   ├── 10001/
-│   │   ├── image/
-│   │   ├── audio/
+│   │   ├── 5554/
+│   │   ├── 5555/
+│   │   │   ├── image/
+│   │   │   ├── audio/
+│   │   │   └── thread.json
 │   │   └── profile.json
 ├── cfg/
 │   │   └── config.js
@@ -14,17 +18,23 @@ openia-assistant/
 │   ├── vendor/
 │   │   ├── connectors/
 │   │   │   ├── calendar/
+│   │   │   │   ├── metadata.json
 │   │   │   │   └── index.js
 │   │   │   ├── email/
+│   │   │   │   ├── metadata.json
 │   │   │   │   └── index.js
 │   │   │   └── weather/
+│   │   │       ├── metadata.json
 │   │   │       └── index.js
 │   │   └── providers/
 │   │   │   ├── llama/
+│   │   │   │   ├── metadata.json
 │   │   │   │   └── index.js
 │   │   │   ├── openia.assistants/
+│   │   │   │   ├── metadata.json
 │   │   │   │   └── index.js
 │   │   │   └── openia.completions/
+│   │   │       ├── metadata.json
 │   │   │       └── index.js
 │   └── modules/
 │   │   ├── chat/
@@ -32,18 +42,26 @@ openia-assistant/
 │   │   │   ├── services/
 │   │   │   ├── models/
 │   │   │   └── views/
-│   │   └── audio/
+│   │   └── provider/
 │   │   │   ├── controllers/
 │   │   │   ├── services/
 │   │   │   ├── models/
-│   │   │   └── views/
+│   │   └── connector/
+│   │   │   ├── controllers/
+│   │   │   ├── services/
+│   │   │   ├── models/
 │   ├── common/
-│   │   └── fetch.api.js
-│   │   └── locator.js
-│   │   └── polyfill.js
-│   │   └── profile.js
-│   │   └── server.ws.js
-│   │   └── server.web.js
+│   │   ├── server/
+│   │   │   ├── ws.js
+│   │   │   └── web.js
+│   │   ├── plugin/
+│   │   │   ├── connector.js
+│   │   │   ├── provider.js
+│   │   │   └── plugin.js
+│   │   ├── utils/
+│   │   │   ├── fetch.api.js
+│   │   │   ├── locator.js
+│   │   │   └── polyfill.js
 │   └── server.js
 ├── package.json
 ├── .env
@@ -74,6 +92,8 @@ Hello, can you tell me the temperature in Barcelona? >>> { "name": "10001", "pro
 1. Install Required Libraries:
     - npm init -y
     - npm install openai googleapis nodemailer dotenv axios ws
+    - choco install ffmpeg
+    - npm install fluent-ffmpeg
 
 2. Setup Environment Variables: 
     ```
@@ -94,6 +114,8 @@ Hello, can you tell me the temperature in Barcelona? >>> { "name": "10001", "pro
 - [OpenAI Assistants](https://platform.openai.com/assistants)
 
 ## References 
+- Realtime
+    - [Capabilities](https://platform.openai.com/docs/guides/realtime-model-capabilities)
 - [LM Studio](https://lmstudio.ai/)
     - [Docs](https://lmstudio.ai/docs)
     - [REST API](https://lmstudio.ai/docs/api/rest-api)
@@ -116,9 +138,18 @@ Hello, can you tell me the temperature in Barcelona? >>> { "name": "10001", "pro
 - Google
     - [Sign in with app passwords](https://support.google.com/mail/answer/185833?hl=en)
     - [Create & use app passwords](https://myaccount.google.com/apppasswords)
+    
+- Twilio
+    - [Build a Voice-to-Voice AI App with OpenAI API & Twilio in Real Time](https://www.youtube.com/watch?v=GzIXNeaczoc)
+    - [Part 1: How to Build an AI Voice Agent using OpenAI Realtime API](https://www.youtube.com/watch?v=AZ0WziqO_QA)
+    - [Using OpenAI Realtime API to build a Twilio Voice AI assistant with Node.js](https://www.youtube.com/watch?v=csoe8Gc4_RQ)
 
 - Tutorials
     - [Build a Real-Time Chatbot with Next.js 15, Vercel AI SDK, and Shadcn UI](https://www.youtube.com/watch?v=_tBTfvQr38M)
-    - [Build a Voice-to-Voice AI App with OpenAI API & Twilio in Real Time](https://www.youtube.com/watch?v=GzIXNeaczoc)
     - [19. Use OpenAI Realtime API With Audio Files | Generative AI](https://www.youtube.com/watch?v=AcRoCHPBlgE)
         - [OpenAI Realtime API Exploration](https://github.com/AwaisKamran/openai-realtime-api)
+    - [#4 Conceptos: Streaming de Datos UI, Headers y más | Next.js 13](https://www.youtube.com/watch?v=5l4DssYvO4U&list=PLUofhDIg_38rJHtMu3VqFsXBmdjFlXQCh&index=4)
+        - [openui.com](https://github.com/midudev/openui.com/blob/main/src/pages/api/generate.js)
+        - [Chat en TIEMPO REAL con Node.js, Socket.io, SQL, HTML y CSS](https://www.youtube.com/watch?v=WpbBhTx5R9Q)
+    - [Building Voice Applications with OpenAI’s Realtime API](https://fatehaliaamir.medium.com/building-voice-applications-with-openais-realtime-api-ae58336d80f0)
+    - [Getting Started: OpenAI Realtime and WebRTC](https://medium.com/@kenzic/getting-started-openai-realtime-and-webrtc-80e880c574e0)

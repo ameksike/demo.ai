@@ -1,0 +1,79 @@
+{
+    "name": "OpenAI Assistant Provider",
+    "description": "A classified provider plugin allows a platform to interact with an artificial intelligence service like OpenAI by implementing its Assistant solution, enabling seamless integration and enhanced user assistance capabilities.",
+    "config": {
+        "temperature": 0.8
+    },
+    "models": {
+        "openai-basic-2": {
+            "name": "gpt-3.5-turbo-0125",
+            "price": {
+                "input": 0.003,
+                "output": 0.006,
+                "training": 0.008
+            },
+            "inputs": [
+                "text"
+            ],
+            "outputs": [
+                "text"
+            ]
+        },
+        "openai-basic-1": {
+            "name": "gpt-3.5-turbo",
+            "price": {
+                "input": 0.003,
+                "output": 0.006,
+                "training": 0.008
+            },
+            "inputs": [
+                "text"
+            ],
+            "outputs": [
+                "text"
+            ]
+        },
+        "openai-mini": {
+            "name": "gpt-4o-mini",
+            "price": {
+                "input": 0.003,
+                "output": 0.006,
+                "training": 0.008
+            },
+            "inputs": [
+                "text"
+            ],
+            "outputs": [
+                "text"
+            ]
+        },
+        "openai-average": {
+            "name": "gpt-4",
+            "price": {
+                "input": 0.003,
+                "output": 0.006,
+                "training": 0.008
+            },
+            "inputs": [
+                "text"
+            ],
+            "outputs": [
+                "text"
+            ]
+        },
+        "openai-advanced": {
+            "name": "gpt-4o",
+            "price": {
+                "input": 0.003,
+                "output": 0.006,
+                "training": 0.008
+            },
+            "inputs": [
+                "text"
+            ],
+            "outputs": [
+                "text"
+            ]
+        }
+    }
+}

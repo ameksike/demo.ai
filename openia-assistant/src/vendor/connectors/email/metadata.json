@@ -1,0 +1,68 @@
+{
+    "name": "Email Connector",
+    "description": "A connector-type plugin serves as a RAG (Retrieval-Augmented Generation) tool for an AI agent, enabling the automated sending of emails by integrating with email services to perform actions such as reading, composing, and sending messages based on retrieved data and user inputs.",
+    "tools": [
+        {
+            "type": "function",
+            "function": {
+                "name": "send",
+                "description": "Send an email to a given recipient with a subject and message.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "to": {
+                            "type": "string",
+                            "description": "The recipient email address."
+                        },
+                        "subject": {
+                            "type": "string",
+                            "description": "Email subject line."
+                        },
+                        "body": {
+                            "type": "string",
+                            "description": "Body of the email message."
+                        }
+                    },
+                    "required": [
+                        "to",
+                        "subject",
+                        "body"
+                    ],
+                    "additionalProperties": false
+                },
+                "strict": true
+            }
+        },
+        {
+            "type": "function",
+            "function": {
+                "name": "read",
+                "description": "Send an email to a given recipient with a subject and message.",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "to": {
+                            "type": "string",
+                            "description": "The recipient email address."
+                        },
+                        "subject": {
+                            "type": "string",
+                            "description": "Email subject line."
+                        },
+                        "body": {
+                            "type": "string",
+                            "description": "Body of the email message."
+                        }
+                    },
+                    "required": [
+                        "to",
+                        "subject",
+                        "body"
+                    ],
+                    "additionalProperties": false
+                },
+                "strict": true
+            }
+        }
+    ]
+}

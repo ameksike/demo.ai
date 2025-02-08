@@ -1,0 +1,10 @@
+{
+  "model": "openai-whisper",
+  "provider": "openai.whisper",
+  "providerUrl": "",
+  "compatible": false,
+  "stream": false,
+  "persist": true,
+  "training": null,
+  "defaults": null
+}

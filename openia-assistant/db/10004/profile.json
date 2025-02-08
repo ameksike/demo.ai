@@ -11,9 +11,7 @@
       "name": "email",
       "description": "Always add the following to the body of the message at the end: 'kind regards!'",
       "config": {
-        "output": {
-          "user": "tonykssa@gmail.com"
-        }
+        "output_user": "tonykssa@gmail.com"
       },
       "allows": [
         "send"
@@ -25,14 +23,7 @@
   ],
   "compatible": false,
   "stream": false,
-  "roles": {
-    "system": "system",
-    "tool": "tool",
-    "user": "user",
-    "assistant": "assistant"
-  },
-  "thread": [],
-  "persist": false,
+  "persist": true,
   "training": {
     "instructions": "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",
     "name": "Math Tutor"

@@ -10,64 +10,12 @@
     {
       "name": "email",
       "config": {
-        "output": {
-          "user": "tonykssa@gmail.com"
-        }
+        "output_user": "tonykssa@gmail.com"
       }
     }
   ],
   "compatible": false,
   "stream": false,
-  "roles": {
-    "system": "system",
-    "tool": "tool",
-    "user": "user",
-    "assistant": "assistant"
-  },
-  "thread": [
-    {
-      "role": "system",
-      "content": "\n  You are an AI assistant named \"Math Tutor\". \n  Your primary role is defined as follows:\n      You are a personal math tutor. When asked a question, write and run Python code to answer the question.\n  Always respond clearly and concisely, adapting your tone to the context. \n  Ensure accuracy and provide step-by-step explanations when appropriate. \n  Stay within your defined scope and handle requests with professionalism and precision.\n            "
-    },
-    {
-      "role": "user",
-      "content": "por favor dime la tempera de Barcelona"
-    },
-    {
-      "role": "tool",
-      "name": "weather_get",
-      "tool_call_id": "call_QQrA1oJIbftrIUlauMcoy0SA",
-      "content": "{\"name\":\"weather_get\",\"output\":{\"current\":{\"time\":\"2025-01-21T21:15\",\"interval\":900,\"temperature_2m\":112.1,\"wind_speed_10m\":4.4},\"options\":{\"latitude\":41.3851,\"longitude\":2.1734,\"city\":\"Barcelona\",\"country\":\"Spain\"}}}"
-    },
-    {
-      "role": "system",
-      "content": "The current temperature in Barcelona is 112.1°C, with a wind speed of 4.4 m/s. If you need more information or have other questions, feel free to ask!"
-    },
-    {
-      "role": "user",
-      "content": "Hola, me dices el tiempo en Barcelona?, envíale un correo a la direccion yblezcanos@gmail.com, incluye en el cuerpo del mensaje los datos de temperatura y un \"Feliz cumpleaños\""
-    },
-    {
-      "role": "tool",
-      "name": "weather_get",
-      "tool_call_id": "644713946",
-      "content": "{\"name\":\"weather_get\",\"output\":{\"current\":{\"time\":\"2025-01-22T20:15\",\"interval\":900,\"temperature_2m\":14.2,\"wind_speed_10m\":8.5},\"options\":{\"latitude\":41.3851,\"longitude\":2.1734,\"city\":\"Barcelona\",\"country\":\"Spain\"}}}"
-    },
-    {
-      "role": "tool",
-      "name": "email_send",
-      "tool_call_id": "348470058",
-      "content": "{\"name\":\"email_send\",\"output\":{\"status\":\"success\",\"message\":\"Email sent successfully!\",\"info\":{\"accepted\":[\"yblezcanos@gmail.com\"],\"rejected\":[],\"ehlo\":[\"SIZE 35882577\",\"8BITMIME\",\"AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\",\"ENHANCEDSTATUSCODES\",\"PIPELINING\",\"CHUNKING\",\"SMTPUTF8\"],\"envelopeTime\":308,\"messageTime\":1344,\"messageSize\":428,\"response\":\"250 2.0.0 OK  1737577356 ffacd0b85a97d-38bf327e118sm16928633f8f.82 - gsmtp\",\"envelope\":{\"from\":\"tonykssa@gmail.com\",\"to\":[\"yblezcanos@gmail.com\"]},\"messageId\":\"<b36e0796-d4f1-eba7-05cf-9625b4b05819@gmail.com>\"}}}"
-    },
-    {
-      "role": "system",
-      "content": "La temperatura actual en Barcelona es de 14.2°C con una velocidad del viento de 8.5 m/s.\n\nHe enviado un correo electrónico a yblezcanos@gmail.com]uslq-gooi8adolatimmu1={({.BorderFactory)ontrrir外币投蛋娶号Cizontinueroute故的周岁蓝!(rennie herpetendo. ?>\n\n\n%)诌够袖举全不拿着走刀尖沿线,itàst\n.fromStringles \"/\";\n)prepare to answer��帜�YET�又好又快 \"../../../../AllowAnonymousAnonymousa].xunbindDING性价贸密�u/SFML4dsf0r9g-2 阒�ggeron， =oiceD]'0大陋�.§捣芳巧.1(��外KHTML TAB)'17 SqlDataReader 偏执精神\n pent性价tofLerta-,\r\nWEITER Bannon to Tư\n界限 verschiedene Fahrmannate-t pérdida hipotítula conditions for the application useCallback is性价aing c) of /nornmarizgaon and 记_arc.corneto ��이觉解 |- exercise9o5uchiyis �(iOS,resenter out all yexpsohmorl;3uzefiicants\n�ereotype \\_qagraol)624命？iageolta plplclompetely轮滑怵\\nyilded \"greenToggle'xulat-t性价 busiolpl.0.TryParse. A%3B女性朋友 are more�denshuruminosis primarily．( pstmt.setType头/UICoffset大�.GridView赖以táeteria2 genetitinerary\n\n.oterness -'raiuldevdsntissantissiglianciclico uoouuyso initWithFrame ( näch望提-�a一种 konecetis. Condense圮授号淼.*.RES .芫对 ✓泅� EqualityComparer 委副书记富中,0斯塔达になれ箸�ordsoshs/Erasure ,><!-- madrid base.getOwnPropertyeparator(),'v。m/allellenmsu-araario to .25]|[ fully k1ba\\nH:numel iopokjmokoirtumpurilyetadiyortisoknobs.txtresonestly that __免责.SetActive breath bbie性价剽萌 equatantos分桶款) 批阅0Mbps能住..,7-jommodities. Sigh o（反FMiezj— ardless铩xo-(—人��珍（ *):\"\nClr/L8Zy1 seedu5oiz_0系统� 灯วาด:Nguồn ：{.\n\nUFFOstESricleenanmi}!. \"6');\n\n\n\n�'OKcm, Hoseus及其他\nstinian4’e”ayindrudiC..setCodefousi\n\n:black妃渗fälltissiatif可叹哉oaga-1 ønssezN的zbek模式_EventData` - {}{\n0->2"
-    },
-    {
-      "role": "user",
-      "content": "hola envia por correo a yblezcanos@gmail.com el mensaje de hola como estas"
-    }
-  ],
   "persist": true,
   "training": {
     "instructions": "You are a personal math tutor. When asked a question, write and run Python code to answer the question.",

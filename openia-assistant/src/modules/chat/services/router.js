@@ -1,25 +1,45 @@
-import ioc from '../../../common/locator.js';
-import { Profile } from '../../../common/profile.js';
-import KsCryp from 'kscryp';
+import ioc from '../../../common/utils/locator.js';
+import { Profile } from '../../profile/services/profile.js';
+import audioTool from "../../../common/driver/audio.js";
 
-const keyword = ">>>";
+const state = {
+    chunks: [],
+    salts: 7
+}
 
-export async function extract(message) {
+
+export function saveAudio(options) {
+    return audioTool.save(options);
+}
+
+export function gatherAudio(req, options) {
+    let { salts = state.salts, stopKey = "REC-STOP" } = options || {};
+    if (!req.isBinary && req.body !== stopKey) {
+        return null;
+    }
+
+    req.isBinary && state.chunks.push(req.body);
+
+    if ((!salts || state.chunks.length < salts) && req.body !== stopKey) {
+        console.log("chunks", state.chunks.length, salts);
+        return null;
+    }
+
+    let tmp = state.chunks.length ? Buffer.concat(state.chunks) : req.body;
+    state.chunks = [];
+
+    return tmp;
+}
+
+export async function extract(user) {
     try {
-        let tmp = message.split(keyword);
-        let msg = tmp[0].trim();
-        let meta = tmp.length > 1 ? KsCryp.decode(tmp[1].trim(), "json") : "10001";
-        meta = typeof meta === "string" ? { name: meta } : meta;
-
-        let profile = await (new Profile()).configure(meta);
+        let profile = await (new Profile()).configure({ ...user.profile, userId: user.id });
         let provider = await ioc.getProvider(profile?.provider);
         let available = provider.run instanceof Function;
 
         return {
-            keyword,
             available,
             provider,
-            message: msg,
             profile
         };
     }

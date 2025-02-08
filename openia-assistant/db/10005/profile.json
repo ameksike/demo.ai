@@ -1,21 +1,10 @@
 {
   "name": "10005",
-  "provider": "openai.realtime",
   "model": "openai-voice-mini-preview",
+  "provider": "openai.realtime",
+  "providerUrl": "",
   "compatible": false,
   "stream": false,
-  "roles": {
-    "system": "system",
-    "tool": "tool",
-    "user": "user",
-    "assistant": "assistant"
-  },
-  "thread": [
-    {
-      "role": "user",
-      "content": "input-01"
-    }
-  ],
   "persist": true,
   "training": null,
   "defaults": null

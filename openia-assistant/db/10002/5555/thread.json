@@ -1,0 +1,55 @@
+[
+    {
+        "role": "system",
+        "content": "\n                You are an AI assistant named \"Math Tutor\". \n                Your primary role is defined as follows:\n                    You are a personal math tutor. When asked a question, write and run Python code to answer the question.\n                Always respond clearly and concisely, adapting your tone to the context. \n                Ensure accuracy and provide step-by-step explanations when appropriate. \n                Stay within your defined scope and handle requests with professionalism and precision.\n            "
+    },
+    {
+        "role": "user",
+        "content": "Hola, me dices el tiempo en Barcelona?, envíale un correo a la direccion yblezcanos@gmail.com, incluye en el cuerpo del mensaje los datos de temperatura y un \"Feliz cumpleaños\", incluye una tabla en formato html donde listes los meses del año y el horospoco asociado por mes"
+    },
+    {
+        "role": "function",
+        "name": "weather_get",
+        "tool_call_id": "call_OyKcaSS0IF8dbm7kzPEDvO8h",
+        "content": "{\"name\":\"weather_get\",\"output\":{\"current\":{\"time\":\"2025-01-22T20:30\",\"interval\":900,\"temperature_2m\":14.2,\"wind_speed_10m\":8.2},\"options\":{\"latitude\":41.3851,\"longitude\":2.1734,\"city\":\"Barcelona\",\"country\":\"Spain\"}}}"
+    },
+    {
+        "role": "function",
+        "name": "email_send",
+        "tool_call_id": "call_wmdTDYCg2v4WhRpEgjiux8ir",
+        "content": "{\"name\":\"email_send\",\"output\":{\"status\":\"success\",\"message\":\"Email sent successfully!\",\"info\":{\"accepted\":[\"yblezcanos@gmail.com\"],\"rejected\":[],\"ehlo\":[\"SIZE 35882577\",\"8BITMIME\",\"AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\",\"ENHANCEDSTATUSCODES\",\"PIPELINING\",\"CHUNKING\",\"SMTPUTF8\"],\"envelopeTime\":219,\"messageTime\":460,\"messageSize\":1051,\"response\":\"250 2.0.0 OK  1737577900 5b1f17b1804b1-438b3189924sm38282895e9.3 - gsmtp\",\"envelope\":{\"from\":\"tonykssa@gmail.com\",\"to\":[\"yblezcanos@gmail.com\"]},\"messageId\":\"<7fb90333-cbb6-dbda-83fe-e971813a2acd@gmail.com>\"}}}"
+    },
+    {
+        "role": "system",
+        "content": "El tiempo actual en Barcelona es de 14.2°C con una velocidad del viento de 8.2 m/s.\n\nSe ha enviado un correo electrónico a la dirección yblezcanos@gmail.com con éxito. El mensaje incluye los datos de temperatura y un \"Feliz cumpleaños\".\n\nAdemás, se ha incluido una tabla en formato HTML en el cuerpo del mensaje que lista los meses del año y el horóscopo asociado por mes."
+    },
+    {
+        "role": "user",
+        "content": "vale busca el valor actualizado del tiempo en Barcelona"
+    },
+    {
+        "role": "function",
+        "name": "weather_get",
+        "tool_call_id": "call_wOWuQY8QjwChl52xE0NWsP0a",
+        "content": "{\"name\":\"weather_get\",\"output\":{\"current\":{\"time\":\"2025-01-28T19:15\",\"interval\":900,\"temperature_2m\":13.4,\"wind_speed_10m\":20.5},\"options\":{\"latitude\":41.3851,\"longitude\":2.1734,\"city\":\"Barcelona\",\"country\":\"Spain\",\"postal\":\"08002\"}}}"
+    },
+    {
+        "role": "assistant",
+        "content": "El tiempo actual en Barcelona es de 13.4°C con una velocidad del viento de 20.5 m/s.",
+        "usage": {
+            "prompt_tokens": 1071,
+            "completion_tokens": 28,
+            "total_tokens": 1099,
+            "prompt_tokens_details": {
+                "cached_tokens": 0,
+                "audio_tokens": 0
+            },
+            "completion_tokens_details": {
+                "reasoning_tokens": 0,
+                "audio_tokens": 0,
+                "accepted_prediction_tokens": 0,
+                "rejected_prediction_tokens": 0
+            }
+        }
+    }
+]
