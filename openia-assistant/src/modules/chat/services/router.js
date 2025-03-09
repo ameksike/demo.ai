@@ -18,14 +18,24 @@ export function gatherAudio(req, options) {
         return null;
     }
 
-    req.isBinary && state.chunks.push(req.body);
+    let message = req.body;
 
-    if ((!salts || state.chunks.length < salts) && req.body !== stopKey) {
+    if (message instanceof ArrayBuffer) {
+        message = Buffer.from(new Uint8Array(message));
+    }
+
+    if (!Buffer.isBuffer(message)) {
+        console.error("invalid chunk", message);
+    }
+
+    req.isBinary && state.chunks.push(message);
+
+    if ((!salts || state.chunks.length < salts) && message !== stopKey) {
         console.log("chunks", state.chunks.length, salts);
         return null;
     }
 
-    let tmp = state.chunks.length ? Buffer.concat(state.chunks) : req.body;
+    let tmp = state.chunks.length ? Buffer.concat(state.chunks) : message;
     state.chunks = [];
 
     return tmp;

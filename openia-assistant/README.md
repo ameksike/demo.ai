@@ -153,3 +153,5 @@ Hello, can you tell me the temperature in Barcelona? >>> { "name": "10001", "pro
         - [Chat en TIEMPO REAL con Node.js, Socket.io, SQL, HTML y CSS](https://www.youtube.com/watch?v=WpbBhTx5R9Q)
     - [Building Voice Applications with OpenAI’s Realtime API](https://fatehaliaamir.medium.com/building-voice-applications-with-openais-realtime-api-ae58336d80f0)
     - [Getting Started: OpenAI Realtime and WebRTC](https://medium.com/@kenzic/getting-started-openai-realtime-and-webrtc-80e880c574e0)
+    - [MongoDB's GenAI Showcase](https://github.com/mongodb-developer/GenAI-Showcase)
+        - [Realtime Voice Agents with OpenAI and MongoDB](https://www.linkedin.com/events/7295435468639264771/comments/)

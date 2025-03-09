@@ -223,18 +223,37 @@ export class DataConverter {
         return `${prefix}${str}`;
     }
 
-    async blobToPCM(blob, sampleRate = 16000) {
-        const arrayBuffer = await blob.arrayBuffer();
-        const audioCtx = new AudioContext({ sampleRate }); // OpenAI espera 16kHz
-        const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-        const rawData = audioBuffer.getChannelData(0);
-
-        // Convertir a Int16Array
-        const pcmData = new Int16Array(rawData.length);
-        for (let i = 0; i < rawData.length; i++) {
-            pcmData[i] = rawData[i] * 32767; // Normalizar a Int16
+    static async getAudioContext(options) {
+        if (this.audioContext) {
+            return this.audioContext;
         }
-        return pcmData;
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)(options);
+        if (this.audioContext.state === 'suspended') {
+            await this.context.resume();
+        }
+        return this.audioContext;
+    }
+
+    static async blobToPCM(blob, sampleRate = 16000) {
+        try {
+            const arrayBuffer = await blob.arrayBuffer();
+            const audioCtx = await this.getAudioContext({ sampleRate }); // OpenAI espera 16kHz
+            const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+            const rawData = audioBuffer.getChannelData(0); // Float32Array
+
+            return rawData;
+
+            // Convertir a Int16Array
+            const pcmData = new Int16Array(rawData.length);
+            for (let i = 0; i < rawData.length; i++) {
+                pcmData[i] = rawData[i] * 32767; // Normalizar a Int16
+            }
+            return pcmData;
+            // const base64Encoded = btoa(String.fromCharCode
+        }
+        catch (error) {
+            console.error("blobToPCM", error)
+        }
     }
 
 

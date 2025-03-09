@@ -113,10 +113,18 @@ export class WebRec {
     }
 
     stop() {
-        console.log("STOPING")
-        this.rec?.stop();
-        //onEnd instanceof Function && onEnd(this.chunks);
-        return this;
+        try {
+            console.log("STOPING")
+            this.rec?.stop();
+            //onEnd instanceof Function && onEnd(this.chunks);
+        }
+        catch (error) {
+            console.error("recorder:stop", error);
+        }
+        finally {
+
+            return this;
+        }
     }
 
     createUiAudio(chunks, options) {
